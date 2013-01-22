@@ -1,0 +1,99 @@
+grammar org.uqbarproject.pseudo.Pseudo with org.eclipse.xtext.common.Terminals
+
+/*
+ * 
+ * no tipado
+en español
+preferir texto
+filtrar, mapear, todos, ninguno, para cada a nivel lenguaje
+listas literales: Conjunto( ), Lista(), Diccionario( clave : valor )
+lambdas? 
+sin sobrecarga
+mixins
+constructores alla scala
+sin paquetes
+orientado a mensajes
+composicion de computaciones x LUEGO y
+ * 
+ */
+generate pseudo "http://www.uqbarproject.org/pseudo/Pseudo"
+
+Model:
+	types+=Type*;
+
+Type:
+	'clase' name=ID ('hereda de' superType=[Type])?
+	declarations+=Declaration*
+	'fin' ('clase'?);
+
+Declaration:
+	Attribute | Method;
+
+Method:
+	'metodo' (classMethod?='de clase'?) name=ID '(' arguments+=ID* ')'
+	statements+=Expression*
+	'fin' ('metodo'?);
+
+Attribute:
+	'atributo' (classAttribute?='de clase'?) name=ID (':=' initialValue=Expression)?;
+
+Expression:
+	TraversableExpression | Assignment | IfExpression | {Expession} Literal;
+
+Literal:
+	(ID | NumberExpression | STRING | NULL);
+
+NumberExpression:
+	INT ('.' INT)?;
+
+TraversableExpression:
+//TODO ojo que se necesita aplicacion parcial o lambdas
+	MaxExpression | //
+	MinExpression | //
+	AverageExpression | //
+	SumExpression | //
+	ComprehensionExpression | //
+	ForEachExpression
+	//	FindExpression |
+	//	SortExpression 
+;
+
+IfExpression:
+	'si' (condition=Expression) 
+	'entonces' trueExpression = Expression 
+	'de lo contrario' falseExpression = Expression
+	'fin'
+;
+
+ComprehensionExpression:
+	'generar' (mapping=ID 'de')? target=Literal ('tal que' condition=ID)?;
+
+ForEachExpression:
+	'para cada' (target=Literal) ('tal que' condition=ID)? action=ID;
+
+SumExpression:
+	'sumatoria' mapping=ID 'de' target=Expression;
+
+AverageExpression:
+	'promedio' mapping=ID 'de' target=Expression;
+
+MaxExpression:
+	'maximo entre' target=Expression ('segun' condition=ID)?;
+
+MinExpression:
+	'minimo entre' target=Expression ('segun' condition=ID)?;
+
+Assignment:
+	(assigned=ID) ':=' (value=Literal);
+
+terminal NULL:
+	'nada';
+
+terminal RETURN:
+	'devolver';
+
+
+terminal THROW:
+	'lanzar';
+
+
