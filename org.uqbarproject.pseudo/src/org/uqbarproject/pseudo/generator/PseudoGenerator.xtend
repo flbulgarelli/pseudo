@@ -13,6 +13,15 @@ import org.uqbarproject.pseudo.pseudo.Type
 import org.uqbarproject.pseudo.pseudo.Method
 import org.uqbarproject.pseudo.pseudo.Declaration
 import org.eclipse.emf.ecore.EObject
+import org.uqbarproject.pseudo.pseudo.IfExpression
+import org.uqbarproject.pseudo.pseudo.Assignment
+import org.uqbarproject.pseudo.pseudo.TraversableExpression
+import org.uqbarproject.pseudo.pseudo.Expression
+import org.uqbarproject.pseudo.pseudo.ForEachExpression
+import org.uqbarproject.pseudo.pseudo.NumberExpression
+import org.uqbarproject.pseudo.pseudo.IdExpression
+import org.uqbarproject.pseudo.pseudo.NullExpression
+import org.uqbarproject.pseudo.pseudo.StringExpression
 
 
 class PseudoGenerator implements IGenerator {
@@ -36,10 +45,17 @@ class PseudoGenerator implements IGenerator {
 	  	«FOR declaration : type.declarations»
 	  	  «declaration.compile»		
 	  	«ENDFOR»
+	  	
+	  	public Object send(String selector, Object ... args) {
+	  		
+	  	}
 	  }
   	'''
-  	def dispatch compile(Method declaration) '''
-	  public Object «declaration.name»() {
+  	def dispatch compile(Method method) '''
+	  public Object «method.name»() {
+	  	«FOR statement : method.statements»
+	  		«statement.compile»		
+	  	«ENDFOR»
 	  	return null;
 	  }
 	'''
@@ -51,10 +67,57 @@ class PseudoGenerator implements IGenerator {
 	  public Object get«declaration.name.toFirstUpper»() {
 	  	return this.«declaration.name»;
 	  }
+	  public Object «declaration.name»() {
+	  	return this.«declaration.name»;
+	  }
 	'''
+	
+	//Expressions
+	def dispatch compile(Expression expression) '''
+		«expression.compileForResult»;
+	'''
+	def dispatch compile(IfExpression expression) '''
+		if («expression.condition.compileForResult») {
+			«expression.trueExpression.compile»;
+		} else {
+			«expression.trueExpression.compile»;
+		}		
+	'''
+	def dispatch compile(ForEachExpression expression) '''
+		for(Object $$element$$ : (Iterable<Object>) («expression.target.compileForResult»)) {
+			«IF expression.condition != null»
+			if ($$element$$.«expression.condition»()) {
+		   	«ENDIF»
+				$$element$$.«expression.action»();
+			«IF expression.condition != null»   	
+			}
+			«ENDIF»
+			
+		}
+	'''
+	def dispatch compileForResult(IfExpression expression) '''
+		((«expression.condition.compileForResult») 
+			? («expression.trueExpression.compileForResult»)
+			: («expression.trueExpression.compileForResult»)) 
+	'''
+	def dispatch compileForResult(Assignment expression) '''
+		«expression.assigned» = «expression.value.compileForResult»
+	'''
+    def dispatch compileForResult(NumberExpression expression) '''
+    	new java.math.BigDecimal(«expression.value»)    
+    '''
+    def dispatch compileForResult(IdExpression expression) {
+    	expression.value    
+    }
+    def dispatch compileForResult(StringExpression expression) '''
+    	""«expression.value»"    
+    '''
+    def dispatch compileForResult(NullExpression expression) {
+    	'null'
+    }
 
 	def effectiveInitialValue(Attribute attribute) {
-		if (attribute.initialValue != null) attribute.initialValue else "null"  
+		if (attribute.initialValue != null) attribute.initialValue.compileForResult else "null"  
 	}
 	
 	def effectiveSuperType(Type type) { 
