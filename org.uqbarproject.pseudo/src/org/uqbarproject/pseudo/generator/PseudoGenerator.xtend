@@ -41,18 +41,23 @@ class PseudoGenerator implements IGenerator {
   		subclassResponsibility as String
   	}
 	def dispatch compile(Type type) '''
-	  public class «type.name» extends «type.effectiveSuperType» {
-	  	«FOR declaration : type.declarations»
-	  	  «declaration.compile»		
-	  	«ENDFOR»
-	  	
-	  	public Object send(String selector, Object ... args) {
-	  		
-	  	}
-	  }
+		public class «type.name» extends «type.effectiveSuperType» {
+		  	«FOR declaration : type.declarations»
+		  	  «declaration.compile»		
+		  	«ENDFOR»
+			public Object send(String selector, Object... args) throws Throwable {
+				Class[] types = new Class[args.length];
+				Arrays.fill(types, Object.class);
+				try {
+					return this.getClass().getMethod(selector, types).invoke(this, args);
+				} catch (InvocationTargetException e) {
+					throw e.getCause();
+				}
+			}
+		}
   	'''
   	def dispatch compile(Method method) '''
-	  public Object «method.name»() {
+	  public Object «method.name»() throws Throwable {
 	  	«FOR statement : method.statements»
 	  		«statement.compile»		
 	  	«ENDFOR»
@@ -86,9 +91,9 @@ class PseudoGenerator implements IGenerator {
 	def dispatch compile(ForEachExpression expression) '''
 		for(Object $$element$$ : (Iterable<Object>) («expression.target.compileForResult»)) {
 			«IF expression.condition != null»
-			if ($$element$$.«expression.condition»()) {
+			if ((Boolean) $$element$$.send(«expression.condition»)()) {
 		   	«ENDIF»
-				$$element$$.«expression.action»();
+				$$element$$.send(«expression.action»)();
 			«IF expression.condition != null»   	
 			}
 			«ENDIF»
