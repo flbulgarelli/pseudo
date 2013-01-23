@@ -47,10 +47,10 @@ class PseudoGenerator implements IGenerator {
 		  	«ENDFOR»
 			public Object send(String selector, Object... args) throws Throwable {
 				Class[] types = new Class[args.length];
-				Arrays.fill(types, Object.class);
+				java.util.Arrays.fill(types, Object.class);
 				try {
 					return this.getClass().getMethod(selector, types).invoke(this, args);
-				} catch (InvocationTargetException e) {
+				} catch (java.lang.reflect.InvocationTargetException e) {
 					throw e.getCause();
 				}
 			}
@@ -91,9 +91,9 @@ class PseudoGenerator implements IGenerator {
 	def dispatch compile(ForEachExpression expression) '''
 		for(Object $$element$$ : (Iterable<Object>) («expression.target.compileForResult»)) {
 			«IF expression.condition != null»
-			if ((Boolean) $$element$$.send(«expression.condition»)()) {
+			if ((Boolean) $$element$$.send("«expression.condition»")) {
 		   	«ENDIF»
-				$$element$$.send(«expression.action»)();
+				$$element$$.send("«expression.action»");
 			«IF expression.condition != null»   	
 			}
 			«ENDIF»
