@@ -31,7 +31,7 @@ Declaration:
 	Attribute | Method;
 
 Method:
-	'metodo' (classMethod?='de clase'?) name=ID '(' arguments+=ID* ')'
+	'metodo' (classMethod?='de clase'?) name=ID ('(' parameters+=ID* ')')?
 	statements+=Expression*
 	'fin' ('metodo'?);
 
