@@ -22,6 +22,7 @@ import org.uqbarproject.pseudo.pseudo.NumberExpression
 import org.uqbarproject.pseudo.pseudo.IdExpression
 import org.uqbarproject.pseudo.pseudo.NullExpression
 import org.uqbarproject.pseudo.pseudo.StringExpression
+import org.uqbarproject.pseudo.pseudo.ComprehensionExpression
 
 
 class PseudoGenerator implements IGenerator {
@@ -36,24 +37,16 @@ class PseudoGenerator implements IGenerator {
 			)
 		]
 	}
-
+	
   	def dispatch compile(EObject declaration) { 
   		subclassResponsibility as String
   	}
 	def dispatch compile(Type type) '''
+		import org.uqbarproject.pseudo.runtime.*;
 		public class «type.name» extends «type.effectiveSuperType» {
 		  	«FOR declaration : type.declarations»
 		  	  «declaration.compile»		
 		  	«ENDFOR»
-			public Object send(String selector, Object... args) throws Throwable {
-				Class[] types = new Class[args.length];
-				java.util.Arrays.fill(types, Object.class);
-				try {
-					return this.getClass().getMethod(selector, types).invoke(this, args);
-				} catch (java.lang.reflect.InvocationTargetException e) {
-					throw e.getCause();
-				}
-			}
 		}
   	'''
   	def dispatch compile(Method method) '''
@@ -88,38 +81,40 @@ class PseudoGenerator implements IGenerator {
 			«expression.trueExpression.compile»;
 		}		
 	'''
-	def dispatch compile(ForEachExpression expression) '''
-		for(Object $$element$$ : (Iterable<Object>) («expression.target.compileForResult»)) {
-			«IF expression.condition != null»
-			if ((Boolean) $$element$$.send("«expression.condition»")) {
-		   	«ENDIF»
-				$$element$$.send("«expression.action»");
-			«IF expression.condition != null»   	
-			}
-			«ENDIF»
-			
-		}
-	'''
+	
 	def dispatch compileForResult(IfExpression expression) '''
 		((«expression.condition.compileForResult») 
 			? («expression.trueExpression.compileForResult»)
 			: («expression.trueExpression.compileForResult»)) 
 	'''
 	def dispatch compileForResult(Assignment expression) '''
-		«expression.assigned» = «expression.value.compileForResult»
+		«expression.assigned» = («expression.value.compileForResult»)
 	'''
     def dispatch compileForResult(NumberExpression expression) '''
-    	new java.math.BigDecimal(«expression.value»)    
+    	(new java.math.BigDecimal(«expression.value»))    
     '''
     def dispatch compileForResult(IdExpression expression) {
     	expression.value    
     }
     def dispatch compileForResult(StringExpression expression) '''
-    	""«expression.value»"    
+    	"«expression.value»"    
     '''
     def dispatch compileForResult(NullExpression expression) {
-    	'null'
+    	'(null)'
     }
+	def dispatch compileForResult(ForEachExpression expression) '''
+	    new Traversing(
+	       new MessageSend("«expression.action»"),
+	       «filterForSelector(expression.condition)»
+	       ).apply(«expression.target.compileForResult»)
+	'''
+	def dispatch compileForResult(ComprehensionExpression expression) '''
+	    new TraversingTransformation(
+	       «mapperForSelector(expression.mapping)»,
+	       «filterForSelector(expression.mapping)»,
+	       new IdentityFunction()
+	       ).apply(«expression.target.compileForResult»)
+	'''
 
 	def effectiveInitialValue(Attribute attribute) {
 		if (attribute.initialValue != null) attribute.initialValue.compileForResult else "null"  
@@ -132,4 +127,20 @@ class PseudoGenerator implements IGenerator {
 	def Object subclassResponsibility() {
 		throw new UnsupportedOperationException()
 	}
+	
+	def filterForSelector(String selector)'''
+		«IF selector == null»
+			new ConstantFunction(true)
+		«ELSE»
+		    new MessageSend("«selector»")
+		«ENDIF»
+	'''
+	
+	def mapperForSelector(String selector)'''
+		«IF selector == null»
+			new IdentityFunction()
+		«ELSE»
+		    new MessageSend("«selector»")
+		«ENDIF»
+	'''
 }
