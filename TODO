@@ -1,0 +1,8 @@
+* Renombrar samples a integration test, y ampliar y replantear los test. Hacer specs. Hacerlos con Spock? 
+* Testear el runtime
+* Implementar la sinxais de envio de mensajes
+* Implementar retorno implicito en expresiones
+* Implementar retorno explicto en expresiones
+* Revisar sintaxis del mapper en listas por comprensión (creo que no está tomando el "de")
+* Implementar super
+* implementar reducciones faltantes
