@@ -60,7 +60,9 @@ Un lenguaje de objetos y funcional que imita al pseudocódigo
 ## Plataforma
   
   * JVM
-  * __A definir__: compilación a código Java o a bytecode
+  * compilado
+  * distribución textual: separación entre ambiente y código (texto) (como en la mayoría de los lenguajes)
+  * __A definir__: generacion de  código Java o  bytecode
 
 ## En general
   
