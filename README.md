@@ -52,7 +52,9 @@ Un lenguaje de objetos y funcional que imita al pseudocódigo
        * selector argumento0 argumento1 ... argumentoN receptor
     * Alguna sintaxis híbrida, basada en etiquetas no posicionales, Groovy-Like:  
         * ```receptor : selector etiqueta0 argumento 0 etiqueta1 argumento1 ... etiquetaN argumentoN```
-          * Ejemplo: ```pastel : cocinar a (150 grados) durante (30 minutos)```
+          * Ejemplo: ```pastel : cocinar a (150: grados) durante (30: minutos)```
+        * Se podria incluir algun atajo para los mensajes unarios:
+          * Ejemplo: ```pastel : cocinar a 150'grados durante 30'minutos```  
           
 
 ## Plataforma
