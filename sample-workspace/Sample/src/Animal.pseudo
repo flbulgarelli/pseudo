@@ -1,0 +1,7 @@
+clase Animal
+  atributo nuevo //:= false
+
+  metodo esNuevo
+  	nuevo
+  fin
+fin
