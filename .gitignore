@@ -1,2 +1,5 @@
-**/bin
+**/bin/**
+sample-workspace/**/bin/**
+sample-workspace/**/.settings/**
+**/.settings/**
 .metadata
