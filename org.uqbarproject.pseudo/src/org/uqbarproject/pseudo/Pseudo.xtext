@@ -39,6 +39,7 @@ Attribute:
 	'atributo' (classAttribute?='de clase'?) name=ID (':=' initialValue=Expression)?;
 
 Expression:
+	MessageSendExpression |
 	TraversableExpression | 
 	Assignment | 
 	IfExpression | 
@@ -69,23 +70,43 @@ IfExpression:
 	'fin'
 ;
 
+MessageSendExpression:
+	SelfUnaryMessageShortcutExpression | SimpleMessageSend  	
+;
+
+SimpleMessageSend:
+	receptor = ID ',' message = Message 
+;
+
+SelfUnaryMessageShortcutExpression:
+	('su'|'sus') message = Message
+;
+
+Message:
+	UnaryMessage //| KeywordMessage
+;
+
+UnaryMessage:
+	selector=ID //=>(key+=ID argument+=ID)*
+;
+
 ComprehensionExpression:
-	'generar' (mapping=ID 'de')? target=Expression (=>'tal que' condition=ID)?;
+	'generar' (mapping=Message 'de')? target=Expression (=>'tal que' condition=Message)?;
 
 ForEachExpression:
-	'para cada' ID 'en' (target=Expression) (=>'tal que' condition=ID)? action=ID;
+	'para cada' ID 'en' (target=Expression) (=>'tal que' condition=Message)? action=Message;
 
 SumExpression:
-	'sumatoria' mapping=ID 'de' target=Expression;
+	'sumatoria' mapping=Message 'de' target=Expression;
 
 AverageExpression:
-	'promedio' mapping=ID 'de' target=Expression;
+	'promedio' mapping=Message 'de' target=Expression;
 
 MaxExpression:
-	'maximo entre' target=Expression (=>'segun' condition=ID)?;
+	'maximo entre' target=Expression (=>'segun' condition=Message)?;
 
 MinExpression:
-	'minimo entre' target=Expression (=>'segun' condition=ID)?;
+	'minimo entre' target=Expression (=>'segun' condition=Message)?;
 
 Assignment:
 	(assigned=ID) ':=' (value=Expression);

@@ -19,7 +19,7 @@ public class ZoologicoTest {
 		zoologico.setAnimales(Arrays.asList(animalNuevo, new Animal() {{
 			setNuevo(false);
 		}}));
-		assertEquals(Arrays.asList(animalNuevo), zoologico.animalesNuevos());
+		assertEquals(Arrays.asList(animalNuevo), zoologico.animales_nuevos());
 	}
 	
 	@Test

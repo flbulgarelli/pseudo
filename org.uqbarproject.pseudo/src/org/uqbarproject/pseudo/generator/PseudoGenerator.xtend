@@ -4,25 +4,28 @@
 package org.uqbarproject.pseudo.generator
 
 import com.google.inject.Inject
+import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.IFileSystemAccess
 import org.eclipse.xtext.generator.IGenerator
 import org.eclipse.xtext.naming.IQualifiedNameProvider
-import org.uqbarproject.pseudo.pseudo.Attribute
-import org.uqbarproject.pseudo.pseudo.Type
-import org.uqbarproject.pseudo.pseudo.Method
-import org.uqbarproject.pseudo.pseudo.Declaration
-import org.eclipse.emf.ecore.EObject
-import org.uqbarproject.pseudo.pseudo.IfExpression
 import org.uqbarproject.pseudo.pseudo.Assignment
-import org.uqbarproject.pseudo.pseudo.TraversableExpression
+import org.uqbarproject.pseudo.pseudo.Attribute
+import org.uqbarproject.pseudo.pseudo.ComprehensionExpression
 import org.uqbarproject.pseudo.pseudo.Expression
 import org.uqbarproject.pseudo.pseudo.ForEachExpression
-import org.uqbarproject.pseudo.pseudo.NumberExpression
 import org.uqbarproject.pseudo.pseudo.IdExpression
+import org.uqbarproject.pseudo.pseudo.IfExpression
+import org.uqbarproject.pseudo.pseudo.Method
 import org.uqbarproject.pseudo.pseudo.NullExpression
+import org.uqbarproject.pseudo.pseudo.NumberExpression
 import org.uqbarproject.pseudo.pseudo.StringExpression
-import org.uqbarproject.pseudo.pseudo.ComprehensionExpression
+import org.uqbarproject.pseudo.pseudo.Type
+import org.uqbarproject.pseudo.pseudo.Message
+import org.uqbarproject.pseudo.pseudo.MessageSendExpression
+import org.uqbarproject.pseudo.pseudo.SimpleMessageSend
+import org.uqbarproject.pseudo.pseudo.SelfUnaryMessageShortcutExpression
+import org.uqbarproject.pseudo.pseudo.UnaryMessage
 
 
 class PseudoGenerator implements IGenerator {
@@ -69,6 +72,10 @@ class PseudoGenerator implements IGenerator {
 	  	return this.«declaration.name»;
 	  }
 	'''
+	//TODO Not an expression, yet
+	def dispatch compile(UnaryMessage message) '''
+		new MessageSend("«message.selector»")
+	'''
 	
 	//Expressions
 	def dispatch compile(Expression expression) '''
@@ -101,10 +108,17 @@ class PseudoGenerator implements IGenerator {
     '''
     def dispatch compileForResult(NullExpression expression) {
     	'(null)'
-    }
+    }   
+     
+    def dispatch compileForResult(SimpleMessageSend expression) '''
+    	«expression.message.compile».apply(«expression.receptor»)
+    '''
+    def dispatch compileForResult(SelfUnaryMessageShortcutExpression expression) '''
+    	«expression.message.compile».apply(this)
+    '''
 	def dispatch compileForResult(ForEachExpression expression) '''
 	    new Traversing(
-	       new MessageSend("«expression.action»"),
+	       «expression.action.compile»,
 	       «filterForSelector(expression.condition)»
 	       ).apply(«expression.target.compileForResult»)
 	'''
@@ -128,19 +142,21 @@ class PseudoGenerator implements IGenerator {
 		throw new UnsupportedOperationException()
 	}
 	
-	def filterForSelector(String selector)'''
-		«IF selector == null»
+	//TODO pass arguments
+	def filterForSelector(Message message)'''
+		«IF message == null»
 			new ConstantFunction(true)
 		«ELSE»
-		    new MessageSend("«selector»")
+		    «message.compile»
 		«ENDIF»
 	'''
-	
-	def mapperForSelector(String selector)'''
-		«IF selector == null»
+
+	//TODO pass arguments	
+	def mapperForSelector(Message message)'''
+		«IF message == null»
 			new IdentityFunction()
 		«ELSE»
-		    new MessageSend("«selector»")
+			«message.compile»
 		«ENDIF»
 	'''
 }

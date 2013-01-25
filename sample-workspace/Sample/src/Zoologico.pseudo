@@ -1,29 +1,29 @@
 clase Zoologico
 
-  atributo animales //:= //Lista()
+  atributo animales //:= //lista vacia 
   
-  metodo agregarAnimal(animal)
-//    animal.fechaIngreso(Fecha.ahora())
-//  	animales.agregar(animal)
+  metodo agregar_animal(animal)
+    animal, fijar //fechaIngreso ahora
+//	(sus animales), agregar // a animal
   fin
   
-  metodo animalMasPesado
+  metodo animal_mas_pesado
 //    maximo entre animales segun peso 
-  fin
-  
-  metodo pesoPromedioAnimales
+  fin 
+   
+  metodo peso_promedio_animales
 //    promedio peso de animales  
   fin
 //  
-  metodo animalesNuevos
+  metodo animales_nuevos
      generar animales tal que esNuevo 
   fin
    
-  metodo nombresAnimales
+  metodo nombre_animales
 //	generar nombre de animales 
   fin
   
-  metodo alimentarAnimales
+  metodo alimentar_animales
      para cada animal en animales alimentar 
   fin 
   
