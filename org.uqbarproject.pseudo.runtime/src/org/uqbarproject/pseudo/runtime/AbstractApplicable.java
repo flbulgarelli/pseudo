@@ -7,7 +7,7 @@ public abstract class AbstractApplicable implements Applicable {
 	}
 
 	public Applicable compose(Applicable other) {
-		return new ComposedApplicable(this, other);
+		return new ComposedApplicable(other, this);
 	}
 	
 	@Override
