@@ -110,7 +110,7 @@ class PseudoGenerator implements IGenerator {
     }   
      
     def dispatch compileForResult(SimpleMessageSend expression) '''
-    	«expression.message.compile».apply(«expression.receptor»)
+    	«expression.message.compile».apply(«expression.receptor.compileForResult»)
     '''
     def dispatch compileForResult(SelfUnaryMessageShortcutExpression expression) '''
     	«expression.message.compile».apply(this)

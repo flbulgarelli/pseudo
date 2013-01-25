@@ -39,14 +39,23 @@ Attribute:
 	'atributo' (classAttribute?='de clase'?) name=ID (':=' initialValue=Expression)?;
 
 Expression:
-	MessageSendExpression |
-	TraversableExpression | 
-	AssignmentExpression | 
-	IfExpression | 
-	{IdExpression} value = ID |
-	{StringExpression} value = STRING |
+	EmbeddableExpression |
+	NonEmbeddableExpression;
+	
+NonEmbeddableExpression:
+	SimpleMessageSend |
+	TraversableExpression |
+	AssignmentExpression |
+	IfExpression;
+	
+EmbeddableExpression:
+	SelfUnaryMessageShortcutExpression |
+	{IdExpression} value=ID |
+	{StringExpression} value=STRING |
 	{NullExpression} NULL |
-	{NumberExpression} value = Number;
+	{NumberExpression} value=Number 
+//TODO	soportar? '(' NonEmbeddableExpression ')'
+	;
 
 Number:
 	INT ('.' INT)?;
@@ -70,12 +79,8 @@ IfExpression:
 	'fin'
 ;
 
-MessageSendExpression:
-	SelfUnaryMessageShortcutExpression | SimpleMessageSend  	
-;
-
 SimpleMessageSend:
-	receptor = ID ',' message = Message 
+	receptor = EmbeddableExpression ',' message = Message 
 ;
 
 SelfUnaryMessageShortcutExpression:
@@ -91,22 +96,22 @@ UnaryMessage:
 ;
 
 ComprehensionExpression:
-	'generar' (mapping=Message 'de')? target=Expression (=>'tal que' condition=Message)?;
+	'generar' (mapping=Message 'de')? target=EmbeddableExpression (=>'tal que' condition=Message)?;
 
 ForEachExpression:
-	'para cada' ID 'en' (target=Expression) (=>'tal que' condition=Message)? action=Message;
+	'para cada' ID 'en' (target=EmbeddableExpression) (=>'tal que' condition=Message)? action=Message;
 
 SumExpression:
-	'sumatoria' mapping=Message 'de' target=Expression;
+	'sumatoria' mapping=Message 'de' target=EmbeddableExpression;
 
 AverageExpression:
-	'promedio' mapping=Message 'de' target=Expression;
+	'promedio' mapping=Message 'de' target=EmbeddableExpression;
 
 MaxExpression:
-	'maximo entre' target=Expression (=>'segun' condition=Message)?;
+	'maximo entre' target=EmbeddableExpression (=>'segun' condition=Message)?;
 
 MinExpression:
-	'minimo entre' target=Expression (=>'segun' condition=Message)?;
+	'minimo entre' target=EmbeddableExpression (=>'segun' condition=Message)?;
 
 AssignmentExpression:
 	(assigned=ID) ':=' (value=Expression);
