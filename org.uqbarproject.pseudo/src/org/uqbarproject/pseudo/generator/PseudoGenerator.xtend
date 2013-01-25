@@ -86,7 +86,7 @@ class PseudoGenerator implements IGenerator {
 		«expression.compileForResult»;
 	'''
 	def dispatch compile(IfExpression expression) '''
-		if («expression.condition.compileForResult») {
+		if («expression.condition.compileForBooleanResult») {
 			«expression.trueExpression.compile»;
 		} else {
 			«expression.trueExpression.compile»;
@@ -94,7 +94,7 @@ class PseudoGenerator implements IGenerator {
 	'''
 	
 	def dispatch compileForResult(IfExpression expression) '''
-		((«expression.condition.compileForResult») 
+		((«expression.condition.compileForBooleanResult») 
 			? («expression.trueExpression.compileForResult»)
 			: («expression.trueExpression.compileForResult»)) 
 	'''
@@ -136,7 +136,11 @@ class PseudoGenerator implements IGenerator {
 	       new IdentityFunction()
 	       ).apply(«expression.target.compileForResult»)
 	'''
-
+	
+	def compileForBooleanResult(Expression expression) '''
+		(Boolean) («expression.compileForResult»)
+	'''
+	
 	def effectiveInitialValue(Attribute attribute) {
 		if (attribute.initialValue != null) attribute.initialValue.compileForResult else "null"  
 	}
