@@ -26,7 +26,7 @@ public class MethodSpec {
   @Test
   public void soporta_self_y_devolucion_implicita() throws Throwable {
     Metodos receptor = new Metodos();
-    assertSame(receptor, receptor.metodo_que_devuelve_self_explicitamente());
+    assertSame(receptor, receptor.metodo_que_devuelve_self_implicitamente());
   }
 
   @Test

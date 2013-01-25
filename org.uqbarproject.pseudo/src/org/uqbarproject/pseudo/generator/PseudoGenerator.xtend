@@ -54,10 +54,14 @@ class PseudoGenerator implements IGenerator {
   	'''
   	def dispatch compile(Method method) '''
 	  public Object «method.name»(«method.parameters.map [ "Object " + it ].join(", ")») throws Throwable {
-	  	«FOR statement : method.statements»
+	  	«IF method.statements.empty»
+	  	return null;
+	  	«ELSE»
+	  	«FOR statement : method.statements.take(method.statements.size-1)»
 	  		«statement.compile»		
 	  	«ENDFOR»
-	  	return null;
+	  	return «method.statements.last.compileForResult»;
+	  	«ENDIF»
 	  }
 	'''
 	def dispatch compile(Attribute declaration) '''
