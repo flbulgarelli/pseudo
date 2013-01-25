@@ -1,0 +1,70 @@
+clase Metodos
+
+  /* Aridad */
+
+   metodo metodo_sin_parametros
+   
+   fin metodo
+   
+   metodo metodo_con_1_parametro etiqueta valor
+   
+   fin metodo
+   
+   metodo metodo_con_2_parametros etiqueta1 valor1 etiqueta2 valor2
+   
+   fin metodo
+
+  /* Retornos y self */
+   
+   metodo metodo_que_devuelve_self_implicitamente
+   		este
+   fin
+   
+   metodo metodo_que_devuelve_self_explicitamente
+//     devolver self
+   fin
+   
+  /* Variables Locales */
+   
+   metodo metodo_con_variables_locales
+      x := 5
+      y := x
+      y
+   fin 
+   
+   metodo metodo_con_if_verdadero
+      condicion := true
+      si condicion entonces
+        'ok'
+      de lo contrario 
+        'error'
+      fin
+   fin
+   
+  metodo metodo_con_if_falso
+      condicion := false
+      si condicion entonces
+        'ok'
+      de lo contrario 
+        'error'
+      fin
+   fin
+   
+  metodo metodo_con_if_con_tag_extendido
+      condicion := true
+      si condicion entonces
+        'ok'
+      de lo contrario 
+        'error'
+      fin //si
+   fin
+   
+   
+//   metodo metodo_con_texto_libre
+//     prosa 
+//		Puedo demostrar el teorema de Fermat. Es trivial, pero no lo haré porque
+//		no entra en este método.       
+//     fin prosa   
+//   fin
+   
+fin clase

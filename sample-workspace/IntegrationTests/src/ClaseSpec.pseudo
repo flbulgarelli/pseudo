@@ -1,0 +1,16 @@
+clase ClaseVacia
+fin
+
+clase ClaseConPadre hereda de ClaseVacia
+fin
+
+clase ClaseConTagsExtendidos
+  metodo un_metodo
+  fin metodo
+fin clase 
+
+clase ClaseSimpleConAtributosYMetodos 
+	atributo un_atributo
+	metodo un_metodo
+	fin
+fin

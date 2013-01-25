@@ -1,0 +1,18 @@
+clase Mensajes 
+
+  /* delegacion en self */
+   
+   metodo metodo_que_delega_en_si_mismo
+     este, metodo_delegado
+   fin
+   
+   metodo metodo_delegado
+     5
+   fin
+   
+   metodo metodo_que_delega_en_otro_objeto
+     5, toString
+   fin
+   
+
+fin
