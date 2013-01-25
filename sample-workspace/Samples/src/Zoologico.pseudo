@@ -4,23 +4,23 @@ clase Zoologico
   
   metodo agregar_animal(animal)
     animal, fijar //fechaIngreso ahora
-//	(sus animales), agregar // a animal
+	sus animales, agregar // a animal
   fin
   
   metodo animal_mas_pesado
-//    maximo entre animales segun peso 
+//    maximo entre animales segun peso  
   fin 
-   
+  
   metodo peso_promedio_animales
-//    promedio peso de animales  
+//    promedio peso de animales
   fin
-//  
+// 
   metodo animales_nuevos
      generar animales tal que esNuevo 
   fin
    
   metodo nombre_animales
-//	generar nombre de animales 
+//	generar nombre de las animales 
   fin
   
   metodo alimentar_animales
@@ -28,7 +28,15 @@ clase Zoologico
   fin 
   
   metodo imprimir
-    'Un Zoologico'
+    si este, tiene_animales entonces
+      'Un Zoologico con animales'
+    de lo contrario 
+      'Un Zoologico vacio'
+    fin
+  fin
+  
+  metodo tiene_animales
+	sus animales, esta_vacia  
   fin
 
 fin
