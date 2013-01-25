@@ -41,7 +41,7 @@ Attribute:
 Expression:
 	MessageSendExpression |
 	TraversableExpression | 
-	Assignment | 
+	AssignmentExpression | 
 	IfExpression | 
 	{IdExpression} value = ID |
 	{StringExpression} value = STRING |
@@ -79,7 +79,7 @@ SimpleMessageSend:
 ;
 
 SelfUnaryMessageShortcutExpression:
-	('su'|'sus') message = Message
+	('su'|'sus') message = UnaryMessage
 ;
 
 Message:
@@ -108,7 +108,7 @@ MaxExpression:
 MinExpression:
 	'minimo entre' target=Expression (=>'segun' condition=Message)?;
 
-Assignment:
+AssignmentExpression:
 	(assigned=ID) ':=' (value=Expression);
 
 terminal NULL:

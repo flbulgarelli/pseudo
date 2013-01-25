@@ -9,7 +9,6 @@ import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.IFileSystemAccess
 import org.eclipse.xtext.generator.IGenerator
 import org.eclipse.xtext.naming.IQualifiedNameProvider
-import org.uqbarproject.pseudo.pseudo.Assignment
 import org.uqbarproject.pseudo.pseudo.Attribute
 import org.uqbarproject.pseudo.pseudo.ComprehensionExpression
 import org.uqbarproject.pseudo.pseudo.Expression
@@ -22,10 +21,10 @@ import org.uqbarproject.pseudo.pseudo.NumberExpression
 import org.uqbarproject.pseudo.pseudo.StringExpression
 import org.uqbarproject.pseudo.pseudo.Type
 import org.uqbarproject.pseudo.pseudo.Message
-import org.uqbarproject.pseudo.pseudo.MessageSendExpression
 import org.uqbarproject.pseudo.pseudo.SimpleMessageSend
 import org.uqbarproject.pseudo.pseudo.SelfUnaryMessageShortcutExpression
 import org.uqbarproject.pseudo.pseudo.UnaryMessage
+import org.uqbarproject.pseudo.pseudo.AssignmentExpression
 
 
 class PseudoGenerator implements IGenerator {
@@ -94,7 +93,7 @@ class PseudoGenerator implements IGenerator {
 			? («expression.trueExpression.compileForResult»)
 			: («expression.trueExpression.compileForResult»)) 
 	'''
-	def dispatch compileForResult(Assignment expression) '''
+	def dispatch compileForResult(AssignmentExpression expression) '''
 		«expression.assigned» = («expression.value.compileForResult»)
 	'''
     def dispatch compileForResult(NumberExpression expression) '''
