@@ -15,7 +15,8 @@ public class TraversingTransformation extends AbstractApplicable {
     this.reducer = reducer;
   }
 
-  public Object eval(Object argument) throws Throwable {
+  @Override
+  public Object apply(Object argument) throws Throwable {
     final List<Object> result = new LinkedList<Object>();
     new Traversing(new AbstractApplicable() {
       public Object apply(Object argument) throws Throwable {
@@ -26,10 +27,5 @@ public class TraversingTransformation extends AbstractApplicable {
     return reducer.apply(result);
   }
 
-  @Override
-  public Object apply(Object receptor) throws Throwable {
-    // TODO Auto-generated method stub
-    return null;
-  }
 
 }
