@@ -25,6 +25,7 @@ import org.uqbarproject.pseudo.pseudo.SimpleMessageSend
 import org.uqbarproject.pseudo.pseudo.SelfUnaryMessageShortcutExpression
 import org.uqbarproject.pseudo.pseudo.UnaryMessage
 import org.uqbarproject.pseudo.pseudo.AssignmentExpression
+import org.uqbarproject.pseudo.pseudo.SelfExpression
 
 
 class PseudoGenerator implements IGenerator {
@@ -107,7 +108,10 @@ class PseudoGenerator implements IGenerator {
     '''
     def dispatch compileForResult(NullExpression expression) {
     	'(null)'
-    }   
+    }
+    def dispatch compileForResult(SelfExpression expression) {
+    	'this'
+    }      
      
     def dispatch compileForResult(SimpleMessageSend expression) '''
     	«expression.message.compile».apply(«expression.receptor.compileForResult»)

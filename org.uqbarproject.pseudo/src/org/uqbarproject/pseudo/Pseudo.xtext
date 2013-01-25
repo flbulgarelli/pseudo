@@ -52,8 +52,9 @@ EmbeddableExpression:
 	SelfUnaryMessageShortcutExpression |
 	{IdExpression} value=ID |
 	{StringExpression} value=STRING |
-	{NullExpression} NULL |
-	{NumberExpression} value=Number 
+	{NullExpression} 'nada' |
+	{NumberExpression} value=Number |
+	{SelfExpression} ('este'|'esta')
 //TODO	soportar? '(' NonEmbeddableExpression ')'
 	;
 
@@ -115,9 +116,6 @@ MinExpression:
 
 AssignmentExpression:
 	(assigned=ID) ':=' (value=Expression);
-
-terminal NULL:
-	'nada';
 
 terminal RETURN:
 	'devolver';
