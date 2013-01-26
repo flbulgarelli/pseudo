@@ -5,6 +5,7 @@ import org.eclipse.xtext.generator.*
 import org.eclipse.xtext.ui.generator.*
 
 var grammarURI = "classpath:/org/uqbarproject/pseudo/Pseudo.xtext"
+var tokensURI = "classpath:/org/uqbarproject/pseudo/Tokens.xtext"
 var file.extensions = "pseudo"
 var projectName = "org.uqbarproject.pseudo"
 var runtimeProject = "../${projectName}"
@@ -133,6 +134,13 @@ Workflow {
                      fileExtensions = file.extensions
                 }
     
+            }
+            language = {
+                uri = tokensURI
+                fileExtensions="___tokens"
+                fragment = grammarAccess.GrammarAccessFragment {}
+                fragment = parseTreeConstructor.ParseTreeConstructorFragment {}
+                fragment = contentAssist.JavaBasedContentAssistFragment {}
             }
         }
 }

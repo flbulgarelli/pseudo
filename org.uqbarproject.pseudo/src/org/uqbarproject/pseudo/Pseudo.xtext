@@ -1,4 +1,4 @@
-grammar org.uqbarproject.pseudo.Pseudo with org.eclipse.xtext.common.Terminals
+grammar org.uqbarproject.pseudo.Pseudo with org.uqbarproject.pseudo.Tokens
 
 /*
  * 
@@ -21,21 +21,6 @@ generate pseudo "http://www.uqbarproject.org/pseudo/Pseudo"
 
 Model:
 	types+=Type*;
-
-CLASS_TOKEN: 'clase';
-INHERITS_TOKEN: 'hereda de';
-END_TOKEN: 'fin';
-METHOD_TOKEN: 'metodo';
-ATTRIBUTE_TOKEN: 'atributo';
-NULL_TOKEN : 'nada';
-TRUE_TOKEN: 'verdadero'|'sí';
-FALSE_TOKEN: 'falso'|'no';
-SELF_TOKEN: 'este'|'esta';
-IF_TOKEN: 'si';
-THEN_TOKEN: 'entonces';
-OTHERWISE_TOKEN: 'de lo contrario';
-RETURN_TOKEN: 'devolver';
-THROW_TOKEN: 'lanzar';
 
 Type:
 	CLASS_TOKEN name=ID (INHERITS_TOKEN superType=[Type])?
