@@ -5,12 +5,13 @@
      * en ingles
 
 * Implementar la sinxais de envio de mensajes n-aria
-* Implementar retorno explicto en expresiones
-* Revisar sintaxis del mapper en listas por comprensión (creo que no está tomando el "de")
+* Implementar retorno explicto en expresiones cuando no tiene valor de retorno
 * Implementar super
 * implementar reducciones faltantes
 * expresiones matematicas
 * soportar texto libre
 * colecciones literales
-* definir sintaxis de variables locales, y asignacion
-
+* soporta null como falso y cero
+* soportar parametros no posicionales? es bueno, pero podria dificular interaccion con Java
+* soportar parametros etiquetados? idem anterior
+* soportar null como absorvente? esopodria dificular mostrar un null object

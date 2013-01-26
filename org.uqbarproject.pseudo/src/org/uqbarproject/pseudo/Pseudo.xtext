@@ -57,8 +57,8 @@ NonEmbeddableExpression:
 	AssignmentExpression |
 	IncrementExpression |
 	DecrementExpression |
-	WhenExpression;
-	//CollectionLiteralExpression ; //TODO es bastante limitante que no se puedan embeber
+	WhenExpression |
+	CollectionLiteralExpression ; //TODO es bastante limitante que no se puedan embeber
 	
 EmbeddableExpression:
 	{IdExpression} value=ID |
@@ -87,23 +87,15 @@ TraversableExpression:
 ;
 
 CollectionLiteralExpression:
-	ListLiteralExpression | SetLiteralExpression | RangeLiteralExpression 
+	ListLiteralExpression | SetLiteralExpression //| RangeLiteralExpression 
 ;
 
 ListLiteralExpression:
-	{EmptyListExpression} 'lista' 'vacia' | NonEmptyListExpression
-;
-
-NonEmptyListExpression:
-	'lista' '(' (elements+=EmbeddableExpression)+ ')'	
+	{ListLiteralExpression} LIST_OPEN_TOKEN (elements+=EmbeddableExpression)* => LIST_CLOSE_TOKEN	
 ;
 
 SetLiteralExpression:
-	{EmptySetExpression} 'conjunto' 'vacio' | NonEmptySetExpression
-;
-
-NonEmptySetExpression:
-	'conjunto' '(' (elements+=EmbeddableExpression)+ ')'	
+	{SetLiteralExpression} SET_OPEN_TOKEN (elements+=EmbeddableExpression)* => SET_CLOSE_TOKEN	
 ;
 
 RangeLiteralExpression:

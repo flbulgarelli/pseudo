@@ -13,8 +13,6 @@ import org.eclipse.xtext.naming.IQualifiedNameProvider
 import org.uqbarproject.pseudo.pseudo.AssignmentExpression
 import org.uqbarproject.pseudo.pseudo.Attribute
 import org.uqbarproject.pseudo.pseudo.ComprehensionExpression
-import org.uqbarproject.pseudo.pseudo.EmptyListExpression
-import org.uqbarproject.pseudo.pseudo.EmptySetExpression
 import org.uqbarproject.pseudo.pseudo.FalseExpression
 import org.uqbarproject.pseudo.pseudo.ForEachExpression
 import org.uqbarproject.pseudo.pseudo.IdExpression
@@ -23,8 +21,6 @@ import org.uqbarproject.pseudo.pseudo.Message
 import org.uqbarproject.pseudo.pseudo.Expression
 import org.uqbarproject.pseudo.pseudo.Method
 import org.uqbarproject.pseudo.pseudo.Return
-import org.uqbarproject.pseudo.pseudo.NonEmptyListExpression
-import org.uqbarproject.pseudo.pseudo.NonEmptySetExpression
 import org.uqbarproject.pseudo.pseudo.NullExpression
 import org.uqbarproject.pseudo.pseudo.NumberExpression
 import org.uqbarproject.pseudo.pseudo.SelfExpression
@@ -36,6 +32,8 @@ import org.uqbarproject.pseudo.pseudo.UnaryMessage
 import org.uqbarproject.pseudo.pseudo.Let
 import org.uqbarproject.pseudo.pseudo.IncrementExpression
 import org.uqbarproject.pseudo.pseudo.DecrementExpression
+import org.uqbarproject.pseudo.pseudo.ListLiteralExpression
+import org.uqbarproject.pseudo.pseudo.SetLiteralExpression
 
 
 class PseudoGenerator implements IGenerator {
@@ -71,7 +69,7 @@ class PseudoGenerator implements IGenerator {
 	  		«statement.compile»		
 	  	«ENDFOR»
 	  	«IF method.statements.last instanceof Expression»
-	  	return «method.statements.last.compileForResult»;
+	  	return « (method.statements.last as Expression).compileForResult»;
 	  	«ELSEIF method.statements.last instanceof Return»
 	  	«method.statements.last.compile»
 	  	«ELSE»
@@ -176,16 +174,10 @@ class PseudoGenerator implements IGenerator {
     def dispatch compileForResult(FalseExpression expression) '''
         false
     '''
-    def dispatch compileForResult(EmptyListExpression expression) '''
-    	new java.util.LinkedList()
-    '''
-    def dispatch compileForResult(EmptySetExpression expression) '''
-    	new java.util.HashSet()
-    '''
-    def dispatch compileForResult(NonEmptyListExpression expression) '''
+    def dispatch compileForResult(ListLiteralExpression expression) '''
     	new java.util.LinkedList(java.util.Arrays.asList(«joinCompileResults(expression.elements)»))
     '''
-    def dispatch compileForResult(NonEmptySetExpression expression) '''
+    def dispatch compileForResult(SetLiteralExpression expression) '''
     	new java.util.HashSet(java.util.Arrays.asList(«joinCompileResults(expression.elements)»))
     '''
     def joinCompileResults(EList<? extends Expression> expressions) {

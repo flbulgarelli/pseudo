@@ -1,6 +1,6 @@
 clase Zoologico
 
-  atributo animales //:= //lista vacia 
+  atributo animales = lista()  
   
   metodo agregar_animal(animal)
     animal, ingreso

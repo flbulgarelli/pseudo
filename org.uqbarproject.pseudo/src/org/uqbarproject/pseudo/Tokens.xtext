@@ -5,15 +5,38 @@ INHERITS_TOKEN: 'hereda';
 END_TOKEN: 'fin';
 METHOD_TOKEN: 'metodo';
 ATTRIBUTE_TOKEN: 'atributo';
+
+/* basic literals */
+
 NULL_TOKEN : 'nada';
 TRUE_TOKEN: 'verdadero'|'si';
 FALSE_TOKEN: 'falso'|'no';
 SELF_TOKEN: 'este'|'esta';
+
+/* collection literals */
+LIST_OPEN_TOKEN:
+	'lista' '('
+;
+LIST_CLOSE_TOKEN:
+	')'
+;
+SET_OPEN_TOKEN:
+	'conjunto' '('
+;
+SET_CLOSE_TOKEN:
+	')'
+;
+
+/* When Tokens */
 WHEN_TOKEN: 'cuando';
 THEN_TOKEN: 'entonces';
 OTHERWISE_TOKEN: 'caso contrario' | 'otro caso';
+
 RETURN_TOKEN: 'devolver';
 THROW_TOKEN: 'lanzar';
+
+/* Assignment tokens */
+
 LET_TOKEN: 'variable';
 SET_TOKEN: 'actualizar';
 INCREMENT_TOKEN: 'incrementar';
