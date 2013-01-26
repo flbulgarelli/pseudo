@@ -123,7 +123,7 @@ class PseudoGenerator implements IGenerator {
 		«expression.assigned» = («expression.value.compileForResult»)
 	'''
     def dispatch compileForResult(NumberExpression expression) '''
-    	(new java.math.BigDecimal(«expression.value»))    
+    	(new java.math.BigDecimal("«expression.value»"))    
     '''
     def dispatch compileForResult(IdExpression expression) {
     	expression.value    
