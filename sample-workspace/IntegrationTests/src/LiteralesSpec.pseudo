@@ -1,0 +1,26 @@
+clase Literales 
+
+   metodo devuelve_cinco
+   	5
+   fin
+   
+   metodo devuelve_cinco_y_medio
+     5.5
+   fin	
+   	
+   metodo devuelve_si
+     si
+   fin
+   
+   metodo devuelve_no
+     no
+   fin
+   
+   metodo devuelve_falso
+     falso
+   fin
+   
+   metodo devuelve_verdadero
+     verdadero
+   fin	
+fin

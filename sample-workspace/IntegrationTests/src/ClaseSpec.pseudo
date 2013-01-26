@@ -1,7 +1,7 @@
 clase ClaseVacia
 fin
 
-clase ClaseConPadre hereda de ClaseVacia
+clase ClaseConPadre hereda ClaseVacia
 fin
 
 clase ClaseSimpleConAtributosYMetodos 

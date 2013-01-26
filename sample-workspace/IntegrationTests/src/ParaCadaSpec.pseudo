@@ -2,7 +2,10 @@ clase Observador
     atributo notificado := falso
     
 	metodo notificar
-//		su notificado, fijar en verdadero
+	  fijar notificado := si
+//	  este, fijar_notificado_en si
+//	  este.fijar_notificado_en si
+//	  este.fijar_notificado(si)
 	fin
 fin
 
@@ -11,7 +14,7 @@ clase Observable
   atributo observadores
  
   metodo notificar_a_todos
-  	para cada observador en sus observadores notificar
+  	para cada observador en observadores notificar
   fin 
   
 fin
