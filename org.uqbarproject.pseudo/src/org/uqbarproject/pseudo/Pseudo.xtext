@@ -40,7 +40,7 @@ THROW_TOKEN: 'lanzar';
 Type:
 	CLASS_TOKEN name=ID (INHERITS_TOKEN superType=[Type])?
 	declarations+=Declaration*
-	END_TOKEN (CLASS_TOKEN?);
+	END_TOKEN;
 
 Declaration:
 	Attribute | Method;
@@ -48,7 +48,7 @@ Declaration:
 Method:
 	METHOD_TOKEN name=ID ('(' parameters+=ID* ')')?
 	statements+=Expression*
-	END_TOKEN (METHOD_TOKEN?);
+	END_TOKEN;
 
 Attribute:
 	ATTRIBUTE_TOKEN name=ID (':=' initialValue=Expression)?;
@@ -65,14 +65,13 @@ NonEmbeddableExpression:
 	//CollectionLiteralExpression ; //TODO es bastante limitante que no se puedan embeber
 	
 EmbeddableExpression:
-	SelfUnaryMessageShortcutExpression |
 	{IdExpression} value=ID |
 	{StringExpression} value=STRING |
 	{NumberExpression} value=Number |
 	{NullExpression} NULL_TOKEN |
 	{TrueExpression} TRUE_TOKEN |
 	{FalseExpression} FALSE_TOKEN |
-	{SelfExpression} SELF_TOKEN
+	{SelfExpression} SELF_TOKEN 
 //TODO	soportar? '(' NonEmbeddableExpression ')'
 	;
 
@@ -125,10 +124,6 @@ IfExpression:
 
 SimpleMessageSend:
 	receptor = EmbeddableExpression ',' message = Message 
-;
-
-SelfUnaryMessageShortcutExpression:
-	('su'|'sus') message = UnaryMessage
 ;
 
 Message:

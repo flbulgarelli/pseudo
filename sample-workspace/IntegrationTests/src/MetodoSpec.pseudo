@@ -4,15 +4,15 @@ clase Metodos
 
    metodo metodo_sin_parametros
    
-   fin metodo
+   fin
    
    metodo metodo_con_1_parametro etiqueta valor
    
-   fin metodo
+   fin
    
    metodo metodo_con_2_parametros etiqueta1 valor1 etiqueta2 valor2
    
-   fin metodo
+   fin
 
   /* Retornos y self */
    
@@ -65,4 +65,4 @@ clase Metodos
 //     fin prosa   
 //   fin
    
-fin clase
+fin

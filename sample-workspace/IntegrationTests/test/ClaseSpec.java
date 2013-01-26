@@ -10,11 +10,6 @@ public class ClaseSpec {
   }
 
   @Test
-  public void puedeDeclararClaseConTagsExtendidos() throws Exception {
-    new ClaseConTagsExtendidos();
-  }
-
-  @Test
   public void puedeDeclararClaseConHerencia() throws Exception {
     new ClaseConPadre();
     assertEquals(ClaseVacia.class, ClaseConPadre.class.getSuperclass());

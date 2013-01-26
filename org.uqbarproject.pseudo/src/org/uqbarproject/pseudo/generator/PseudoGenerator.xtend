@@ -22,7 +22,6 @@ import org.uqbarproject.pseudo.pseudo.StringExpression
 import org.uqbarproject.pseudo.pseudo.Type
 import org.uqbarproject.pseudo.pseudo.Message
 import org.uqbarproject.pseudo.pseudo.SimpleMessageSend
-import org.uqbarproject.pseudo.pseudo.SelfUnaryMessageShortcutExpression
 import org.uqbarproject.pseudo.pseudo.UnaryMessage
 import org.uqbarproject.pseudo.pseudo.AssignmentExpression
 import org.uqbarproject.pseudo.pseudo.SelfExpression
@@ -149,9 +148,6 @@ class PseudoGenerator implements IGenerator {
     }
     def dispatch compileForResult(SimpleMessageSend expression) '''
     	«expression.message.compile».apply(«expression.receptor.compileForResult»)
-    '''
-    def dispatch compileForResult(SelfUnaryMessageShortcutExpression expression) '''
-    	«expression.message.compile».apply(this)
     '''
 	def dispatch compileForResult(ForEachExpression expression) '''
 	    new Traversing(

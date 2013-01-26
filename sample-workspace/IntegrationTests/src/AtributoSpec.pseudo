@@ -2,5 +2,5 @@ clase Atributos
 
   atributo atributo_sin_inicializador
   atributo atributo_con_inicializador := 10
-
-fin clase
+ 
+fin
