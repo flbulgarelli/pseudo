@@ -32,8 +32,17 @@ Declaration:
 
 Method:
 	METHOD_TOKEN name=ID ('(' parameters+=ID* ')')?
-	statements+=Expression*
+	statements+=Statement*
 	END_TOKEN;
+
+Statement:
+	Expression | Return | LocalVariableDeclaration ;
+
+Return:
+	RETURN_TOKEN value=ID;
+	
+LocalVariableDeclaration:
+	LOCAL_VARIABLE_TOKEN (assigned=ID) (':=' (value=Expression))?;
 
 Attribute:
 	ATTRIBUTE_TOKEN name=ID (':=' initialValue=Expression)?;
@@ -46,7 +55,7 @@ NonEmbeddableExpression:
 	SimpleMessageSend |
 	TraversableExpression |
 	AssignmentExpression |
-	IfExpression ;
+	IfExpression;
 	//CollectionLiteralExpression ; //TODO es bastante limitante que no se puedan embeber
 	
 EmbeddableExpression:

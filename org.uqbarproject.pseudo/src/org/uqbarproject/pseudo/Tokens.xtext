@@ -1,7 +1,7 @@
 grammar org.uqbarproject.pseudo.Tokens with org.eclipse.xtext.common.Terminals
 
 CLASS_TOKEN: 'clase';
-INHERITS_TOKEN: 'hereda de';
+INHERITS_TOKEN: 'hereda';
 END_TOKEN: 'fin';
 METHOD_TOKEN: 'metodo';
 ATTRIBUTE_TOKEN: 'atributo';
@@ -14,4 +14,5 @@ THEN_TOKEN: 'entonces';
 OTHERWISE_TOKEN: 'de lo contrario';
 RETURN_TOKEN: 'devolver';
 THROW_TOKEN: 'lanzar';
+LOCAL_VARIABLE_TOKEN: 'variable';
 

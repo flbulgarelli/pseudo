@@ -4,37 +4,36 @@
 package org.uqbarproject.pseudo.generator
 
 import com.google.inject.Inject
+import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.IFileSystemAccess
 import org.eclipse.xtext.generator.IGenerator
 import org.eclipse.xtext.naming.IQualifiedNameProvider
+import org.uqbarproject.pseudo.pseudo.AssignmentExpression
 import org.uqbarproject.pseudo.pseudo.Attribute
 import org.uqbarproject.pseudo.pseudo.ComprehensionExpression
-import org.uqbarproject.pseudo.pseudo.Expression
+import org.uqbarproject.pseudo.pseudo.EmptyListExpression
+import org.uqbarproject.pseudo.pseudo.EmptySetExpression
+import org.uqbarproject.pseudo.pseudo.FalseExpression
 import org.uqbarproject.pseudo.pseudo.ForEachExpression
 import org.uqbarproject.pseudo.pseudo.IdExpression
 import org.uqbarproject.pseudo.pseudo.IfExpression
-import org.uqbarproject.pseudo.pseudo.Method
-import org.uqbarproject.pseudo.pseudo.NullExpression
-import org.uqbarproject.pseudo.pseudo.NumberExpression
-import org.uqbarproject.pseudo.pseudo.StringExpression
-import org.uqbarproject.pseudo.pseudo.Type
 import org.uqbarproject.pseudo.pseudo.Message
-import org.uqbarproject.pseudo.pseudo.SimpleMessageSend
-import org.uqbarproject.pseudo.pseudo.UnaryMessage
-import org.uqbarproject.pseudo.pseudo.AssignmentExpression
-import org.uqbarproject.pseudo.pseudo.SelfExpression
-import org.uqbarproject.pseudo.pseudo.TrueExpression
-import org.uqbarproject.pseudo.pseudo.FalseExpression
-import org.uqbarproject.pseudo.pseudo.EmptyListExpression
-import org.uqbarproject.pseudo.pseudo.EmptySetExpression
+import org.uqbarproject.pseudo.pseudo.Expression
+import org.uqbarproject.pseudo.pseudo.Method
+import org.uqbarproject.pseudo.pseudo.Return
 import org.uqbarproject.pseudo.pseudo.NonEmptyListExpression
 import org.uqbarproject.pseudo.pseudo.NonEmptySetExpression
-import java.util.Arrays
-import java.util.List
-import org.eclipse.emf.common.util.EList
-import org.uqbarproject.pseudo.pseudo.EmbeddableExpression
+import org.uqbarproject.pseudo.pseudo.NullExpression
+import org.uqbarproject.pseudo.pseudo.NumberExpression
+import org.uqbarproject.pseudo.pseudo.SelfExpression
+import org.uqbarproject.pseudo.pseudo.SimpleMessageSend
+import org.uqbarproject.pseudo.pseudo.StringExpression
+import org.uqbarproject.pseudo.pseudo.TrueExpression
+import org.uqbarproject.pseudo.pseudo.Type
+import org.uqbarproject.pseudo.pseudo.UnaryMessage
+import org.uqbarproject.pseudo.pseudo.LocalVariableDeclaration
 
 
 class PseudoGenerator implements IGenerator {
@@ -69,12 +68,19 @@ class PseudoGenerator implements IGenerator {
 	  	«FOR statement : method.statements.take(method.statements.size-1)»
 	  		«statement.compile»		
 	  	«ENDFOR»
+	  	«IF method.statements.last instanceof Expression»
 	  	return «method.statements.last.compileForResult»;
+	  	«ELSEIF method.statements.last instanceof Return»
+	  	«method.statements.last.compile»
+	  	«ELSE»
+	  	«method.statements.last.compile»
+	  	return null;
+	  	«ENDIF»
 	  	«ENDIF»
 	  }
 	'''
 	def dispatch compile(Attribute declaration) '''
-	  private Object «declaration.name» = «declaration.effectiveInitialValue»;
+	  private Object «declaration.name» = «declaration.initialValue.compileForResultOrNull»;
 	  public void set«declaration.name.toFirstUpper»(Object value) {
 	  	this.«declaration.name» = value;
 	  }
@@ -84,6 +90,12 @@ class PseudoGenerator implements IGenerator {
 	  public Object «declaration.name»() {
 	  	return this.«declaration.name»;
 	  }
+	'''
+	def dispatch compile(Return ret) '''
+		return «ret.value»;
+	'''
+	def dispatch compile(LocalVariableDeclaration declaration) '''
+		Object «declaration.assigned» = «declaration.value.compileForResultOrNull»;
 	'''
 	//TODO Not an expression, yet
 	def dispatch compile(UnaryMessage message) '''
@@ -152,13 +164,13 @@ class PseudoGenerator implements IGenerator {
 	def dispatch compileForResult(ForEachExpression expression) '''
 	    new Traversing(
 	       «expression.action.compile»,
-	       «filterForSelector(expression.condition)»
+	       «compileForResultOrTrueFunction(expression.condition)»
 	       ).apply(«expression.target.compileForResult»)
 	'''
 	def dispatch compileForResult(ComprehensionExpression expression) '''
 	    new TraversingTransformation(
-	       «mapperForSelector(expression.mapping)»,
-	       «filterForSelector(expression.mapping)»,
+	       «compileForResultOrIdentityFunction(expression.mapping)»,
+	       «compileForResultOrTrueFunction(expression.mapping)»,
 	       new IdentityFunction()
 	       ).apply(«expression.target.compileForResult»)
 	'''
@@ -167,20 +179,12 @@ class PseudoGenerator implements IGenerator {
 		(Boolean) («expression.compileForResult»)
 	'''
 	
-	def effectiveInitialValue(Attribute attribute) {
-		if (attribute.initialValue != null) attribute.initialValue.compileForResult else "null"  
-	}
-	
-	def effectiveSuperType(Type type) { 
-		if (type.superType != null) type.superType.name else 'java.lang.Object'
-	}
-	
-	def Object subclassResponsibility() {
-		throw new UnsupportedOperationException()
+	def compileForResultOrNull(Expression expression) {
+		if (expression != null) expression.compileForResult else "null"  
 	}
 	
 	//TODO pass arguments
-	def filterForSelector(Message message)'''
+	def compileForResultOrTrueFunction(Message message)'''
 		«IF message == null»
 			new ConstantFunction(true)
 		«ELSE»
@@ -189,11 +193,19 @@ class PseudoGenerator implements IGenerator {
 	'''
 
 	//TODO pass arguments	
-	def mapperForSelector(Message message)'''
+	def compileForResultOrIdentityFunction(Message message)'''
 		«IF message == null»
 			new IdentityFunction()
 		«ELSE»
 			«message.compile»
 		«ENDIF»
 	'''
+	
+	def effectiveSuperType(Type type) { 
+		if (type.superType != null) type.superType.name else 'java.lang.Object'
+	}
+	
+	def Object subclassResponsibility() {
+		throw new UnsupportedOperationException()
+	}
 }
