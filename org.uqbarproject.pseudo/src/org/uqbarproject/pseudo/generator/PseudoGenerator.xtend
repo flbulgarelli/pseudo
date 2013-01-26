@@ -33,7 +33,9 @@ import org.uqbarproject.pseudo.pseudo.StringExpression
 import org.uqbarproject.pseudo.pseudo.TrueExpression
 import org.uqbarproject.pseudo.pseudo.Type
 import org.uqbarproject.pseudo.pseudo.UnaryMessage
-import org.uqbarproject.pseudo.pseudo.LocalVariableDeclaration
+import org.uqbarproject.pseudo.pseudo.Let
+import org.uqbarproject.pseudo.pseudo.IncrementExpression
+import org.uqbarproject.pseudo.pseudo.DecrementExpression
 
 
 class PseudoGenerator implements IGenerator {
@@ -81,6 +83,7 @@ class PseudoGenerator implements IGenerator {
 	'''
 	def dispatch compile(Attribute declaration) '''
 	  private Object «declaration.name» = «declaration.initialValue.compileForResultOrNull»;
+«««	  TODO REMOVER
 	  public void set«declaration.name.toFirstUpper»(Object value) {
 	  	this.«declaration.name» = value;
 	  }
@@ -94,8 +97,8 @@ class PseudoGenerator implements IGenerator {
 	def dispatch compile(Return ret) '''
 		return «ret.value.compileForResult»;
 	'''
-	def dispatch compile(LocalVariableDeclaration declaration) '''
-		Object «declaration.assigned» = «declaration.value.compileForResultOrNull»;
+	def dispatch compile(Let declaration) '''
+		Object «declaration.name» = «declaration.value.compileForResultOrNull»;
 	'''
 	//TODO Not an expression, yet
 	def dispatch compile(UnaryMessage message) '''
@@ -135,7 +138,13 @@ class PseudoGenerator implements IGenerator {
 		)
 	'''
 	def dispatch compileForResult(AssignmentExpression expression) '''
-		«expression.assigned» = («expression.value.compileForResult»)
+		«expression.target» = («expression.value.compileForResult»)
+	'''
+	def dispatch compileForResult(IncrementExpression expression) '''
+		«expression.target» = new MessageSend("add", «expression.value.compileForResultOrOne»).apply(«expression.target»)
+	'''
+	def dispatch compileForResult(DecrementExpression expression) '''
+		«expression.target» = new MessageSend("subtract", «expression.value.compileForResultOrOne»).apply(«expression.target»)
 	'''
     def dispatch compileForResult(NumberExpression expression) '''
     	(new java.math.BigDecimal("«expression.value»"))    
@@ -146,15 +155,15 @@ class PseudoGenerator implements IGenerator {
     def dispatch compileForResult(StringExpression expression) '''
     	"«expression.value»"    
     '''
-    def dispatch compileForResult(NullExpression expression) {
-    	'(null)'
-    }
-    def dispatch compile(NullExpression expression) {
-    	';'
-    }
-    def dispatch compileForResult(SelfExpression expression) {
-    	'this'
-    }      
+    def dispatch compileForResult(NullExpression expression) '''
+    	(null)
+    '''
+    def dispatch compile(NullExpression expression) '''
+    	;
+    '''
+    def dispatch compileForResult(SelfExpression expression) '''
+    	this
+    '''      
     def dispatch compileForResult(TrueExpression expression) '''
         true
     '''
@@ -201,21 +210,25 @@ class PseudoGenerator implements IGenerator {
 		if (expression != null) expression.compileForResult else "null"  
 	}
 	
+	def compileForResultOrOne(Expression expression) {
+		if(expression != null) expression.compileForResult else "java.math.BigDecimal.ONE" 
+	}
+	
 	//TODO pass arguments
 	def compileForResultOrTrueFunction(Message message)'''
-		«IF message == null»
-			new ConstantFunction(true)
-		«ELSE»
+		«IF message != null»
 		    «message.compile»
+		«ELSE»
+			new ConstantFunction(true)
 		«ENDIF»
 	'''
 
 	//TODO pass arguments	
 	def compileForResultOrIdentityFunction(Message message)'''
-		«IF message == null»
-			new IdentityFunction()
-		«ELSE»
+		«IF message != null»
 			«message.compile»
+		«ELSE»
+			new IdentityFunction()
 		«ENDIF»
 	'''
 	

@@ -1,16 +1,13 @@
 clase Observador
-    atributo notificado := falso
+    atributo notificado = falso
     
 	metodo notificar
-	  fijar notificado := si
-//	  este, fijar_notificado_en si
-//	  este.fijar_notificado_en si
-//	  este.fijar_notificado(si)
+	  actualizar notificado = si
 	fin
 fin
 
 clase Observable
-
+ 
   atributo observadores
  
   metodo notificar_a_todos

@@ -11,8 +11,11 @@ FALSE_TOKEN: 'falso'|'no';
 SELF_TOKEN: 'este'|'esta';
 WHEN_TOKEN: 'cuando';
 THEN_TOKEN: 'entonces';
-OTHERWISE_TOKEN: 'caso contrario';
+OTHERWISE_TOKEN: 'caso contrario' | 'otro caso';
 RETURN_TOKEN: 'devolver';
 THROW_TOKEN: 'lanzar';
-LOCAL_VARIABLE_TOKEN: 'variable';
-
+LET_TOKEN: 'variable';
+SET_TOKEN: 'actualizar';
+INCREMENT_TOKEN: 'incrementar';
+DECREMENT_TOKEN: 'decrementar';
+ACCUMULATE_BY_TOKEN: 'con';

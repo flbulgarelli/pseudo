@@ -36,16 +36,16 @@ Method:
 	END_TOKEN;
 
 Statement:
-	Expression | Return | LocalVariableDeclaration ;
+	Expression | Return | Let ;
 
 Return:
 	RETURN_TOKEN value=EmbeddableExpression;
 	
-LocalVariableDeclaration:
-	LOCAL_VARIABLE_TOKEN (assigned=ID) (':=' (value=Expression))?;
+Let:
+	LET_TOKEN (name=ID) ('=' (value=Expression))?;
 
 Attribute:
-	ATTRIBUTE_TOKEN name=ID (':=' initialValue=Expression)?;
+	ATTRIBUTE_TOKEN name=ID ('=' initialValue=Expression)?;
 
 Expression:
 	EmbeddableExpression |
@@ -55,6 +55,8 @@ NonEmbeddableExpression:
 	SimpleMessageSend |
 	TraversableExpression |
 	AssignmentExpression |
+	IncrementExpression |
+	DecrementExpression |
 	WhenExpression;
 	//CollectionLiteralExpression ; //TODO es bastante limitante que no se puedan embeber
 	
@@ -93,7 +95,7 @@ ListLiteralExpression:
 ;
 
 NonEmptyListExpression:
-	'lista' 'con' (elements+=EmbeddableExpression)+	
+	'lista' '(' (elements+=EmbeddableExpression)+ ')'	
 ;
 
 SetLiteralExpression:
@@ -101,7 +103,7 @@ SetLiteralExpression:
 ;
 
 NonEmptySetExpression:
-	'conjunto' 'con' (elements+=EmbeddableExpression)+	
+	'conjunto' '(' (elements+=EmbeddableExpression)+ ')'	
 ;
 
 RangeLiteralExpression:
@@ -147,5 +149,12 @@ MinExpression:
 	'minimo entre' target=EmbeddableExpression (=>'segun' condition=Message)?;
 
 AssignmentExpression:
-	(assigned=ID) ':=' (value=Expression);
+	SET_TOKEN (target=ID) '=' (value=Expression);
 
+IncrementExpression:
+	INCREMENT_TOKEN target=ID (ACCUMULATE_BY_TOKEN value = EmbeddableExpression)?
+;
+
+DecrementExpression:
+	DECREMENT_TOKEN target=ID (ACCUMULATE_BY_TOKEN value = EmbeddableExpression)?
+;

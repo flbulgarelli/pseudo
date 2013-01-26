@@ -27,9 +27,27 @@ clase Metodos
   /* Variables Locales */
    
    metodo metodo_con_variables_locales
-      variable x := 5
-      variable y := x
+      variable x = 5
+      variable y = x
       y
+   fin 
+   
+   metodo metodo_que_actualiza_variables_locales
+   	 variable x = 4
+   	 actualizar x = 6
+   	 x
+   fin
+   
+   metodo metodo_que_incrementa_variables_locales
+   	variable x = 0
+   	incrementar x
+   	x
+   fin
+   
+   metodo metodo_que_decrementa_variables_locales
+    variable x = 1
+    decrementar x
+    x
    fin 
    
    
@@ -61,17 +79,17 @@ clase Metodos
     caso contrario
       'imposible'	
     fin
-  fin
+  fin 
    
   metodo metodo_con_when_con_variable
-      variable condicion := verdadero
+      variable condicion = verdadero
       cuando condicion entonces
         'ok'
       caso contrario 
         'error'
       fin
    fin
-   
+    
   //si bien en Pseudo, todo when es una expresion, en Java, algunos compilann
   //a una expresion y otros a una sentencia
   metodo metodo_con_sentencia_when

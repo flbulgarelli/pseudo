@@ -3,7 +3,7 @@ clase Zoologico
   atributo animales //:= //lista vacia 
   
   metodo agregar_animal(animal)
-    animal, fijar //fechaIngreso ahora
+    animal, ingreso
 	animales, agregar // a animal
   fin
   

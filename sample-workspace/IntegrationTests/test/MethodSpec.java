@@ -33,8 +33,23 @@ public class MethodSpec {
   }
 
   @Test
-  public void soporta_variables_locales() throws Throwable {
+  public void soporta_declarar_variables_locales() throws Throwable {
     assertEquals(BigDecimal.valueOf(5L), new Metodos().metodo_con_variables_locales());
+  }
+  
+  @Test
+  public void soporta_incrementar_variables_locales() throws Throwable {
+    assertEquals(BigDecimal.ZERO, new Metodos().metodo_que_decrementa_variables_locales());
+  }
+  
+  @Test
+  public void soporta_decrementar_variables_locales() throws Throwable {
+    assertEquals(BigDecimal.ONE, new Metodos().metodo_que_incrementa_variables_locales());
+  }
+  
+  @Test
+  public void soporta_actualizar_variables_locales() throws Throwable {
+    assertEquals(new BigDecimal("6"), new Metodos().metodo_que_actualiza_variables_locales());
   }
 
   @Test

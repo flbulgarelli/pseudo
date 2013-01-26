@@ -1,13 +1,13 @@
 clase CuentaBancaria
 
-  atributo monto := 10
+  atributo monto = 10
  
-  metodo incrementar(cuanto) 
-	monto := cuanto //+ cuanto 
+  metodo depositar(cantidad) 
+	incrementar monto con cantidad
   fin
   
-  metodo decrementar(cuanto)
-	monto := cuanto //- cuanto
+  metodo extraer(cantidad)
+	decrementar monto con cantidad
   fin
    
   metodo imprimir
