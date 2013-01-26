@@ -119,10 +119,12 @@ class PseudoGenerator implements IGenerator {
 			«expression.actions.get(i).compile»;
 		}
 		«ENDFOR»
-		«ENDIF»		
+		«ENDIF»
+		«IF expression.defaultAction != null»		
 		else {
 			«expression.defaultAction.compile»;
-		}		
+		}
+		«ENDIF»		
 	'''
 	 
 	def dispatch compileForResult(WhenExpression expression) '''
@@ -134,7 +136,11 @@ class PseudoGenerator implements IGenerator {
 			(«expression.actions.get(i).compileForResult»)				
 		«ENDFOR»
 		«ENDIF»
+		«IF expression.defaultAction != null»	
 		: («expression.defaultAction.compileForResult»)
+		«ELSE»
+		: null
+		«ENDIF»
 		)
 	'''
 	def dispatch compileForResult(AssignmentExpression expression) '''

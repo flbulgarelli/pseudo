@@ -76,8 +76,14 @@ clase Metodos
   	  'imposible'
   	cuando verdadero entonces
   	  'ok'  
-    caso contrario
+    otro caso
       'imposible'	
+    fin
+  fin 
+  
+  metodo metodo_sin_default
+  	cuando falso entonces
+  	  este, hacer_algo  
     fin
   fin 
    

@@ -71,8 +71,8 @@ public class MethodSpec {
   }
 
   @Test
-  public void soporta_when_sin_default() throws Exception {
-    fail();
+  public void soporta_when_sin_default() throws Throwable {
+    assertEquals(null, new Metodos().metodo_sin_default());
   }
 
   @Test
