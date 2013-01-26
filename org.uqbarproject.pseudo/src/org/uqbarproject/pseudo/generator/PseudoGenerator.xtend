@@ -110,11 +110,13 @@ class PseudoGenerator implements IGenerator {
 		if («expression.cases.get(0).compileForBooleanResult») {
 			«expression.actions.get(0).compile»;
 		}
+		«IF expression.cases.size > 1»
 		«FOR i : 1..expression.cases.size-1»
 		else if («expression.cases.get(i).compileForBooleanResult») {
 			«expression.actions.get(i).compile»;
-		}		
+		}
 		«ENDFOR»
+		«ENDIF»		
 		else {
 			«expression.defaultAction.compile»;
 		}		
@@ -123,10 +125,12 @@ class PseudoGenerator implements IGenerator {
 	def dispatch compileForResult(WhenExpression expression) '''
 		((«expression.cases.get(0).compileForBooleanResult») ? 
 			(«expression.actions.get(0).compileForResult»)
+		«IF expression.cases.size > 1»			
 		«FOR i : 1..expression.cases.size-1»
 		: («expression.cases.get(i).compileForBooleanResult») ?
 			(«expression.actions.get(i).compileForResult»)				
 		«ENDFOR»
+		«ENDIF»
 		: («expression.defaultAction.compileForResult»)
 		)
 	'''

@@ -21,41 +21,67 @@ clase Metodos
    fin
    
    metodo metodo_que_devuelve_self_explicitamente
-//     devolver self
+	  devolver este
    fin
    
   /* Variables Locales */
    
    metodo metodo_con_variables_locales
-      x := 5
-      y := x
+      variable x := 5
+      variable y := x
       y
    fin 
    
-   metodo metodo_con_if_verdadero
-      si verdadero entonces
+   
+   /* When's */
+   
+   metodo metodo_con_when_verdadero
+      cuando verdadero entonces
         'ok'
-      de lo contrario 
+      caso contrario 
         'error'
       fin
    fin
    
-  metodo metodo_con_if_falso
-      si falso entonces
+  metodo metodo_con_when_falso
+      cuando falso entonces
         'ok'
-      de lo contrario 
+      caso contrario 
         'error'
       fin
-   fin
+  fin
    
-  metodo metodo_con_if_con_tag_extendido
+  metodo metodo_con_when_multiple
+  	cuando falso entonces
+  	  'imposible'
+  	cuando falso entonces
+  	  'imposible'
+  	cuando verdadero entonces
+  	  'ok'  
+    caso contrario
+      'imposible'	
+    fin
+  fin
+   
+  metodo metodo_con_when_con_variable
       condicion := verdadero
-      si condicion entonces
+      cuando condicion entonces
         'ok'
-      de lo contrario 
+      caso contrario 
         'error'
-      fin //si
+      fin
    fin
+   
+  //si bien en Pseudo, todo when es una expresion, en Java, algunos compilann
+  //a una expresion y otros a una sentencia
+  metodo metodo_con_sentencia_when
+  	cuando verdadero entonces
+  	  si
+  	caso contrario
+  	  no
+    fin
+    devolver 5
+  fin 
    
    
 //   metodo metodo_con_texto_libre
@@ -63,6 +89,6 @@ clase Metodos
 //		Puedo demostrar el teorema de Fermat. Es trivial, pero no lo haré porque
 //		no entra en este método.       
 //     fin prosa   
-//   fin
+//   fin 
    
 fin

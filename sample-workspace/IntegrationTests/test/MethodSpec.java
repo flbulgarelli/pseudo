@@ -1,6 +1,9 @@
 import static org.junit.Assert.*;
 
+import java.math.BigDecimal;
 import java.util.Map;
+
+import javax.sound.midi.Receiver;
 
 import org.junit.Test;
 
@@ -30,15 +33,29 @@ public class MethodSpec {
   }
 
   @Test
-  public void soporta_variables_locales() throws Exception {
+  public void soporta_variables_locales() throws Throwable {
+    assertEquals(BigDecimal.valueOf(5L), new Metodos().metodo_con_variables_locales());
+  }
+
+  @Test
+  public void soporta_when() throws Throwable {
+    Metodos receptor = new Metodos();
+    assertEquals("ok", receptor.metodo_con_when_verdadero());
+    assertEquals("error", receptor.metodo_con_when_falso());
+  }
+
+  @Test
+  public void soporta_when_con_multiples_condiciones() throws Throwable {
+    assertEquals("ok", new Metodos().metodo_con_when_multiple());
+  }
+
+  @Test
+  public void soporta_when_sin_default() throws Exception {
     fail();
   }
 
   @Test
-  public void soporta_ifs() throws Throwable {
-    Metodos receptor = new Metodos();
-    assertEquals("ok", receptor.metodo_con_if_verdadero());
-    assertEquals("error", receptor.metodo_con_if_falso());
+  public void soporta_when_que_compila_a_sentencia() throws Throwable {
+    assertEquals(BigDecimal.valueOf(5), new Metodos().metodo_con_sentencia_when());
   }
-  
 }

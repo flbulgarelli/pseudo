@@ -39,7 +39,7 @@ Statement:
 	Expression | Return | LocalVariableDeclaration ;
 
 Return:
-	RETURN_TOKEN value=ID;
+	RETURN_TOKEN value=EmbeddableExpression;
 	
 LocalVariableDeclaration:
 	LOCAL_VARIABLE_TOKEN (assigned=ID) (':=' (value=Expression))?;
