@@ -1,0 +1,17 @@
+clase Observador
+    atributo notificado := falso
+    
+	metodo notificar
+//		su notificado, fijar en verdadero
+	fin
+fin
+
+clase Observable
+
+  atributo observadores
+ 
+  metodo notificar_a_todos
+  	para cada observador en sus observadores notificar
+  fin 
+  
+fin
