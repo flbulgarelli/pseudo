@@ -1,6 +1,8 @@
 package org.uqbarproject.pseudo.runtime;
 
 import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.LinkedList;
 
 public class MessageSend extends AbstractApplicable {
   private final String selector;
@@ -11,19 +13,32 @@ public class MessageSend extends AbstractApplicable {
     this.arguments = arguments;
   }
 
+  // TODO use invokeDynamic
   public Object apply(Object receptor) throws Throwable {
-    Class<?>[] types = new Class[arguments.length];
-    java.util.Arrays.fill(types, Object.class);
     try {
-      return resolveMethod(receptor, types).invoke(receptor, arguments);
+      return resolveMethod(receptor, arguments.length).invoke(receptor, arguments);
     } catch (java.lang.reflect.InvocationTargetException e) {
       throw e.getCause();
     }
   }
 
-  private Method resolveMethod(Object receptor, Class<?>[] types) throws NoSuchMethodException {
-    // TODO dar sugerencias
-    return receptor.getClass().getMethod(selector, types);
+  private Method resolveMethod(Object receptor, int argumentsCount) throws NoSuchMethodException {
+    Method[] methods = receptor.getClass().getMethods();
+    Collection<Method> similarMethods = new LinkedList<Method>();
+
+    for (Method method : methods) {
+      if (method.getName().equals(selector) && method.getParameterTypes().length == argumentsCount)
+        return method;
+
+      if (method.getName().toLowerCase().contains(selector.toLowerCase()))
+        similarMethods.add(method);
+    }
+
+    throw new NoSuchMethodException(String.format(
+      "No such method %s with %s parameters. Similar methods are: %s",
+      selector,
+      argumentsCount,
+      similarMethods));
   }
 
 }

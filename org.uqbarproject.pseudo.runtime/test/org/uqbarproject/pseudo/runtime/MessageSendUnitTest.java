@@ -1,5 +1,9 @@
 package org.uqbarproject.pseudo.runtime;
 
+import static org.junit.Assert.*;
+
+import java.math.BigDecimal;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -23,5 +27,10 @@ public class MessageSendUnitTest {
     Cell aCell = new Cell(10);
     new MessageSend("setValue", 15).apply(aCell);
     Assert.assertEquals(15, aCell.getValue());
+  }
+
+  @Test
+  public void canSendMessagesForTypedMethods() throws Throwable {
+    assertEquals(BigDecimal.valueOf(3), new MessageSend("add", java.math.BigDecimal.ONE).apply(BigDecimal.valueOf(2)));
   }
 }
