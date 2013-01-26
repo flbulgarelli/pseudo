@@ -64,7 +64,7 @@ clase Metodos
   fin
    
   metodo metodo_con_when_con_variable
-      condicion := verdadero
+      variable condicion := verdadero
       cuando condicion entonces
         'ok'
       caso contrario 
@@ -76,19 +76,17 @@ clase Metodos
   //a una expresion y otros a una sentencia
   metodo metodo_con_sentencia_when
   	cuando verdadero entonces
-  	  si
+  	  nada
   	caso contrario
-  	  no
+  	  nada
     fin
     devolver 5
   fin 
    
    
-//   metodo metodo_con_texto_libre
-//     prosa 
-//		Puedo demostrar el teorema de Fermat. Es trivial, pero no lo haré porque
-//		no entra en este método.       
-//     fin prosa   
+//   especificacion especificacion_metodo(argumento)
+//	Este método demuestra el teorema de Fermat. Es trivial, pero no lo haré porque
+//	no entra en este bloque       
 //   fin 
    
 fin

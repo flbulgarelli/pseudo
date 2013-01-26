@@ -43,6 +43,12 @@ public class MethodSpec {
     assertEquals("ok", receptor.metodo_con_when_verdadero());
     assertEquals("error", receptor.metodo_con_when_falso());
   }
+  
+  @Test
+  public void soporta_when_sobre_variables() throws Throwable {
+    Metodos receptor = new Metodos();
+    assertEquals("ok", receptor.metodo_con_when_con_variable());
+  }
 
   @Test
   public void soporta_when_con_multiples_condiciones() throws Throwable {

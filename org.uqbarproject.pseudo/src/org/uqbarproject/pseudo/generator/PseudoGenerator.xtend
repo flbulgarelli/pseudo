@@ -92,7 +92,7 @@ class PseudoGenerator implements IGenerator {
 	  }
 	'''
 	def dispatch compile(Return ret) '''
-		return «ret.value»;
+		return «ret.value.compileForResult»;
 	'''
 	def dispatch compile(LocalVariableDeclaration declaration) '''
 		Object «declaration.assigned» = «declaration.value.compileForResultOrNull»;
@@ -148,6 +148,9 @@ class PseudoGenerator implements IGenerator {
     '''
     def dispatch compileForResult(NullExpression expression) {
     	'(null)'
+    }
+    def dispatch compile(NullExpression expression) {
+    	';'
     }
     def dispatch compileForResult(SelfExpression expression) {
     	'this'
