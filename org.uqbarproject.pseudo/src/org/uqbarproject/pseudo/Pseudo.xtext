@@ -52,8 +52,10 @@ EmbeddableExpression:
 	SelfUnaryMessageShortcutExpression |
 	{IdExpression} value=ID |
 	{StringExpression} value=STRING |
-	{NullExpression} 'nada' |
 	{NumberExpression} value=Number |
+	{NullExpression} 'nada' |
+	{TrueExpression} ('verdadero'|'sí') |
+	{FalseExpression} ('falso'|'no') |
 	{SelfExpression} ('este'|'esta')
 //TODO	soportar? '(' NonEmbeddableExpression ')'
 	;

@@ -26,6 +26,8 @@ import org.uqbarproject.pseudo.pseudo.SelfUnaryMessageShortcutExpression
 import org.uqbarproject.pseudo.pseudo.UnaryMessage
 import org.uqbarproject.pseudo.pseudo.AssignmentExpression
 import org.uqbarproject.pseudo.pseudo.SelfExpression
+import org.uqbarproject.pseudo.pseudo.TrueExpression
+import org.uqbarproject.pseudo.pseudo.FalseExpression
 
 
 class PseudoGenerator implements IGenerator {
@@ -116,6 +118,12 @@ class PseudoGenerator implements IGenerator {
     def dispatch compileForResult(SelfExpression expression) {
     	'this'
     }      
+    def dispatch compileForResult(TrueExpression expression) '''
+        true
+    '''
+    def dispatch compileForResult(FalseExpression expression) '''
+        false
+    '''
      
     def dispatch compileForResult(SimpleMessageSend expression) '''
     	«expression.message.compile».apply(«expression.receptor.compileForResult»)
