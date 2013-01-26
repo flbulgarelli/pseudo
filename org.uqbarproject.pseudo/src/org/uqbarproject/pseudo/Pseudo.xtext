@@ -55,7 +55,7 @@ NonEmbeddableExpression:
 	SimpleMessageSend |
 	TraversableExpression |
 	AssignmentExpression |
-	IfExpression;
+	WhenExpression;
 	//CollectionLiteralExpression ; //TODO es bastante limitante que no se puedan embeber
 	
 EmbeddableExpression:
@@ -109,10 +109,10 @@ RangeLiteralExpression:
 ;
 
 
-IfExpression:
-	IF_TOKEN (condition=Expression) 
-	THEN_TOKEN trueExpression = Expression 
-	OTHERWISE_TOKEN falseExpression = Expression
+WhenExpression:
+	(WHEN_TOKEN (cases+=Expression) 
+	THEN_TOKEN actions+= Expression)+ 
+	OTHERWISE_TOKEN defaultAction=Expression
 	END_TOKEN 
 ;
 

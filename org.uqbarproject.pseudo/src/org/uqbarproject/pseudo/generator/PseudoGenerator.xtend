@@ -18,7 +18,7 @@ import org.uqbarproject.pseudo.pseudo.EmptySetExpression
 import org.uqbarproject.pseudo.pseudo.FalseExpression
 import org.uqbarproject.pseudo.pseudo.ForEachExpression
 import org.uqbarproject.pseudo.pseudo.IdExpression
-import org.uqbarproject.pseudo.pseudo.IfExpression
+import org.uqbarproject.pseudo.pseudo.WhenExpression
 import org.uqbarproject.pseudo.pseudo.Message
 import org.uqbarproject.pseudo.pseudo.Expression
 import org.uqbarproject.pseudo.pseudo.Method
@@ -106,18 +106,29 @@ class PseudoGenerator implements IGenerator {
 	def dispatch compile(Expression expression) '''
 		«expression.compileForResult»;
 	'''
-	def dispatch compile(IfExpression expression) '''
-		if («expression.condition.compileForBooleanResult») {
-			«expression.trueExpression.compile»;
-		} else {
-			«expression.falseExpression.compile»;
+	def dispatch compile(WhenExpression expression) '''
+		if («expression.cases.get(0).compileForBooleanResult») {
+			«expression.actions.get(0).compile»;
+		}
+		«FOR i : 1..expression.cases.size-1»
+		else if («expression.cases.get(i).compileForBooleanResult») {
+			«expression.actions.get(i).compile»;
+		}		
+		«ENDFOR»
+		else {
+			«expression.defaultAction.compile»;
 		}		
 	'''
-	
-	def dispatch compileForResult(IfExpression expression) '''
-		((«expression.condition.compileForBooleanResult») 
-			? («expression.trueExpression.compileForResult»)
-			: («expression.falseExpression.compileForResult»)) 
+	 
+	def dispatch compileForResult(WhenExpression expression) '''
+		((«expression.cases.get(0).compileForBooleanResult») ? 
+			(«expression.actions.get(0).compileForResult»)
+		«FOR i : 1..expression.cases.size-1»
+		: («expression.cases.get(i).compileForBooleanResult») ?
+			(«expression.actions.get(i).compileForResult»)				
+		«ENDFOR»
+		: («expression.defaultAction.compileForResult»)
+		)
 	'''
 	def dispatch compileForResult(AssignmentExpression expression) '''
 		«expression.assigned» = («expression.value.compileForResult»)
