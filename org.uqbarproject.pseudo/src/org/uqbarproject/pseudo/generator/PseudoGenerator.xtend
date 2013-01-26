@@ -28,6 +28,14 @@ import org.uqbarproject.pseudo.pseudo.AssignmentExpression
 import org.uqbarproject.pseudo.pseudo.SelfExpression
 import org.uqbarproject.pseudo.pseudo.TrueExpression
 import org.uqbarproject.pseudo.pseudo.FalseExpression
+import org.uqbarproject.pseudo.pseudo.EmptyListExpression
+import org.uqbarproject.pseudo.pseudo.EmptySetExpression
+import org.uqbarproject.pseudo.pseudo.NonEmptyListExpression
+import org.uqbarproject.pseudo.pseudo.NonEmptySetExpression
+import java.util.Arrays
+import java.util.List
+import org.eclipse.emf.common.util.EList
+import org.uqbarproject.pseudo.pseudo.EmbeddableExpression
 
 
 class PseudoGenerator implements IGenerator {
@@ -124,7 +132,21 @@ class PseudoGenerator implements IGenerator {
     def dispatch compileForResult(FalseExpression expression) '''
         false
     '''
-     
+    def dispatch compileForResult(EmptyListExpression expression) '''
+    	new java.util.LinkedList()
+    '''
+    def dispatch compileForResult(EmptySetExpression expression) '''
+    	new java.util.HashSet()
+    '''
+    def dispatch compileForResult(NonEmptyListExpression expression) '''
+    	new java.util.LinkedList(java.util.Arrays.asList(«joinCompileResults(expression.elements)»))
+    '''
+    def dispatch compileForResult(NonEmptySetExpression expression) '''
+    	new java.util.HashSet(java.util.Arrays.asList(«joinCompileResults(expression.elements)»))
+    '''
+    def joinCompileResults(EList<? extends Expression> expressions) {
+    	expressions.map[it.compileForResult].join(',')
+    }
     def dispatch compileForResult(SimpleMessageSend expression) '''
     	«expression.message.compile».apply(«expression.receptor.compileForResult»)
     '''

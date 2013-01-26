@@ -46,7 +46,8 @@ NonEmbeddableExpression:
 	SimpleMessageSend |
 	TraversableExpression |
 	AssignmentExpression |
-	IfExpression;
+	IfExpression ;
+	//CollectionLiteralExpression ; //TODO es bastante limitante que no se puedan embeber
 	
 EmbeddableExpression:
 	SelfUnaryMessageShortcutExpression |
@@ -74,6 +75,31 @@ TraversableExpression:
 	//	FindExpression |
 	//	SortExpression 
 ;
+
+CollectionLiteralExpression:
+	ListLiteralExpression | SetLiteralExpression | RangeLiteralExpression 
+;
+
+ListLiteralExpression:
+	{EmptyListExpression} 'lista' 'vacia' | NonEmptyListExpression
+;
+
+NonEmptyListExpression:
+	'lista' 'con' (elements+=EmbeddableExpression)+	
+;
+
+SetLiteralExpression:
+	{EmptySetExpression} 'conjunto' 'vacio' | NonEmptySetExpression
+;
+
+NonEmptySetExpression:
+	'conjunto' 'con' (elements+=EmbeddableExpression)+	
+;
+
+RangeLiteralExpression:
+	'rango desde' start =  EmbeddableExpression 'hasta' end = EmbeddableExpression 
+;
+
 
 IfExpression:
 	'si' (condition=Expression) 
