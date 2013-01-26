@@ -99,14 +99,14 @@ class PseudoGenerator implements IGenerator {
 		if («expression.condition.compileForBooleanResult») {
 			«expression.trueExpression.compile»;
 		} else {
-			«expression.trueExpression.compile»;
+			«expression.falseExpression.compile»;
 		}		
 	'''
 	
 	def dispatch compileForResult(IfExpression expression) '''
 		((«expression.condition.compileForBooleanResult») 
 			? («expression.trueExpression.compileForResult»)
-			: («expression.trueExpression.compileForResult»)) 
+			: («expression.falseExpression.compileForResult»)) 
 	'''
 	def dispatch compileForResult(AssignmentExpression expression) '''
 		«expression.assigned» = («expression.value.compileForResult»)

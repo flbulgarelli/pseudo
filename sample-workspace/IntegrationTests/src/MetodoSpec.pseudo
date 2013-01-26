@@ -33,8 +33,7 @@ clase Metodos
    fin 
    
    metodo metodo_con_if_verdadero
-      condicion := true
-      si condicion entonces
+      si verdadero entonces
         'ok'
       de lo contrario 
         'error'
@@ -42,8 +41,7 @@ clase Metodos
    fin
    
   metodo metodo_con_if_falso
-      condicion := false
-      si condicion entonces
+      si falso entonces
         'ok'
       de lo contrario 
         'error'
@@ -51,7 +49,7 @@ clase Metodos
    fin
    
   metodo metodo_con_if_con_tag_extendido
-      condicion := true
+      condicion := verdadero
       si condicion entonces
         'ok'
       de lo contrario 
