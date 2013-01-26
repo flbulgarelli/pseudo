@@ -22,21 +22,36 @@ generate pseudo "http://www.uqbarproject.org/pseudo/Pseudo"
 Model:
 	types+=Type*;
 
+CLASS_TOKEN: 'clase';
+INHERITS_TOKEN: 'hereda de';
+END_TOKEN: 'fin';
+METHOD_TOKEN: 'metodo';
+ATTRIBUTE_TOKEN: 'atributo';
+NULL_TOKEN : 'nada';
+TRUE_TOKEN: 'verdadero'|'sí';
+FALSE_TOKEN: 'falso'|'no';
+SELF_TOKEN: 'este'|'esta';
+IF_TOKEN: 'si';
+THEN_TOKEN: 'entonces';
+OTHERWISE_TOKEN: 'de lo contrario';
+RETURN_TOKEN: 'devolver';
+THROW_TOKEN: 'lanzar';
+
 Type:
-	'clase' name=ID ('hereda de' superType=[Type])?
+	CLASS_TOKEN name=ID (INHERITS_TOKEN superType=[Type])?
 	declarations+=Declaration*
-	'fin' ('clase'?);
+	END_TOKEN (CLASS_TOKEN?);
 
 Declaration:
 	Attribute | Method;
 
 Method:
-	'metodo' (classMethod?='de clase'?) name=ID ('(' parameters+=ID* ')')?
+	METHOD_TOKEN name=ID ('(' parameters+=ID* ')')?
 	statements+=Expression*
-	'fin' ('metodo'?);
+	END_TOKEN (METHOD_TOKEN?);
 
 Attribute:
-	'atributo' (classAttribute?='de clase'?) name=ID (':=' initialValue=Expression)?;
+	ATTRIBUTE_TOKEN name=ID (':=' initialValue=Expression)?;
 
 Expression:
 	EmbeddableExpression |
@@ -54,10 +69,10 @@ EmbeddableExpression:
 	{IdExpression} value=ID |
 	{StringExpression} value=STRING |
 	{NumberExpression} value=Number |
-	{NullExpression} 'nada' |
-	{TrueExpression} ('verdadero'|'sí') |
-	{FalseExpression} ('falso'|'no') |
-	{SelfExpression} ('este'|'esta')
+	{NullExpression} NULL_TOKEN |
+	{TrueExpression} TRUE_TOKEN |
+	{FalseExpression} FALSE_TOKEN |
+	{SelfExpression} SELF_TOKEN
 //TODO	soportar? '(' NonEmbeddableExpression ')'
 	;
 
@@ -102,10 +117,10 @@ RangeLiteralExpression:
 
 
 IfExpression:
-	'si' (condition=Expression) 
-	'entonces' trueExpression = Expression 
-	'de lo contrario' falseExpression = Expression
-	'fin'
+	IF_TOKEN (condition=Expression) 
+	THEN_TOKEN trueExpression = Expression 
+	OTHERWISE_TOKEN falseExpression = Expression
+	END_TOKEN 
 ;
 
 SimpleMessageSend:
@@ -144,12 +159,4 @@ MinExpression:
 
 AssignmentExpression:
 	(assigned=ID) ':=' (value=Expression);
-
-terminal RETURN:
-	'devolver';
-
-
-terminal THROW:
-	'lanzar';
-
 
