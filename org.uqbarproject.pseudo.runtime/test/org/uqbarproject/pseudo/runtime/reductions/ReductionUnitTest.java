@@ -1,20 +1,24 @@
 package org.uqbarproject.pseudo.runtime.reductions;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 
 import org.junit.Test;
+import org.uqbarproject.pseudo.runtime.IdentityFunction;
 import org.uqbarproject.pseudo.runtime.MessageSend;
-import org.uqbarproject.pseudo.runtime.reductions.MaxFunction;
-import org.uqbarproject.pseudo.runtime.reductions.MinFunction;
-import org.uqbarproject.pseudo.runtime.reductions.SumFunction;
 
+/**
+ * Tests for functions in the reduction package
+ * 
+ * @author flbulgarelli
+ */
 public class ReductionUnitTest {
 
   @Test
   public void maxReductionCalculatesMax() throws Throwable {
-    assertEquals(50, new MaxFunction().apply(Arrays.asList(10, 50, 3)));
+    assertEquals(50, new MaxFunction(new IdentityFunction()).apply(Arrays.asList(10, 50, 3)));
   }
 
   @Test
@@ -26,7 +30,7 @@ public class ReductionUnitTest {
 
   @Test
   public void minReductionCalculatesMin() throws Throwable {
-    assertEquals(3, new MinFunction().apply(Arrays.asList(10, 50, 3)));
+    assertEquals(3, new MinFunction(new IdentityFunction()).apply(Arrays.asList(10, 50, 3)));
   }
 
   @Test
@@ -35,8 +39,28 @@ public class ReductionUnitTest {
   }
 
   @Test
-  public void sumReductionCalculatesMax() throws Throwable {
-    assertEquals(63, new SumFunction().apply(Arrays.asList(10, 50, 3)));
+  public void sumReductionCalculatesSum() throws Throwable {
+    assertEquals(63, new SumFunction(new IdentityFunction()).apply(Arrays.asList(10, 50, 3)));
+  }
+
+  @Test
+  public void averageReductionCalculatesAverage() throws Throwable {
+    assertEquals(63 / 3.0, new SumFunction(new IdentityFunction()).apply(Arrays.asList(10, 50, 3)));
+  }
+
+  @Test
+  public void find() throws Exception {
+    fail();
+  }
+
+  @Test
+  public void any() throws Exception {
+    fail();
+  }
+
+  @Test
+  public void all() throws Exception {
+    fail();
   }
 
 }

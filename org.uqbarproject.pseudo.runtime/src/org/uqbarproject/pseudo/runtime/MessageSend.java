@@ -3,11 +3,14 @@ package org.uqbarproject.pseudo.runtime;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 
+/**
+ * @author flbulgarelli
+ * */
+// TODO rename to Message
 public class MessageSend extends AbstractApplicable {
   private final String selector;
   private final Object[] arguments;
@@ -19,6 +22,11 @@ public class MessageSend extends AbstractApplicable {
 
   // TODO use invokeDynamic
   public Object apply(Object receptor) throws Throwable {
+    return sendTo(receptor);
+  }
+
+  /** Sends this message to the given object */
+  private Object sendTo(Object receptor) throws IllegalAccessException, NoSuchMethodException, Throwable {
     try {
       return resolveMethod(receptor, arguments.length).invoke(receptor, arguments);
     } catch (java.lang.reflect.InvocationTargetException e) {
@@ -26,13 +34,17 @@ public class MessageSend extends AbstractApplicable {
     }
   }
 
+  /** Performs a naiv method lookup */
   private Method resolveMethod(Object receptor, int argumentsCount) throws NoSuchMethodException {
     Collection<Method> similarMethods = new LinkedList<Method>();
 
-    Method method = findMethod(argumentsCount, getCandidateMethods(receptor), similarMethods);
+    for (Method method : getCandidateMethods(receptor)) {
+      if (method.getName().equals(selector) && method.getParameterTypes().length == argumentsCount)
+        return method;
 
-    if (method != null)
-      return method;
+      if (method.getName().toLowerCase().contains(selector.toLowerCase()))
+        similarMethods.add(method);
+    }
 
     throw new NoSuchMethodException(String.format(
       "No such method %s with %s parameters. Similar methods are: %s",
@@ -41,6 +53,10 @@ public class MessageSend extends AbstractApplicable {
       similarMethods));
   }
 
+  /**
+   * Answers a collection of methods that may match the this message for the
+   * given receptor
+   */
   private Collection<Method> getCandidateMethods(Object receptor) {
     Collection<Method> methods = new ArrayList<Method>();
     Collections.addAll(methods, receptor.getClass().getMethods());
@@ -50,16 +66,4 @@ public class MessageSend extends AbstractApplicable {
           methods.add(method);
     return methods;
   }
-
-  private Method findMethod(int argumentsCount, Iterable<Method> methods, Collection<Method> similarMethods) {
-    for (Method method : methods) {
-      if (method.getName().equals(selector) && method.getParameterTypes().length == argumentsCount)
-        return method;
-
-      if (method.getName().toLowerCase().contains(selector.toLowerCase()))
-        similarMethods.add(method);
-    }
-    return null;
-  }
-
 }
