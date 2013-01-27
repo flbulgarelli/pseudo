@@ -5,23 +5,58 @@ package org.uqbarproject.pseudo.formatting;
 
 import org.eclipse.xtext.formatting.impl.AbstractDeclarativeFormatter;
 import org.eclipse.xtext.formatting.impl.FormattingConfig;
+import org.uqbarproject.pseudo.services.PseudoGrammarAccess;
 
 /**
  * This class contains custom formatting description.
  * 
  * see : http://www.eclipse.org/Xtext/documentation/latest/xtext.html#formatting
- * on how and when to use it 
+ * on how and when to use it
  * 
- * Also see {@link org.eclipse.xtext.xtext.XtextFormattingTokenSerializer} as an example
+ * Also see {@link org.eclipse.xtext.xtext.XtextFormattingTokenSerializer} as an
+ * example
  */
 public class PseudoFormatter extends AbstractDeclarativeFormatter {
-	
-	@Override
-	protected void configureFormatting(FormattingConfig c) {
-// It's usually a good idea to activate the following three statements.
-// They will add and preserve newlines around comments
-//		c.setLinewrap(0, 1, 2).before(getGrammarAccess().getSL_COMMENTRule());
-//		c.setLinewrap(0, 1, 2).before(getGrammarAccess().getML_COMMENTRule());
-//		c.setLinewrap(0, 1, 1).after(getGrammarAccess().getML_COMMENTRule());
-	}
+
+  @Override
+  protected void configureFormatting(FormattingConfig c) {
+    // It's usually a good idea to activate the following three statements.
+    // They will add and preserve newlines around comments
+    PseudoGrammarAccess grammar = (PseudoGrammarAccess) getGrammarAccess();
+    c.setLinewrap(0, 1, 2).before(grammar.getSL_COMMENTRule());
+    c.setLinewrap(0, 1, 2).before(grammar.getML_COMMENTRule());
+    c.setLinewrap(0, 1, 1).after(grammar.getML_COMMENTRule());
+    
+    c.setLinewrap(2).around(grammar.getMethodRule());
+    c.setLinewrap().around(grammar.getAttributeRule());
+    
+    c.setLinewrap().around(grammar.getStatementRule());
+    
+    c.setLinewrap().before(grammar.getWHEN_TOKENRule());
+    c.setLinewrap().after(grammar.getTHEN_TOKENRule());
+    c.setLinewrap().around(grammar.getOTHERWISE_TOKENRule());
+    
+    c.setSpace("  ");
+    
+    c.setLinewrap().around(grammar.getEND_TOKENRule());
+    
+    c.setIndentationIncrement().before(grammar.getWhenExpressionAccess().getActionsExpressionParserRuleCall_0_3_0());
+    c.setIndentationDecrement().after(grammar.getWhenExpressionAccess().getActionsExpressionParserRuleCall_0_3_0());
+    c.setIndentationIncrement().before(grammar.getWhenExpressionAccess().getDefaultActionExpressionParserRuleCall_1_1_0());
+    c.setIndentationDecrement().after(grammar.getWhenExpressionAccess().getDefaultActionExpressionParserRuleCall_1_1_0());
+    
+    c.setIndentation(
+      grammar.getMethodAccess().getMETHOD_TOKENParserRuleCall_0(), 
+      grammar.getMethodAccess().getEND_TOKENParserRuleCall_5());
+    
+    c.setIndentation(
+      grammar.getMethodAccess().getMETHOD_TOKENParserRuleCall_0(), 
+      grammar.getMethodAccess().getEND_TOKENParserRuleCall_5());
+    
+    
+    c.setIndentation(
+      grammar.getTypeAccess().getCLASS_TOKENParserRuleCall_0(), 
+      grammar.getTypeAccess().getEND_TOKENParserRuleCall_4());
+    
+  }
 }
