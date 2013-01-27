@@ -1,7 +1,11 @@
 package org.uqbarproject.pseudo.runtime;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 
 public class MessageSend extends AbstractApplicable {
@@ -23,9 +27,31 @@ public class MessageSend extends AbstractApplicable {
   }
 
   private Method resolveMethod(Object receptor, int argumentsCount) throws NoSuchMethodException {
-    Method[] methods = receptor.getClass().getMethods();
     Collection<Method> similarMethods = new LinkedList<Method>();
 
+    Method method = findMethod(argumentsCount, getCandidateMethods(receptor), similarMethods);
+
+    if (method != null)
+      return method;
+
+    throw new NoSuchMethodException(String.format(
+      "No such method %s with %s parameters. Similar methods are: %s",
+      selector,
+      argumentsCount,
+      similarMethods));
+  }
+
+  private Collection<Method> getCandidateMethods(Object receptor) {
+    Collection<Method> methods = new ArrayList<Method>();
+    Collections.addAll(methods, receptor.getClass().getMethods());
+    if (receptor instanceof Class)
+      for (Method method : ((Class<?>) receptor).getMethods())
+        if (Modifier.isStatic(((Method) method).getModifiers()))
+          methods.add(method);
+    return methods;
+  }
+
+  private Method findMethod(int argumentsCount, Iterable<Method> methods, Collection<Method> similarMethods) {
     for (Method method : methods) {
       if (method.getName().equals(selector) && method.getParameterTypes().length == argumentsCount)
         return method;
@@ -33,12 +59,7 @@ public class MessageSend extends AbstractApplicable {
       if (method.getName().toLowerCase().contains(selector.toLowerCase()))
         similarMethods.add(method);
     }
-
-    throw new NoSuchMethodException(String.format(
-      "No such method %s with %s parameters. Similar methods are: %s",
-      selector,
-      argumentsCount,
-      similarMethods));
+    return null;
   }
 
 }

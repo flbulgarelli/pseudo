@@ -1,6 +1,6 @@
 package org.uqbarproject.pseudo.runtime;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.math.BigDecimal;
 
@@ -32,5 +32,20 @@ public class MessageSendUnitTest {
   @Test
   public void canSendMessagesForTypedMethods() throws Throwable {
     assertEquals(BigDecimal.valueOf(3), new MessageSend("add", java.math.BigDecimal.ONE).apply(BigDecimal.valueOf(2)));
+  }
+
+  @Test
+  public void canSendClassMessagesToStaticMethods() throws Throwable {
+    Assert.assertEquals(Cell.fromValue(10), new MessageSend("fromValue", 10).apply(Cell.class));
+  }
+  
+  @Test(expected=NoSuchMethodException.class)
+  public void failsWhenClassMethodIsNotFound() throws Throwable {
+    new MessageSend("setValue", 10).apply(Cell.class);
+  }
+  
+  @Test
+  public void canSendClassMessagesToClassObjectMethods() throws Throwable {
+    Assert.assertEquals("Cell", new MessageSend("getSimpleName").apply(Cell.class));
   }
 }

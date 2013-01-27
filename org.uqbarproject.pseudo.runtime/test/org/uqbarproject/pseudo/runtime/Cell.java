@@ -2,6 +2,7 @@ package org.uqbarproject.pseudo.runtime;
 
 /**
  * For testing only
+ * 
  * @author flbulgarelli
  */
 public class Cell {
@@ -22,6 +23,10 @@ public class Cell {
   @Override
   public String toString() {
     return "Cell(" + value + ")";
+  }
+
+  public static Cell fromValue(Object value) {
+    return new Cell(value);
   }
 
   @Override
