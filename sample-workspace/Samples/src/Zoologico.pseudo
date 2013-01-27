@@ -14,7 +14,7 @@ clase Zoologico
   metodo peso_promedio_animales
 //    promedio peso de animales
   fin
-// 
+
   metodo animales_nuevos
      generar animales tal que esNuevo 
   fin

@@ -1,17 +1,21 @@
 clase Observador
-    atributo notificado = falso
-    
-	metodo notificar
-	  actualizar notificado = si
-	fin
+  atributo notificado = no
+
+  metodo notificar
+    actualizar notificado = si
+  fin
+
 fin
 
 clase Observable
- 
-  atributo observadores
- 
-  metodo notificar_a_todos
-  	para cada observador en observadores notificar
-  fin 
+  atributo observadores = lista()
   
+  metodo registrar_observador(observador)
+    observadores, add observador 
+  fin  
+
+  metodo notificar_a_todos
+    para cada observador en observadores notificar
+  fin
+
 fin

@@ -1,9 +1,7 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 import java.math.BigDecimal;
-import java.util.Map;
-
-import javax.sound.midi.Receiver;
 
 import org.junit.Test;
 
@@ -16,8 +14,13 @@ public class MethodSpec {
 
   @Test
   public void soporta_metodos_con_parametros() throws Exception {
-    Metodos.class.getMethod("metodo_con_1_parametro", Map.class);
-    Metodos.class.getMethod("metodo_con_2_parametros", Map.class);
+    Metodos.class.getMethod("metodo_con_1_parametro", Object.class);
+    Metodos.class.getMethod("metodo_con_2_parametros", Object.class, Object.class);
+  }
+  
+  @Test
+  public void soporta_referenciar_parametros() throws Throwable {
+    assertEquals(10, new Metodos().metodo_que_devuelve_un_parametro(10));
   }
 
   @Test

@@ -1,5 +1,5 @@
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
@@ -8,6 +8,11 @@ public class MensajesSpec {
   public void soporta_delegacion_en_self() throws Throwable {
     Mensajes receptor = new Mensajes();
     assertEquals(receptor.metodo_que_delega_en_si_mismo(), receptor.metodo_delegado());
+  }
+  
+  @Test
+  public void soporta_pasar_argumentos() throws Exception {
+    fail();
   }
 
   @Test

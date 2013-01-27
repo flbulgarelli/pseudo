@@ -3,16 +3,19 @@ clase Metodos
   /* Aridad */
 
    metodo metodo_sin_parametros
+   fin
+   
+   metodo metodo_con_1_parametro(valor)
    
    fin
    
-   metodo metodo_con_1_parametro etiqueta valor
+   metodo metodo_con_2_parametros(parametro1 parametro2)
    
    fin
    
-   metodo metodo_con_2_parametros etiqueta1 valor1 etiqueta2 valor2
-   
-   fin
+  metodo metodo_que_devuelve_un_parametro(parametro1)
+     parametro1 	
+  fin
 
   /* Retornos y self */
    
