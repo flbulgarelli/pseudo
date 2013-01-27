@@ -129,16 +129,16 @@ ForEachExpression:
 	'para cada' ID 'en' (target=EmbeddableExpression) (=>'tal que' condition=Message)? action=Message;
 
 SumExpression:
-	'sumatoria' mapping=Message 'de' target=EmbeddableExpression;
+	'sumatoria' criteria=Message 'de' target=EmbeddableExpression;
 
 AverageExpression:
-	'promedio' mapping=Message 'de' target=EmbeddableExpression;
+	'promedio' criteria=Message 'de' target=EmbeddableExpression;
 
 MaxExpression:
-	'maximo entre' target=EmbeddableExpression (=>'segun' condition=Message)?;
+	'maximo entre' target=EmbeddableExpression (=>'segun' criteria=Message)?;
 
 MinExpression:
-	'minimo entre' target=EmbeddableExpression (=>'segun' condition=Message)?;
+	'minimo entre' target=EmbeddableExpression (=>'segun' criteria=Message)?;
 
 AssignmentExpression:
 	SET_TOKEN (target=ID) '=' (value=Expression);

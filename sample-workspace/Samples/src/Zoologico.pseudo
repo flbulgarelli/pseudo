@@ -8,13 +8,21 @@ clase Zoologico
   fin
   
   metodo animal_mas_pesado
-//    maximo entre animales segun peso  
+    maximo entre animales segun peso  
+  fin 
+  
+  metodo animal_mas_liviano
+    minimo entre animales segun peso  
+  fin 
+  
+  metodo peso_total
+    sumatoria peso de animales
   fin 
   
   metodo peso_promedio_animales
-//    promedio peso de animales
+    promedio peso de animales
   fin
-
+ 
   metodo animales_nuevos
      generar animales tal que esNuevo 
   fin

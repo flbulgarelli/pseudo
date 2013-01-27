@@ -34,8 +34,15 @@ import org.uqbarproject.pseudo.pseudo.IncrementExpression
 import org.uqbarproject.pseudo.pseudo.DecrementExpression
 import org.uqbarproject.pseudo.pseudo.ListLiteralExpression
 import org.uqbarproject.pseudo.pseudo.SetLiteralExpression
+import org.uqbarproject.pseudo.pseudo.MaxExpression
+import org.uqbarproject.pseudo.pseudo.MinExpression
+import org.uqbarproject.pseudo.pseudo.SumExpression
+import org.uqbarproject.pseudo.pseudo.EmbeddableExpression
+import org.uqbarproject.pseudo.pseudo.AverageExpression
 
-
+/**
+ * @author flbulgareli
+ */
 class PseudoGenerator implements IGenerator {
 	
     @Inject extension IQualifiedNameProvider	
@@ -54,6 +61,7 @@ class PseudoGenerator implements IGenerator {
   	}
 	def dispatch compile(Type type) '''
 		import org.uqbarproject.pseudo.runtime.*;
+		import org.uqbarproject.pseudo.runtime.reductions.*;
 		public class «type.name» extends «type.effectiveSuperType» {
 		  	«FOR declaration : type.declarations»
 		  	  «declaration.compile»		
@@ -199,6 +207,18 @@ class PseudoGenerator implements IGenerator {
 	       new IdentityFunction()
 	       ).apply(«expression.target.compileForResult»)
 	'''
+	def dispatch compileForResult(MaxExpression expression) {
+	 	compileReductionWithCriteria('MaxFunction', expression.criteria, expression.target)
+	}
+	def dispatch compileForResult(MinExpression expression) {
+		compileReductionWithCriteria('MinFunction', expression.criteria, expression.target)
+	}
+	def dispatch compileForResult(SumExpression expression) {
+		compileReductionWithCriteria('SumFunction', expression.criteria, expression.target)
+	}
+	def dispatch compileForResult(AverageExpression expression) {
+		compileReductionWithCriteria('AverageFunction', expression.criteria, expression.target)
+	}
 	
 	def compileForBooleanResult(Expression expression) '''
 		(Boolean) («expression.compileForResult»)
@@ -241,4 +261,13 @@ class PseudoGenerator implements IGenerator {
 	def compileClassModifier(boolean isClassModifier) {
 		if (isClassModifier) "static" else ""
 	}
+	
+	def compileReductionWithCriteria(String reductionClass, Message criteria, EmbeddableExpression target) '''
+	    new TraversingTransformation(
+	       new IdentityFunction(),
+	       new ConstantFunction(true),
+	       new «reductionClass»(«compileForResultOrIdentityFunction(criteria)»)
+	       ).apply(«target.compileForResult»)
+	'''
+	
 }

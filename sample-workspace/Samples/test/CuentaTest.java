@@ -20,7 +20,7 @@ public class CuentaTest {
 
 	@Test
 	public void parametrizacionBasica() throws Throwable {
-		cuentaBancaria.incrementar(BigDecimal.valueOf(5));
+		cuentaBancaria.depositar(BigDecimal.valueOf(5));
 		assertEquals(BigDecimal.valueOf(15), cuentaBancaria.getMonto());
 	}
 
