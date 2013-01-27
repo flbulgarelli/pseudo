@@ -1,5 +1,6 @@
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
 
 import java.math.BigDecimal;
 
@@ -81,5 +82,15 @@ public class MethodSpec {
   @Test
   public void soporta_when_que_compila_a_sentencia() throws Throwable {
     assertEquals(BigDecimal.valueOf(5), new Metodos().metodo_con_sentencia_when());
+  }
+  
+  @Test
+  public void soporta_declarar_metodos_de_clase() throws Throwable {
+    assertEquals(BigDecimal.valueOf(5), Metodos.metodo_que_es_de_clase());
+  }
+  
+  @Test
+  public void soporta_uso_de_self_en_metodos_de_clase() throws Throwable {
+    fail();
   }
 }

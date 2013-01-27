@@ -1,10 +1,15 @@
 grammar org.uqbarproject.pseudo.Tokens with org.eclipse.xtext.common.Terminals
 
+END_TOKEN: 'fin';
+
 CLASS_TOKEN: 'clase';
 INHERITS_TOKEN: 'hereda';
-END_TOKEN: 'fin';
-METHOD_TOKEN: 'metodo';
-ATTRIBUTE_TOKEN: 'atributo';
+
+METHOD_TOKEN: 'mi' | 'metodo';
+ATTRIBUTE_TOKEN: 'vi' | 'atributo';
+
+CLASS_METHOD_TOKEN: 'vc' | 'metodo' 'de' 'clase'  ;
+CLASS_ATTRIBUTE_TOKEN: 'mc' | 'atributo' 'de' 'clase';
 
 /* basic literals */
 

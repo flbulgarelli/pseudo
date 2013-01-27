@@ -31,7 +31,7 @@ Declaration:
 	Attribute | Method;
 
 Method:
-	METHOD_TOKEN name=ID ('(' parameters+=ID* ')')?
+	(METHOD_TOKEN | classMethod?=CLASS_METHOD_TOKEN) name=ID ('(' parameters+=ID* ')')?
 	statements+=Statement*
 	END_TOKEN;
 
@@ -45,7 +45,7 @@ Let:
 	LET_TOKEN (name=ID) ('=' (value=Expression))?;
 
 Attribute:
-	ATTRIBUTE_TOKEN name=ID ('=' initialValue=Expression)?;
+	(ATTRIBUTE_TOKEN|classAttribute?=CLASS_ATTRIBUTE_TOKEN) name=ID ('=' initialValue=Expression)?;
 
 Expression:
 	EmbeddableExpression |

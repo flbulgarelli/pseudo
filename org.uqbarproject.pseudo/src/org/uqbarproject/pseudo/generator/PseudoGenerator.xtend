@@ -61,7 +61,7 @@ class PseudoGenerator implements IGenerator {
 		}
   	'''
   	def dispatch compile(Method method) '''
-	  public Object «method.name»(«method.parameters.map [ "Object " + it ].join(", ")») throws Throwable {
+	  public «method.classMethod.compileClassModifier» Object «method.name»(«method.parameters.map [ "Object " + it ].join(", ")») throws Throwable {
 	  	«IF method.statements.empty»
 	  	return null;
 	  	«ELSE»
@@ -80,7 +80,7 @@ class PseudoGenerator implements IGenerator {
 	  }
 	'''
 	def dispatch compile(Attribute declaration) '''
-	  private Object «declaration.name» = «declaration.initialValue.compileForResultOrNull»;
+	  private «declaration.classAttribute.compileClassModifier» Object «declaration.name» = «declaration.initialValue.compileForResultOrNull»;
 «««	  TODO REMOVER
 	  public void set«declaration.name.toFirstUpper»(Object value) {
 	  	this.«declaration.name» = value;
@@ -236,5 +236,9 @@ class PseudoGenerator implements IGenerator {
 	
 	def Object subclassResponsibility() {
 		throw new UnsupportedOperationException()
+	}
+	
+	def compileClassModifier(boolean isClassModifier) {
+		if (isClassModifier) "static" else ""
 	}
 }

@@ -3,15 +3,16 @@ clase Metodos
   /* Aridad */
 
    metodo metodo_sin_parametros
+   
    fin
    
-   metodo metodo_con_1_parametro(valor)
+   metodo metodo_con_1_parametro( valor )
    
    fin
    
    metodo metodo_con_2_parametros(parametro1 parametro2)
    
-   fin
+   fin 
    
   metodo metodo_que_devuelve_un_parametro(parametro1)
      parametro1 	
@@ -26,6 +27,15 @@ clase Metodos
    metodo metodo_que_devuelve_self_explicitamente
 	  devolver este
    fin
+   
+   /*Metodos de clase */
+   metodo de clase metodo_que_es_de_clase
+    5   
+   fin
+   
+//   metodo de clase metodo_de_clase_con_self
+//    este
+//   fin
    
   /* Variables Locales */
    

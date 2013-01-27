@@ -15,3 +15,4 @@
 * soportar parametros no posicionales? es bueno, pero podria dificular interaccion con Java
 * soportar parametros etiquetados? idem anterior
 * soportar null como absorvente? esopodria dificular mostrar un null object
+* hay una inconsistencia?: al if se le pasa una expresion, a los generadores un mensaje.

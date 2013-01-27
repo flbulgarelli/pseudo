@@ -1,5 +1,8 @@
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
+import java.math.BigDecimal;
 
 import org.junit.Test;
 
@@ -29,5 +32,19 @@ public class MensajesSpec {
   @Test
   public void encadenamiento() throws Exception {
     fail();
+  }
+  
+  @Test
+  public void soporta_enviar_mensajes_a_la_clase() throws Throwable {
+    assertEquals(BigDecimal.valueOf(4), new Mensajes().metodo_que_envia_mensaje_a_la_clase());
+  }
+ 
+  /**Esto es medio discutible. Conceptualmente no es correcto,
+   * sin embargo, creo que podría ser aceptable es tanto es "pseudo"codigo
+   */
+  @Test
+  public void soporta_enviar_mensajes_de_clase_a_la_instancia() throws Throwable {
+    assertEquals(BigDecimal.valueOf(4), new Mensajes().metodo_que_envia_mensaje_de_clase_a_la_instancia());
+
   }
 }
