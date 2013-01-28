@@ -24,7 +24,7 @@ import org.uqbarproject.pseudo.pseudo.Return
 import org.uqbarproject.pseudo.pseudo.NullExpression
 import org.uqbarproject.pseudo.pseudo.NumberExpression
 import org.uqbarproject.pseudo.pseudo.SelfExpression
-import org.uqbarproject.pseudo.pseudo.SimpleMessageSend
+import org.uqbarproject.pseudo.pseudo.MessageSend
 import org.uqbarproject.pseudo.pseudo.StringExpression
 import org.uqbarproject.pseudo.pseudo.TrueExpression
 import org.uqbarproject.pseudo.pseudo.Type
@@ -112,7 +112,7 @@ class PseudoGenerator implements IGenerator {
 		«IF message.arguments.empty»
 		 )
 		«ELSE»
-		, «message.arguments.join(", ")»)
+		, «joinCompileResults(message.arguments)»)
 		«ENDIF»
 	'''
 	
@@ -196,8 +196,8 @@ class PseudoGenerator implements IGenerator {
     def joinCompileResults(EList<? extends Expression> expressions) {
     	expressions.map[it.compileForResult].join(',')
     }
-    def dispatch compileForResult(SimpleMessageSend expression) '''
-    	«expression.message.compile».apply(«expression.receptor.compileForResult»)
+    def dispatch compileForResult(MessageSend expression) '''
+    	«expression.message.compile».apply(«expression.getReceptor.compileForResult»)
     '''
 	def dispatch compileForResult(ForEachExpression expression) '''
 	    new Traversing(

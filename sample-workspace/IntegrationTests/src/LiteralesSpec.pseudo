@@ -17,11 +17,11 @@ clase Literales
    fin
    
    metodo devuelve_lista_llena
-     lista(1 2 verdadero 'hola') 
+     lista(1, 2, verdadero, 'hola') 
    fin
    
    metodo devuelve_conjunto_lleno
-     conjunto(1 2 verdadero 'hola') 
+     conjunto(1, 2, verdadero, 'hola') 
    fin
    	
    metodo devuelve_si

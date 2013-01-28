@@ -10,7 +10,7 @@ clase Metodos
    
    fin
    
-   metodo metodo_con_2_parametros(parametro1 parametro2)
+   metodo metodo_con_2_parametros(parametro1, parametro2)
    
    fin 
    
@@ -96,7 +96,7 @@ clase Metodos
   
   metodo metodo_sin_default
   	cuando falso entonces
-  	  este, hacer_algo  
+  	  este.hacer_algo  
     fin
   fin 
    

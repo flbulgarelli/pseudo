@@ -13,7 +13,7 @@ clase Golondrina
   fin
   
   metodo volar_a(una_ciudad) 
-     variable distancia = ciudad_actual, distancia //a una_ciudad
+     variable distancia = ciudad_actual.distancia(una_ciudad)
      actualizar ciudad_actual = una_ciudad
      decrementar energia con distancia 
   fin

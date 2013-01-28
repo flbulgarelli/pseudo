@@ -3,8 +3,8 @@ clase Zoologico
   atributo animales = lista()  
   
   metodo agregar_animal(animal)
-    animal, ingreso
-	animales, agregar // a animal
+    animal.ingreso
+	  animales.agregar // a animal
   fin
   
   metodo animal_mas_pesado
@@ -36,7 +36,7 @@ clase Zoologico
   fin 
   
   metodo imprimir
-    cuando este, tiene_animales entonces
+    cuando este.tiene_animales entonces
       'Un Zoologico con animales'
     caso contrario 
       'Un Zoologico vacio'
@@ -44,7 +44,7 @@ clase Zoologico
   fin
   
   metodo tiene_animales
-	animales, esta_vacia  
+	animales.esta_vacia  
   fin
 
 fin
