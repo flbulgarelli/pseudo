@@ -31,4 +31,5 @@ Export-Package: org.uqbarproject.pseudo,
  org.uqbarproject.pseudo.validation,
  org.uqbarproject.pseudo.scoping,
  org.uqbarproject.pseudo.generator,
- org.uqbarproject.pseudo.formatting
+ org.uqbarproject.pseudo.formatting,
+ org.uqbarproject.pseudo.parseTreeConstruction

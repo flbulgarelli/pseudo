@@ -14,8 +14,9 @@ public class MensajesSpec {
   }
   
   @Test
-  public void soporta_pasar_argumentos() throws Exception {
-    fail();
+  public void soporta_pasar_argumentos() throws Throwable {
+    Mensajes receptor = new Mensajes();
+    assertEquals(BigDecimal.valueOf(9), receptor.metodo_que_pasa_parametros(BigDecimal.valueOf(4), BigDecimal.valueOf(5)));
   }
 
   @Test

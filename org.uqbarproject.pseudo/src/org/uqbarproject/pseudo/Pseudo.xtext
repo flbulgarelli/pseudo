@@ -115,11 +115,7 @@ SimpleMessageSend:
 ;
 
 Message:
-	UnaryMessage //| KeywordMessage
-;
-
-UnaryMessage:
-	selector=ID //=>(key+=ID argument+=ID)*
+	selector=ID ( '(' arguments+=ID* ')' )?
 ;
 
 ComprehensionExpression:

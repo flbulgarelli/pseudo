@@ -28,7 +28,6 @@ import org.uqbarproject.pseudo.pseudo.SimpleMessageSend
 import org.uqbarproject.pseudo.pseudo.StringExpression
 import org.uqbarproject.pseudo.pseudo.TrueExpression
 import org.uqbarproject.pseudo.pseudo.Type
-import org.uqbarproject.pseudo.pseudo.UnaryMessage
 import org.uqbarproject.pseudo.pseudo.Let
 import org.uqbarproject.pseudo.pseudo.IncrementExpression
 import org.uqbarproject.pseudo.pseudo.DecrementExpression
@@ -107,8 +106,14 @@ class PseudoGenerator implements IGenerator {
 		Object «declaration.name» = «declaration.value.compileForResultOrNull»;
 	'''
 	//TODO Not an expression, yet
-	def dispatch compile(UnaryMessage message) '''
-		new MessageSend("«message.selector»")
+	def dispatch compile(Message message) '''
+	
+		new MessageSend("«message.selector»"
+		«IF message.arguments.empty»
+		 )
+		«ELSE»
+		, «message.arguments.join(", ")»)
+		«ENDIF»
 	'''
 	
 	//Expressions

@@ -10,6 +10,14 @@ clase Mensajes
      5
    fin
    
+   metodo metodo_que_pasa_parametros(parametro1 parametro2) 
+     este, metodo_delegado_con_parametros(parametro1 parametro2)
+   fin
+   
+   metodo metodo_delegado_con_parametros(parametro1 parametro2)
+     parametro1, add(parametro2)
+   fin
+   
    metodo metodo_que_delega_en_otro_objeto
      5, toString
    fin

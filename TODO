@@ -10,9 +10,11 @@
 * implementar reducciones faltantes
 * expresiones matematicas
 * soportar texto libre
-* colecciones literales
+* diccionarios literales
+* rangos literales
 * soporta null como falso y cero
 * soportar parametros no posicionales? es bueno, pero podria dificular interaccion con Java
 * soportar parametros etiquetados? idem anterior
 * soportar null como absorvente? esopodria dificular mostrar un null object
+* soporta referencias entre elementos a nivel IDE
 * hay una inconsistencia?: al if se le pasa una expresion, a los generadores un mensaje.
