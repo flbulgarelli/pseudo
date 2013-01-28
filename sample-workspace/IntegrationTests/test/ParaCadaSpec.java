@@ -23,6 +23,12 @@ public class ParaCadaSpec {
 		assertTrue((Boolean)observador1.notificado());
 		assertTrue((Boolean)observador2.notificado());
 	}
+	
+	@Test
+  public void soporta_acciones_con_argumentos() throws Throwable {
+    observable.notificar_a_todos_de("un evento");
+    assertEquals("un evento", observador2.ultimo_evento());
+  }
 
 	@Test
 	public void soporta_iteracion_con_filtro() throws Exception {
@@ -31,7 +37,7 @@ public class ParaCadaSpec {
 
 	@Test
 	public void la_iteracion_es_una_expresion() throws Throwable {
-		assertSame(observador2, observable.notificar_a_todos());
+		assertSame(true, observable.notificar_a_todos());
 	}
 
 }

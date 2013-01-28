@@ -3,13 +3,18 @@
      * en español con solo palabras
      * en español con palabras y simbolos
      * en ingles
-
-* Implementar la sinxais de envio de mensajes n-aria
+* literales de mensajes
 * Implementar retorno explicto en expresiones cuando no tiene valor de retorno
 * Implementar super
 * implementar reducciones faltantes
 * expresiones matematicas
 * soportar texto libre
+* generacion de stubs
+* etiquetas del ide
+* luego, compuesto, etc
+* constructores
+* extensiones/mixins?
+* integracion con java
 * diccionarios literales
 * rangos literales
 * soporta null como falso y cero
