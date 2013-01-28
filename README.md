@@ -3,6 +3,14 @@ pseudo
 
 Un lenguaje de objetos y funcional que imita al pseudocódigo
 
+# Ramas de desarrollo:
+ 
+  * Consolidar lenguaje mínimo: hacer que el lenguaje funcione, aunque no tenga todo
+  * Rama formateo: construir un formatter de eclipse.
+  * Rama aspectos visuales: hacer que el lenguaje se "vea bien" en el outline
+  * Validaciones: hacer que genere mejores mensajes de error y no compile código erroneo
+  * English version: hacer una versión paralela de Pseudo con sintaxis alternativa en inglés.  
+
 # Características
 
 ## Semánticas
