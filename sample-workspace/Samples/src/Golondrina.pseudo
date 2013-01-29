@@ -1,21 +1,21 @@
 clase Golondrina
 
   atributo nombre
-  atributo energia := 100
+  atributo energia = 100
   atributo ciudad_actual
   
-  metodo comer //gramos_de_alpiste gramos
-//     esta golondrina, incrementar_energia //en (gramos / 10)                
+  metodo comer(gramos_de_alpise)
+     incrementar energia con gramos_de_alpise /// 10)                
   fin
-  
+   
   metodo esta_sana
-     su energia //> 100
+     energia //> 100
   fin
   
-  metodo volar //a una_ciudad 
-     distancia := su ciudad, distancia //a una_ciudad
-//     esta golondrina, fijar_ciudad //en una_ciudad
-//     esta golondrina, decrementar_energia //en distancia 
+  metodo volar_a(una_ciudad) 
+     variable distancia = ciudad_actual.distancia(una_ciudad)
+     actualizar ciudad_actual = una_ciudad
+     decrementar energia con distancia 
   fin
    
 fin

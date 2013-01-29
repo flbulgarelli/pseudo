@@ -2,14 +2,15 @@ package org.uqbarproject.pseudo.runtime.reductions;
 
 import org.uqbarproject.pseudo.runtime.AbstractApplicable;
 import org.uqbarproject.pseudo.runtime.Applicable;
+
 /**
  * @author flbulgarelli
  */
-public class SumFunction extends AbstractApplicable {
+public class AverageFunction extends AbstractApplicable {
 
   private final Applicable criteria;
 
-  public SumFunction(Applicable criteria) {
+  public AverageFunction(Applicable criteria) {
     this.criteria = criteria;
   }
 

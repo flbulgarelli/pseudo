@@ -23,19 +23,27 @@ public class AtributoSpec {
   }
   
   @Test
-  public void todo_atributo_tiene_accesores() throws Exception {
-    Atributos.class.getMethod("fijar_atributo_con_inicializador", Map.class);
-  }
-
-  @Test
   public void todo_atributo_tiene_accesores_java_beans() throws Exception {
     Atributos.class.getMethod("getAtributoConInicializador");
-    Atributos.class.getMethod("setAtributoConInicializador", Object.class);
   }
-
+  
   @Test
-  public void todo_atributo_tiene_acumuladores() throws Exception {
-    Atributos.class.getMethod("incrementar_atributo_con_inicializador", Object.class);
-    Atributos.class.getMethod("decrementar_atributo_con_inicializador", Object.class);
+  public void soporta_incrementar_atributos() throws Throwable {
+    assertEquals(BigDecimal.valueOf(11), new Atributos().metodo_que_incrementa_atributos());
+  }
+  
+  @Test
+  public void soporta_acumular_atributos() throws Throwable {
+    assertEquals(BigDecimal.valueOf(20), new Atributos().metodo_que_acumula_atributos());
+  }
+  
+  @Test
+  public void soporta_decrementar_atributos() throws Throwable {
+    assertEquals(BigDecimal.valueOf(9), new Atributos().metodo_que_decrementa_atributos());
+  }
+  
+  @Test
+  public void soporta_actualizar_atributos() throws Throwable {
+    assertEquals(new BigDecimal("6"), new Atributos().metodo_que_actualiza_atributos());
   }
 }

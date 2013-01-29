@@ -1,5 +1,6 @@
 package org.uqbarproject.pseudo.runtime;
 
+
 public class Traversing extends AbstractApplicable {
 
   private final Applicable action;
@@ -12,7 +13,7 @@ public class Traversing extends AbstractApplicable {
 
   public Object apply(Object generator) throws Throwable {
     Object lastResult = null;
-    for (Object element : (Iterable<?>) generator) {
+    for (Object element : Iterables.toIterable(generator)) {
       if (filter.applyForBoolean(element)) {
         lastResult = action.apply(element);
       }

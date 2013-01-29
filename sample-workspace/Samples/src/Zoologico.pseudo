@@ -1,26 +1,34 @@
 clase Zoologico
 
-  atributo animales //:= //lista vacia 
+  atributo animales = lista()  
   
   metodo agregar_animal(animal)
-    animal, fijar //fechaIngreso ahora
-	sus animales, agregar // a animal
+    animal.ingreso
+	  animales.agregar // a animal
   fin
   
   metodo animal_mas_pesado
-//    maximo entre animales segun peso  
+    maximo entre animales segun peso  
+  fin 
+  
+  metodo animal_mas_liviano
+    minimo entre animales segun peso  
+  fin 
+  
+  metodo peso_total
+    sumatoria peso de animales
   fin 
   
   metodo peso_promedio_animales
-//    promedio peso de animales
+    promedio peso de animales
   fin
-// 
+ 
   metodo animales_nuevos
      generar animales tal que esNuevo 
   fin
    
   metodo nombre_animales
-//	generar nombre de las animales 
+	generar nombre de animales 
   fin
   
   metodo alimentar_animales
@@ -28,15 +36,15 @@ clase Zoologico
   fin 
   
   metodo imprimir
-    si este, tiene_animales entonces
+    cuando este.tiene_animales entonces
       'Un Zoologico con animales'
-    de lo contrario 
+    caso contrario 
       'Un Zoologico vacio'
     fin
   fin
   
   metodo tiene_animales
-	sus animales, esta_vacia  
+	animales.esta_vacia  
   fin
 
 fin

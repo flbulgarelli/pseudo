@@ -1,10 +1,25 @@
-* Implementar la sinxais de envio de mensajes n-aria
-* Implementar retorno explicto en expresiones
-* Revisar sintaxis del mapper en listas por comprensión (creo que no está tomando el "de")
+* El español es demasiado verborragico. Probablemente un pseudocodigo en ingles será mejor....
+   * tener tres niveles
+     * en español con solo palabras
+     * en español con palabras y simbolos
+     * en ingles
+* literales de mensajes
+* Implementar retorno explicto en expresiones cuando no tiene valor de retorno
 * Implementar super
 * implementar reducciones faltantes
 * expresiones matematicas
 * soportar texto libre
-* colecciones literales
-* definir sintaxis de variables locales, y asignacion
-
+* generacion de stubs
+* etiquetas del ide
+* luego, compuesto, etc
+* constructores
+* extensiones/mixins?
+* integracion con java
+* diccionarios literales
+* rangos literales
+* soporta null como falso y cero
+* soportar parametros no posicionales? es bueno, pero podria dificular interaccion con Java
+* soportar parametros etiquetados? idem anterior
+* soportar null como absorvente? esopodria dificular mostrar un null object
+* soporta referencias entre elementos a nivel IDE
+* hay una inconsistencia?: al if se le pasa una expresion, a los generadores un mensaje.

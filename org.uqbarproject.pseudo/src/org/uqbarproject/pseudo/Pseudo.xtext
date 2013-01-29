@@ -1,12 +1,7 @@
-grammar org.uqbarproject.pseudo.Pseudo with org.eclipse.xtext.common.Terminals
+grammar org.uqbarproject.pseudo.Pseudo with org.uqbarproject.pseudo.Tokens
 
 /*
  * 
- * no tipado
-en español
-preferir texto
-filtrar, mapear, todos, ninguno, para cada a nivel lenguaje
-listas literales: Conjunto( ), Lista(), Diccionario( clave : valor )
 lambdas? 
 sin sobrecarga
 mixins
@@ -23,41 +18,52 @@ Model:
 	types+=Type*;
 
 Type:
-	'clase' name=ID ('hereda de' superType=[Type])?
+	CLASS_TOKEN name=ID (INHERITS_TOKEN superType=[Type])?
 	declarations+=Declaration*
-	'fin' ('clase'?);
+	END_TOKEN;
 
 Declaration:
 	Attribute | Method;
 
 Method:
-	'metodo' (classMethod?='de clase'?) name=ID ('(' parameters+=ID* ')')?
-	statements+=Expression*
-	'fin' ('metodo'?);
+	(METHOD_TOKEN | classMethod?=CLASS_METHOD_TOKEN) name=ID ('(' (parameters+=ID (',' parameters+=ID)*)?  =>')')?
+	statements+=Statement*
+	END_TOKEN;
+
+Statement:
+	Expression | Return | Let ;
+
+Return:
+	RETURN_TOKEN value=EmbeddableExpression;
+	
+Let:
+	LET_TOKEN (name=ID) ('=' (value=Expression))?;
 
 Attribute:
-	'atributo' (classAttribute?='de clase'?) name=ID (':=' initialValue=Expression)?;
+	(ATTRIBUTE_TOKEN|classAttribute?=CLASS_ATTRIBUTE_TOKEN) name=ID ('=' initialValue=Expression)?;
 
 Expression:
 	EmbeddableExpression |
 	NonEmbeddableExpression;
 	
 NonEmbeddableExpression:
-	SimpleMessageSend |
+	MessageSend |
+	ConstructionExpression |
 	TraversableExpression |
 	AssignmentExpression |
-	IfExpression ;
-	//CollectionLiteralExpression ; //TODO es bastante limitante que no se puedan embeber
+	IncrementExpression |
+	DecrementExpression |
+	WhenExpression |
+	CollectionLiteralExpression ; //TODO es bastante limitante que no se puedan embeber
 	
 EmbeddableExpression:
-	SelfUnaryMessageShortcutExpression |
 	{IdExpression} value=ID |
 	{StringExpression} value=STRING |
 	{NumberExpression} value=Number |
-	{NullExpression} 'nada' |
-	{TrueExpression} ('verdadero'|'sí') |
-	{FalseExpression} ('falso'|'no') |
-	{SelfExpression} ('este'|'esta')
+	{NullExpression} NULL_TOKEN |
+	{TrueExpression} TRUE_TOKEN |
+	{FalseExpression} FALSE_TOKEN |
+	{SelfExpression} SELF_TOKEN 
 //TODO	soportar? '(' NonEmbeddableExpression ')'
 	;
 
@@ -77,23 +83,15 @@ TraversableExpression:
 ;
 
 CollectionLiteralExpression:
-	ListLiteralExpression | SetLiteralExpression | RangeLiteralExpression 
+	ListLiteralExpression | SetLiteralExpression //| RangeLiteralExpression 
 ;
 
 ListLiteralExpression:
-	{EmptyListExpression} 'lista' 'vacia' | NonEmptyListExpression
-;
-
-NonEmptyListExpression:
-	'lista' 'con' (elements+=EmbeddableExpression)+	
+	{ListLiteralExpression} LIST_OPEN_TOKEN (elements+=EmbeddableExpression (',' elements+=EmbeddableExpression)*)? => LIST_CLOSE_TOKEN	
 ;
 
 SetLiteralExpression:
-	{EmptySetExpression} 'conjunto' 'vacio' | NonEmptySetExpression
-;
-
-NonEmptySetExpression:
-	'conjunto' 'con' (elements+=EmbeddableExpression)+	
+	{SetLiteralExpression} SET_OPEN_TOKEN (elements+=EmbeddableExpression (',' elements+=EmbeddableExpression)*)? => SET_CLOSE_TOKEN	
 ;
 
 RangeLiteralExpression:
@@ -101,27 +99,27 @@ RangeLiteralExpression:
 ;
 
 
-IfExpression:
-	'si' (condition=Expression) 
-	'entonces' trueExpression = Expression 
-	'de lo contrario' falseExpression = Expression
-	'fin'
+WhenExpression:
+	(WHEN_TOKEN (cases+=Expression) 
+	THEN_TOKEN actions+= Expression)+ 
+	(OTHERWISE_TOKEN defaultAction=Expression)?
+	END_TOKEN 
 ;
 
-SimpleMessageSend:
-	receptor = EmbeddableExpression ',' message = Message 
+MessageSend:
+	receptor = EmbeddableExpression '.' message = Message 
 ;
 
-SelfUnaryMessageShortcutExpression:
-	('su'|'sus') message = UnaryMessage
+ConstructionExpression:
+	NEW_TOKEN target = [Type] (INITIALIZATION_BLOCK_TOKEN (initializations+=Initialization)+  END_TOKEN)?	
+;
+
+Initialization:
+	INITIALIZE_WITH_TOKEN attribute=ID  '='  initialValue=Expression
 ;
 
 Message:
-	UnaryMessage //| KeywordMessage
-;
-
-UnaryMessage:
-	selector=ID //=>(key+=ID argument+=ID)*
+	selector=ID ( '(' (arguments+=EmbeddableExpression (',' arguments+=EmbeddableExpression)*)? =>')' )?
 ;
 
 ComprehensionExpression:
@@ -131,25 +129,24 @@ ForEachExpression:
 	'para cada' ID 'en' (target=EmbeddableExpression) (=>'tal que' condition=Message)? action=Message;
 
 SumExpression:
-	'sumatoria' mapping=Message 'de' target=EmbeddableExpression;
+	'sumatoria' criteria=Message 'de' target=EmbeddableExpression;
 
 AverageExpression:
-	'promedio' mapping=Message 'de' target=EmbeddableExpression;
+	'promedio' criteria=Message 'de' target=EmbeddableExpression;
 
 MaxExpression:
-	'maximo entre' target=EmbeddableExpression (=>'segun' condition=Message)?;
+	'maximo entre' target=EmbeddableExpression (=>'segun' criteria=Message)?;
 
 MinExpression:
-	'minimo entre' target=EmbeddableExpression (=>'segun' condition=Message)?;
+	'minimo entre' target=EmbeddableExpression (=>'segun' criteria=Message)?;
 
 AssignmentExpression:
-	(assigned=ID) ':=' (value=Expression);
+	SET_TOKEN (target=ID) '=' (value=Expression);
 
-terminal RETURN:
-	'devolver';
+IncrementExpression:
+	INCREMENT_TOKEN target=ID (ACCUMULATE_BY_TOKEN value = EmbeddableExpression)?
+;
 
-
-terminal THROW:
-	'lanzar';
-
-
+DecrementExpression:
+	DECREMENT_TOKEN target=ID (ACCUMULATE_BY_TOKEN value = EmbeddableExpression)?
+;

@@ -1,6 +1,8 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
 
-import java.util.Map;
+import java.math.BigDecimal;
 
 import org.junit.Test;
 
@@ -13,8 +15,13 @@ public class MethodSpec {
 
   @Test
   public void soporta_metodos_con_parametros() throws Exception {
-    Metodos.class.getMethod("metodo_con_1_parametro", Map.class);
-    Metodos.class.getMethod("metodo_con_2_parametros", Map.class);
+    Metodos.class.getMethod("metodo_con_1_parametro", Object.class);
+    Metodos.class.getMethod("metodo_con_2_parametros", Object.class, Object.class);
+  }
+  
+  @Test
+  public void soporta_referenciar_parametros() throws Throwable {
+    assertEquals(10, new Metodos().metodo_que_devuelve_un_parametro(10));
   }
 
   @Test
@@ -30,15 +37,60 @@ public class MethodSpec {
   }
 
   @Test
-  public void soporta_variables_locales() throws Exception {
-    fail();
+  public void soporta_declarar_variables_locales() throws Throwable {
+    assertEquals(BigDecimal.valueOf(5L), new Metodos().metodo_con_variables_locales());
+  }
+  
+  @Test
+  public void soporta_incrementar_variables_locales() throws Throwable {
+    assertEquals(BigDecimal.ZERO, new Metodos().metodo_que_decrementa_variables_locales());
+  }
+  
+  @Test
+  public void soporta_decrementar_variables_locales() throws Throwable {
+    assertEquals(BigDecimal.ONE, new Metodos().metodo_que_incrementa_variables_locales());
+  }
+  
+  @Test
+  public void soporta_actualizar_variables_locales() throws Throwable {
+    assertEquals(new BigDecimal("6"), new Metodos().metodo_que_actualiza_variables_locales());
   }
 
   @Test
-  public void soporta_ifs() throws Throwable {
+  public void soporta_when() throws Throwable {
     Metodos receptor = new Metodos();
-    assertEquals("ok", receptor.metodo_con_if_verdadero());
-    assertEquals("error", receptor.metodo_con_if_falso());
+    assertEquals("ok", receptor.metodo_con_when_verdadero());
+    assertEquals("error", receptor.metodo_con_when_falso());
   }
   
+  @Test
+  public void soporta_when_sobre_variables() throws Throwable {
+    Metodos receptor = new Metodos();
+    assertEquals("ok", receptor.metodo_con_when_con_variable());
+  }
+
+  @Test
+  public void soporta_when_con_multiples_condiciones() throws Throwable {
+    assertEquals("ok", new Metodos().metodo_con_when_multiple());
+  }
+
+  @Test
+  public void soporta_when_sin_default() throws Throwable {
+    assertEquals(null, new Metodos().metodo_sin_default());
+  }
+
+  @Test
+  public void soporta_when_que_compila_a_sentencia() throws Throwable {
+    assertEquals(BigDecimal.valueOf(5), new Metodos().metodo_con_sentencia_when());
+  }
+  
+  @Test
+  public void soporta_declarar_metodos_de_clase() throws Throwable {
+    assertEquals(BigDecimal.valueOf(5), Metodos.metodo_que_es_de_clase());
+  }
+  
+  @Test
+  public void soporta_uso_de_self_en_metodos_de_clase() throws Throwable {
+    fail();
+  }
 }

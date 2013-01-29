@@ -1,5 +1,8 @@
 **/bin/**
 sample-workspace/**/bin/**
-sample-workspace/**/.settings/**
 **/.settings/**
+sample-workspace/**/.settings/**
 .metadata
+**/plugin.xml_gen
+org.uqbarproject.pseudo/.antlr-generator-3.2.0.jar
+RemoteSystemsTempFiles/**

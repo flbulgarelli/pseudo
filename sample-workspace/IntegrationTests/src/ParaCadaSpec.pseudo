@@ -1,17 +1,31 @@
 clase Observador
-    atributo notificado := falso
-    
-	metodo notificar
-//		su notificado, fijar en verdadero
-	fin
+  atributo notificado = no
+  atributo ultimo_evento
+
+  metodo notificar
+    actualizar notificado = si
+  fin
+
+  metodo notificar_de(evento)
+    actualizar notificado = si
+    actualizar ultimo_evento = evento
+  fin  
+
 fin
 
 clase Observable
-
-  atributo observadores
- 
-  metodo notificar_a_todos
-  	para cada observador en sus observadores notificar
-  fin 
+  atributo observadores = lista()
   
+  metodo registrar_observador(observador)
+    observadores.add(observador) 
+  fin  
+
+  metodo notificar_a_todos
+    para cada observador en observadores notificar
+  fin
+  
+  metodo notificar_a_todos_de(evento)
+    para cada observador en observadores notificar_de(evento)
+  fin
+
 fin
