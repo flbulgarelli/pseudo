@@ -1,21 +1,19 @@
 clase Constructores
-  
+
   metodo de clase metodo_que_instancia
-    nuevo Perro 
+    nuevo Perro
   fin
-  
-  
+
   metodo de clase metodo_que_inistancia_e_inicializa
-    nuevo Perro inicializar 
+    nuevo Perro inicializar
       con nombre = "fido"
       con raza = "terrier"
-    fin 
+    fin
   fin
 
 fin
 
-
-clase Perro 
-   atributo nombre
-   atributo raza
+clase Perro
+  atributo nombre
+  atributo raza
 fin   

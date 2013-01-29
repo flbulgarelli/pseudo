@@ -1,25 +1,20 @@
 clase Golondrina
-
   atributo nombre
   atributo energia = 100
   atributo ciudad_actual
-  
-  metodo comer(gramos_de_alpise)
-     incrementar energia con gramos_de_alpise /// 10)                
-  fin
-   
-  metodo esta_sana
-     energia //> 100
-  fin
-  
-  metodo volar_a(una_ciudad) 
-     variable distancia = ciudad_actual.distancia(una_ciudad)
-     actualizar ciudad_actual = una_ciudad
-     decrementar energia con distancia 
-  fin
-   
-fin
 
-//todo provee un geter, un setter, un incrementador, un decrementador
-//esta|este (placeholder)? -> this
-//su x -> this.x ; su x == esta _, x
+  metodo comer(gramos_de_alpise)
+    incrementar energia con gramos_de_alpise /// 10)                
+  fin
+
+  metodo esta_sana
+    energia //> 100
+  fin
+
+  metodo volar_a(una_ciudad)
+    variable distancia = ciudad_actual.distancia(una_ciudad)
+    actualizar ciudad_actual = una_ciudad
+    decrementar energia con distancia
+  fin
+
+fin

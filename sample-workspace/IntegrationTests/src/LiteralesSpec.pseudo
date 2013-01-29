@@ -1,42 +1,43 @@
-clase Literales 
+clase Literales
 
-   metodo devuelve_cinco
-   	5
-   fin
-   
-   metodo devuelve_cinco_y_medio
-     5.5
-   fin	
-   
-   metodo devuelve_lista_vacia
-   	 lista()
-   fin
-   
-   metodo devuelve_conjunto_vacio
+  metodo devuelve_cinco
+    5
+  fin
+
+  metodo devuelve_cinco_y_medio
+    5.5
+  fin
+
+  metodo devuelve_lista_vacia
+    lista()
+  fin
+
+  metodo devuelve_conjunto_vacio
     conjunto()
-   fin
-   
-   metodo devuelve_lista_llena
-     lista(1, 2, verdadero, 'hola') 
-   fin
-   
-   metodo devuelve_conjunto_lleno
-     conjunto(1, 2, verdadero, 'hola') 
-   fin
-   	
-   metodo devuelve_si
-     si
-   fin
-   
-   metodo devuelve_no
-     no
-   fin
-   
-   metodo devuelve_falso
-     falso
-   fin
-   
-   metodo devuelve_verdadero
-     verdadero
-   fin	
+  fin
+
+  metodo devuelve_lista_llena
+    lista(1, 2, verdadero, 'hola')
+  fin
+
+  metodo devuelve_conjunto_lleno
+    conjunto(1, 2, verdadero, 'hola')
+  fin
+
+  metodo devuelve_si
+    si
+  fin
+
+  metodo devuelve_no
+    no
+  fin
+
+  metodo devuelve_falso
+    falso
+  fin
+
+  metodo devuelve_verdadero
+    verdadero
+  fin
+
 fin

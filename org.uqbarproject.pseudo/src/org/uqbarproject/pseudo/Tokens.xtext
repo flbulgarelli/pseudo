@@ -11,6 +11,15 @@ ATTRIBUTE_TOKEN: 'vi' | 'atributo';
 CLASS_METHOD_TOKEN: 'vc' | 'metodo' 'de' 'clase'  ;
 CLASS_ATTRIBUTE_TOKEN: 'mc' | 'atributo' 'de' 'clase';
 
+/* Generic elemetns lists */
+SEPARATOR_TOKEN: ',';
+OPEN_TOKEN: '(';
+CLOSE_TOKEN: ')';
+
+MESSAGE_SEND_TOKEN:
+	'.'
+;
+
 /* basic literals */
 
 NULL_TOKEN : 'nada';

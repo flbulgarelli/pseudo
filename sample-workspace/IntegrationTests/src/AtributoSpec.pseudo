@@ -1,22 +1,21 @@
 clase Atributos
-
   atributo atributo_sin_inicializador
   atributo atributo_con_inicializador = 10
-  
-   metodo metodo_que_actualiza_atributos
-   	 actualizar atributo_con_inicializador = 6
-   fin
-   
-   metodo metodo_que_incrementa_atributos
-   	incrementar atributo_con_inicializador
-   fin
-   
-   metodo metodo_que_acumula_atributos
-   	incrementar atributo_con_inicializador con 10
-   fin
-   
-   metodo metodo_que_decrementa_atributos
+
+  metodo metodo_que_actualiza_atributos
+    actualizar atributo_con_inicializador = 6
+  fin
+
+  metodo metodo_que_incrementa_atributos
+    incrementar atributo_con_inicializador
+  fin
+
+  metodo metodo_que_acumula_atributos
+    incrementar atributo_con_inicializador con 10
+  fin
+
+  metodo metodo_que_decrementa_atributos
     decrementar atributo_con_inicializador
-   fin 
- 
+  fin
+
 fin

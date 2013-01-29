@@ -26,7 +26,7 @@ Declaration:
 	Attribute | Method;
 
 Method:
-	(METHOD_TOKEN | classMethod?=CLASS_METHOD_TOKEN) name=ID ('(' (parameters+=ID (',' parameters+=ID)*)?  =>')')?
+	(METHOD_TOKEN | classMethod?=CLASS_METHOD_TOKEN) name=ID (OPEN_TOKEN (parameters+=ID (SEPARATOR_TOKEN parameters+=ID)*)?  =>CLOSE_TOKEN)?
 	statements+=Statement*
 	END_TOKEN;
 
@@ -87,11 +87,11 @@ CollectionLiteralExpression:
 ;
 
 ListLiteralExpression:
-	{ListLiteralExpression} LIST_OPEN_TOKEN (elements+=EmbeddableExpression (',' elements+=EmbeddableExpression)*)? => LIST_CLOSE_TOKEN	
+	{ListLiteralExpression} LIST_OPEN_TOKEN (elements+=EmbeddableExpression (SEPARATOR_TOKEN elements+=EmbeddableExpression)*)? => LIST_CLOSE_TOKEN	
 ;
 
 SetLiteralExpression:
-	{SetLiteralExpression} SET_OPEN_TOKEN (elements+=EmbeddableExpression (',' elements+=EmbeddableExpression)*)? => SET_CLOSE_TOKEN	
+	{SetLiteralExpression} SET_OPEN_TOKEN (elements+=EmbeddableExpression (SEPARATOR_TOKEN elements+=EmbeddableExpression)*)? => SET_CLOSE_TOKEN	
 ;
 
 RangeLiteralExpression:
@@ -107,7 +107,7 @@ WhenExpression:
 ;
 
 MessageSend:
-	receptor = EmbeddableExpression '.' message = Message 
+	receptor = EmbeddableExpression MESSAGE_SEND_TOKEN message = Message 
 ;
 
 ConstructionExpression:
@@ -119,8 +119,8 @@ Initialization:
 ;
 
 Message:
-	selector=ID ( '(' (arguments+=EmbeddableExpression (',' arguments+=EmbeddableExpression)*)? =>')' )?
-;
+	selector=ID 
+	(OPEN_TOKEN (arguments+=EmbeddableExpression (SEPARATOR_TOKEN arguments+=EmbeddableExpression)*)? => CLOSE_TOKEN)?;
 
 ComprehensionExpression:
 	'generar' (mapping=Message 'de')? target=EmbeddableExpression (=>'tal que' condition=Message)?;

@@ -4,8 +4,10 @@ fin
 clase ClaseConPadre hereda ClaseVacia
 fin
 
-clase ClaseSimpleConAtributosYMetodos 
-	atributo un_atributo
-	metodo un_metodo
-	fin
+clase ClaseSimpleConAtributosYMetodos
+  atributo un_atributo
+
+  metodo un_metodo
+  fin
+
 fin
