@@ -38,6 +38,7 @@ import org.uqbarproject.pseudo.pseudo.MinExpression
 import org.uqbarproject.pseudo.pseudo.SumExpression
 import org.uqbarproject.pseudo.pseudo.EmbeddableExpression
 import org.uqbarproject.pseudo.pseudo.AverageExpression
+import org.uqbarproject.pseudo.pseudo.ConstructionExpression
 
 /**
  * @author flbulgareli
@@ -224,6 +225,9 @@ class PseudoGenerator implements IGenerator {
 	def dispatch compileForResult(AverageExpression expression) {
 		compileReductionWithCriteria('AverageFunction', expression.criteria, expression.target)
 	}
+	def dispatch compileForResult(ConstructionExpression expression) '''
+		new «expression.target.name»()
+	'''
 	
 	def compileForBooleanResult(Expression expression) '''
 		(Boolean) («expression.compileForResult»)

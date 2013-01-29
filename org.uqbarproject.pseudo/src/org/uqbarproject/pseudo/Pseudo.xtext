@@ -2,11 +2,6 @@ grammar org.uqbarproject.pseudo.Pseudo with org.uqbarproject.pseudo.Tokens
 
 /*
  * 
- * no tipado
-en español
-preferir texto
-filtrar, mapear, todos, ninguno, para cada a nivel lenguaje
-listas literales: Conjunto( ), Lista(), Diccionario( clave : valor )
 lambdas? 
 sin sobrecarga
 mixins
@@ -53,6 +48,7 @@ Expression:
 	
 NonEmbeddableExpression:
 	MessageSend |
+	ConstructionExpression |
 	TraversableExpression |
 	AssignmentExpression |
 	IncrementExpression |
@@ -112,6 +108,14 @@ WhenExpression:
 
 MessageSend:
 	receptor = EmbeddableExpression '.' message = Message 
+;
+
+ConstructionExpression:
+	NEW_TOKEN target = [Type] (INITIALIZATION_BLOCK_TOKEN (initializations+=Initialization)+  END_TOKEN)?	
+;
+
+Initialization:
+	INITIALIZE_WITH_TOKEN attribute=ID  '='  initialValue=Expression
 ;
 
 Message:

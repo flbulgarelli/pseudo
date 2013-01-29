@@ -47,3 +47,8 @@ SET_TOKEN: 'actualizar';
 INCREMENT_TOKEN: 'incrementar';
 DECREMENT_TOKEN: 'decrementar';
 ACCUMULATE_BY_TOKEN: 'con';
+
+/* Instantiation tokens */
+NEW_TOKEN: 'nuevo';
+INITIALIZATION_BLOCK_TOKEN: 'inicializar';
+INITIALIZE_WITH_TOKEN: 'con' ; 
