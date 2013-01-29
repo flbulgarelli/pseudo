@@ -41,7 +41,7 @@ clase Metodos
 
   metodo metodo_que_actualiza_variables_locales
     variable x = 4
-    actualizar x = 6
+    actualizar x  = 6 
     x
   fin
 

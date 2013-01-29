@@ -39,13 +39,14 @@ import org.uqbarproject.pseudo.pseudo.SumExpression
 import org.uqbarproject.pseudo.pseudo.EmbeddableExpression
 import org.uqbarproject.pseudo.pseudo.AverageExpression
 import org.uqbarproject.pseudo.pseudo.ConstructionExpression
+import org.uqbarproject.pseudo.pseudo.Parameter
 
 /**
  * @author flbulgareli
  */
 class PseudoGenerator implements IGenerator {
 	
-    @Inject extension IQualifiedNameProvider	
+    @Inject extension IQualifiedNameProvider
 	
 	override void doGenerate(Resource resource, IFileSystemAccess fsa) {
 		resource.allContents.filter(typeof(Type)).forEach [
@@ -69,7 +70,7 @@ class PseudoGenerator implements IGenerator {
 		}
   	'''
   	def dispatch compile(Method method) '''
-	  public «method.classMethod.compileClassModifier» Object «method.name»(«method.parameters.map [ "Object " + it ].join(", ")») throws Throwable {
+	  public «method.classMethod.compileClassModifier» Object «method.name»(«method.parameters.map [ "Object " + it.name ].join(", ")») throws Throwable {
 	  	«IF method.statements.empty»
 	  	return null;
 	  	«ELSE»
@@ -155,20 +156,27 @@ class PseudoGenerator implements IGenerator {
 		«ENDIF»
 		)
 	'''
+	
 	def dispatch compileForResult(AssignmentExpression expression) '''
-		«expression.target» = («expression.value.compileForResult»)
+		«expression.target.referenceName» = («expression.value.compileForResult»)
 	'''
 	def dispatch compileForResult(IncrementExpression expression) '''
-		«expression.target» = new MessageSend("add", «expression.value.compileForResultOrOne»).apply(«expression.target»)
+		«expression.target.referenceName» = new MessageSend(
+				"add",
+				«expression.value.compileForResultOrOne»
+				).apply(«expression.target.referenceName»)
 	'''
 	def dispatch compileForResult(DecrementExpression expression) '''
-		«expression.target» = new MessageSend("subtract", «expression.value.compileForResultOrOne»).apply(«expression.target»)
+		«expression.target.referenceName» = new MessageSend(
+				"subtract",
+				«expression.value.compileForResultOrOne»
+				).apply(«expression.target.referenceName»)
 	'''
     def dispatch compileForResult(NumberExpression expression) '''
     	(new java.math.BigDecimal("«expression.value»"))    
     '''
     def dispatch compileForResult(IdExpression expression) {
-    	expression.value    
+    	expression.value.referenceName   
     }
     def dispatch compileForResult(StringExpression expression) '''
     	"«expression.value»"    
@@ -263,10 +271,6 @@ class PseudoGenerator implements IGenerator {
 		if (type.superType != null) type.superType.name else 'java.lang.Object'
 	}
 	
-	def Object subclassResponsibility() {
-		throw new UnsupportedOperationException()
-	}
-	
 	def compileClassModifier(boolean isClassModifier) {
 		if (isClassModifier) "static" else ""
 	}
@@ -278,5 +282,22 @@ class PseudoGenerator implements IGenerator {
 	       new «reductionClass»(«compileForResultOrIdentityFunction(criteria)»)
 	       ).apply(«target.compileForResult»)
 	'''
+	
+	def Object subclassResponsibility() {
+		throw new UnsupportedOperationException()
+	}
+	
+	def dispatch referenceName(EObject object) {
+		subclassResponsibility()
+	}
+	def dispatch referenceName(Attribute attribute) {
+		attribute.name
+	}	
+	def dispatch referenceName(Parameter parameter) {
+		parameter.name
+	}	
+	def dispatch referenceName(Let localVariable) {
+		localVariable.name
+	}	
 	
 }
