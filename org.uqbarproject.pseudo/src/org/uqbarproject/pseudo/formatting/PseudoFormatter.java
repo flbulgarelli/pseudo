@@ -20,8 +20,6 @@ public class PseudoFormatter extends AbstractDeclarativeFormatter {
 
   @Override
   protected void configureFormatting(FormattingConfig c) {
-    // It's usually a good idea to activate the following three statements.
-    // They will add and preserve newlines around comments
     PseudoGrammarAccess grammar = (PseudoGrammarAccess) getGrammarAccess();
     c.setLinewrap(0, 1, 2).before(grammar.getSL_COMMENTRule());
     c.setLinewrap(0, 1, 2).before(grammar.getML_COMMENTRule());
@@ -36,9 +34,23 @@ public class PseudoFormatter extends AbstractDeclarativeFormatter {
     c.setLinewrap().after(grammar.getTHEN_TOKENRule());
     c.setLinewrap().around(grammar.getOTHERWISE_TOKENRule());
     
+    c.setLinewrap().before(grammar.getNEW_TOKENRule());
+    c.setLinewrap().after(grammar.getINITIALIZATION_BLOCK_TOKENRule());
+    c.setLinewrap().before(grammar.getINITIALIZE_WITH_TOKENRule());
+    
     c.setSpace("  ");
     
     c.setLinewrap().around(grammar.getEND_TOKENRule());
+    
+    c.setNoSpace().around(grammar.getMESSAGE_SEND_TOKENRule());
+    c.setNoSpace().before(grammar.getSEPARATOR_TOKENRule());
+    c.setNoSpace().around(grammar.getOPEN_TOKENRule());
+    c.setNoSpace().before(grammar.getCLOSE_TOKENRule());
+    c.setNoSpace().after(grammar.getLIST_OPEN_TOKENRule());
+    c.setNoSpace().after(grammar.getSET_OPEN_TOKENRule());
+    c.setNoSpace().before(grammar.getLIST_CLOSE_TOKENRule());
+    c.setNoSpace().before(grammar.getSET_CLOSE_TOKENRule());
+    
     
     c.setIndentationIncrement().before(grammar.getWhenExpressionAccess().getActionsExpressionParserRuleCall_0_3_0());
     c.setIndentationDecrement().after(grammar.getWhenExpressionAccess().getActionsExpressionParserRuleCall_0_3_0());
@@ -46,13 +58,12 @@ public class PseudoFormatter extends AbstractDeclarativeFormatter {
     c.setIndentationDecrement().after(grammar.getWhenExpressionAccess().getDefaultActionExpressionParserRuleCall_1_1_0());
     
     c.setIndentation(
-      grammar.getMethodAccess().getMETHOD_TOKENParserRuleCall_0(), 
-      grammar.getMethodAccess().getEND_TOKENParserRuleCall_5());
-    
-    c.setIndentation(
-      grammar.getMethodAccess().getMETHOD_TOKENParserRuleCall_0(), 
-      grammar.getMethodAccess().getEND_TOKENParserRuleCall_5());
-    
+      grammar.getConstructionExpressionAccess().getINITIALIZATION_BLOCK_TOKENParserRuleCall_2_0(), 
+      grammar.getConstructionExpressionAccess().getEND_TOKENParserRuleCall_2_2());
+
+    c.setIndentationIncrement().after(grammar.getMETHOD_TOKENRule());
+    c.setIndentationIncrement().after(grammar.getCLASS_METHOD_TOKENRule());
+    c.setIndentationDecrement().before(grammar.getMethodAccess().getEND_TOKENParserRuleCall_4());
     
     c.setIndentation(
       grammar.getTypeAccess().getCLASS_TOKENParserRuleCall_0(), 

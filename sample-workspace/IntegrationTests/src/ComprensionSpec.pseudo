@@ -1,28 +1,30 @@
 clase Comprensiones
-  
+
   metodo nombres_de_personas(personas)
     generar nombre de personas
-  fin 
-  
+  fin
+
   metodo nombres_de_personas_mayores(personas)
     generar nombre de personas tal que es_mayor
   fin
-  
+
   metodo persona_mas_adulta(personas)
-     maximo entre personas segun edad
+    maximo entre personas segun edad
   fin
-  
+
   metodo persona_mas_joven(personas)
-     minimo entre personas segun edad
+    minimo entre personas segun edad
   fin
-  
+
 fin
 
 clase Persona
   atributo nombre
   atributo edad
+
   metodo es_mayor
-//    edad > 18
+  //    edad > 18
     si
-  fin  
+  fin
+
 fin
