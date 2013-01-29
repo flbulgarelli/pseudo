@@ -158,25 +158,25 @@ class PseudoGenerator implements IGenerator {
 	'''
 	
 	def dispatch compileForResult(AssignmentExpression expression) '''
-		«expression.target.referenceName» = («expression.value.compileForResult»)
+		«expression.target.compileForReference» = («expression.value.compileForResult»)
 	'''
 	def dispatch compileForResult(IncrementExpression expression) '''
-		«expression.target.referenceName» = new MessageSend(
+		«expression.target.compileForReference» = new MessageSend(
 				"add",
 				«expression.value.compileForResultOrOne»
-				).apply(«expression.target.referenceName»)
+				).apply(«expression.target.compileForReference»)
 	'''
 	def dispatch compileForResult(DecrementExpression expression) '''
-		«expression.target.referenceName» = new MessageSend(
+		«expression.target.compileForReference» = new MessageSend(
 				"subtract",
 				«expression.value.compileForResultOrOne»
-				).apply(«expression.target.referenceName»)
+				).apply(«expression.target.compileForReference»)
 	'''
     def dispatch compileForResult(NumberExpression expression) '''
     	(new java.math.BigDecimal("«expression.value»"))    
     '''
     def dispatch compileForResult(IdExpression expression) {
-    	expression.value.referenceName   
+    	expression.value.compileForReference   
     }
     def dispatch compileForResult(StringExpression expression) '''
     	"«expression.value»"    
@@ -287,16 +287,16 @@ class PseudoGenerator implements IGenerator {
 		throw new UnsupportedOperationException()
 	}
 	
-	def dispatch referenceName(EObject object) {
+	def dispatch compileForReference(EObject object) {
 		subclassResponsibility()
 	}
-	def dispatch referenceName(Attribute attribute) {
-		attribute.getName
+	def dispatch compileForReference(Attribute attribute) {
+		'this.' + attribute.getName
 	}	
-	def dispatch referenceName(Parameter parameter) {
+	def dispatch compileForReference(Parameter parameter) {
 		parameter.name
 	}	
-	def dispatch referenceName(LocalVariable localVariable) {
+	def dispatch compileForReference(LocalVariable localVariable) {
 		localVariable.getName
 	}	
 	
