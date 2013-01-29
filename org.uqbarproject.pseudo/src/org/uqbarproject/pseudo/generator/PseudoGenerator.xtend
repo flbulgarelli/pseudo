@@ -209,7 +209,7 @@ class PseudoGenerator implements IGenerator {
 	def dispatch compileForResult(ComprehensionExpression expression) '''
 	    new TraversingTransformation(
 	       «compileForResultOrIdentityFunction(expression.mapping)»,
-	       «compileForResultOrTrueFunction(expression.mapping)»,
+	       «compileForResultOrTrueFunction(expression.condition)»,
 	       new IdentityFunction()
 	       ).apply(«expression.target.compileForResult»)
 	'''
