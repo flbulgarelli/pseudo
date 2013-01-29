@@ -28,7 +28,7 @@ import org.uqbarproject.pseudo.pseudo.MessageSend
 import org.uqbarproject.pseudo.pseudo.StringExpression
 import org.uqbarproject.pseudo.pseudo.TrueExpression
 import org.uqbarproject.pseudo.pseudo.Type
-import org.uqbarproject.pseudo.pseudo.Let
+import org.uqbarproject.pseudo.pseudo.LocalVariable
 import org.uqbarproject.pseudo.pseudo.IncrementExpression
 import org.uqbarproject.pseudo.pseudo.DecrementExpression
 import org.uqbarproject.pseudo.pseudo.ListLiteralExpression
@@ -64,13 +64,13 @@ class PseudoGenerator implements IGenerator {
 		import org.uqbarproject.pseudo.runtime.*;
 		import org.uqbarproject.pseudo.runtime.reductions.*;
 		public class «type.name» extends «type.effectiveSuperType» {
-		  	«FOR declaration : type.declarations»
-		  	  «declaration.compile»		
+		  	«FOR member : type.members»
+		  	  «member.compile»		
 		  	«ENDFOR»
 		}
   	'''
   	def dispatch compile(Method method) '''
-	  public «method.classMethod.compileClassModifier» Object «method.name»(«method.parameters.map [ "Object " + it.name ].join(", ")») throws Throwable {
+	  public «method.classMethod.compileClassModifier» Object «method.getName»(«method.parameters.map [ "Object " + it.name ].join(", ")») throws Throwable {
 	  	«IF method.statements.empty»
 	  	return null;
 	  	«ELSE»
@@ -89,23 +89,23 @@ class PseudoGenerator implements IGenerator {
 	  }
 	'''
 	def dispatch compile(Attribute declaration) '''
-	  private «declaration.classAttribute.compileClassModifier» Object «declaration.name» = «declaration.initialValue.compileForResultOrNull»;
+	  private «declaration.classAttribute.compileClassModifier» Object «declaration.getName» = «declaration.initialValue.compileForResultOrNull»;
 «««	  TODO REMOVER
-	  public void set«declaration.name.toFirstUpper»(Object value) {
-	  	this.«declaration.name» = value;
+	  public void set«declaration.getName.toFirstUpper»(Object value) {
+	  	this.«declaration.getName» = value;
 	  }
-	  public Object get«declaration.name.toFirstUpper»() {
-	  	return this.«declaration.name»;
+	  public Object get«declaration.getName.toFirstUpper»() {
+	  	return this.«declaration.getName»;
 	  }
-	  public Object «declaration.name»() {
-	  	return this.«declaration.name»;
+	  public Object «declaration.getName»() {
+	  	return this.«declaration.getName»;
 	  }
 	'''
 	def dispatch compile(Return ret) '''
 		return «ret.value.compileForResult»;
 	'''
-	def dispatch compile(Let declaration) '''
-		Object «declaration.name» = «declaration.value.compileForResultOrNull»;
+	def dispatch compile(LocalVariable declaration) '''
+		Object «declaration.getName» = «declaration.getValue.compileForResultOrNull»;
 	'''
 	//TODO Not an expression, yet
 	def dispatch compile(Message message) '''
@@ -291,13 +291,13 @@ class PseudoGenerator implements IGenerator {
 		subclassResponsibility()
 	}
 	def dispatch referenceName(Attribute attribute) {
-		attribute.name
+		attribute.getName
 	}	
 	def dispatch referenceName(Parameter parameter) {
 		parameter.name
 	}	
-	def dispatch referenceName(Let localVariable) {
-		localVariable.name
+	def dispatch referenceName(LocalVariable localVariable) {
+		localVariable.getName
 	}	
 	
 }

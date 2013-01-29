@@ -8,8 +8,8 @@ import java.util.Set;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.validation.Check;
-import org.uqbarproject.pseudo.pseudo.Declaration;
-import org.uqbarproject.pseudo.pseudo.Let;
+import org.uqbarproject.pseudo.pseudo.Member;
+import org.uqbarproject.pseudo.pseudo.LocalVariable;
 import org.uqbarproject.pseudo.pseudo.Method;
 import org.uqbarproject.pseudo.pseudo.Parameter;
 import org.uqbarproject.pseudo.pseudo.PseudoPackage;
@@ -49,15 +49,15 @@ public class PseudoJavaValidator extends AbstractPseudoJavaValidator {
 
   @Check
   public void checkDuplicateMembers(Type type) {
-    new DuplicateChecker<Type, Declaration>() {
+    new DuplicateChecker<Type, Member>() {
       protected void checkChilds(Type parentObject) {
-        for (Declaration child : parentObject.getDeclarations()) {
+        for (Member child : parentObject.getMembers()) {
           updateIndexes(child, child.getName());
         }
       }
 
       protected EAttribute feature() {
-        return PseudoPackage.Literals.DECLARATION__NAME;
+        return PseudoPackage.Literals.MEMBER__NAME;
       }
 
       protected String duplicationMessage() {
@@ -68,18 +68,18 @@ public class PseudoJavaValidator extends AbstractPseudoJavaValidator {
 
   @Check
   public void checkDuplicateLocals(Method method) {
-    new DuplicateChecker<Method, Let>() {
+    new DuplicateChecker<Method, LocalVariable>() {
       protected void checkChilds(Method parentObject) {
         for (Statement statement : parentObject.getStatements()) {
-          if (statement instanceof Let) {
-            Let child = (Let) statement;
+          if (statement instanceof LocalVariable) {
+            LocalVariable child = (LocalVariable) statement;
             updateIndexes(child, child.getName());
           }
         }
       }
 
       protected EAttribute feature() {
-        return PseudoPackage.Literals.LET__NAME;
+        return PseudoPackage.Literals.LOCAL_VARIABLE__NAME;
       }
 
       protected String duplicationMessage() {

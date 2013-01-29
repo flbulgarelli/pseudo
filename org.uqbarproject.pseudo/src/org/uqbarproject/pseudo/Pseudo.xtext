@@ -21,10 +21,10 @@ Model:
 
 Type:
 	CLASS_TOKEN name=ID (INHERITS_TOKEN superType=[Type])?
-	declarations+=Declaration*
+	members+=Member*
 	END_TOKEN;
 
-Declaration:
+Member:
 	Attribute | Method;
 
 Method:
@@ -39,12 +39,12 @@ Parameter:
 ;	
 
 Statement:
-	Expression | Return | Let ;
+	Expression | Return | LocalVariable ;
 
 Return:
 	RETURN_TOKEN value=EmbeddableExpression;
 	
-Let:
+LocalVariable:
 	LET_TOKEN (name=ID) ('=' (value=Expression))?;
 
 Attribute:
