@@ -41,7 +41,12 @@ import org.uqbarproject.pseudo.pseudo.AverageExpression
 import org.uqbarproject.pseudo.pseudo.ConstructionExpression
 import org.uqbarproject.pseudo.pseudo.Parameter
 import org.uqbarproject.pseudo.pseudo.SuperSend
-import static extension org.uqbarproject.pseudo.util.EObjectExtensions.* 
+import static extension org.uqbarproject.pseudo.util.EObjectExtensions.*
+import org.uqbarproject.pseudo.pseudo.Applicable
+import org.uqbarproject.pseudo.pseudo.ApplicablePipeline
+import org.uqbarproject.pseudo.pseudo.ApplicableComposition
+import org.uqbarproject.pseudo.pseudo.ApplicableDisyuntion
+import org.uqbarproject.pseudo.pseudo.ApplicableConjuntion 
 
 /**
  * @author flbulgareli
@@ -60,7 +65,7 @@ class PseudoGenerator implements IGenerator {
 	}
 	
   	def dispatch compile(EObject declaration) { 
-  		subclassResponsibility as String
+  		declaration.subclassResponsibility('compile') as String
   	}
 	def dispatch compile(Type type) '''
 		import org.uqbarproject.pseudo.runtime.*;
@@ -113,6 +118,18 @@ class PseudoGenerator implements IGenerator {
 		Object «declaration.getName» = «declaration.getValue.compileForResultOrNull»;
 	'''
 	//TODO Not an expression, yet
+	def dispatch compile(ApplicablePipeline pipeline) '''
+		«joinMessages(pipeline.messages, "andThen")»
+	'''
+	def dispatch compile(ApplicableComposition pipeline) '''
+		«joinMessages(pipeline.messages, "compose")»
+	'''
+	def dispatch compile(ApplicableDisyuntion pipeline) '''
+		«joinMessages(pipeline.messages, "or")»
+	'''
+	def dispatch compile(ApplicableConjuntion pipeline) '''
+		«joinMessages(pipeline.messages, "and")»
+	'''
 	def dispatch compile(Message message) '''
 		new MessageSend("«message.selector»"
 		«IF message.arguments.empty»
@@ -121,6 +138,7 @@ class PseudoGenerator implements IGenerator {
 		, «joinCompileResults(message.arguments)»)
 		«ENDIF»
 	'''
+
 	
 	//Expressions
 	def dispatch compile(Expression expression) '''
@@ -206,9 +224,7 @@ class PseudoGenerator implements IGenerator {
     def dispatch compileForResult(SetLiteralExpression expression) '''
     	new java.util.HashSet(java.util.Arrays.asList(«joinCompileResults(expression.elements)»))
     '''
-    def joinCompileResults(EList<? extends Expression> expressions) {
-    	expressions.map[it.compileForResult].join(',')
-    }
+
     def dispatch compileForResult(MessageSend expression) '''
     	«expression.message.compile».apply(«expression.getReceptor.compileForResult»)
     '''
@@ -257,7 +273,7 @@ class PseudoGenerator implements IGenerator {
 	}
 	
 	//TODO pass arguments
-	def compileForResultOrTrueFunction(Message message)'''
+	def compileForResultOrTrueFunction(Applicable message)'''
 		«IF message != null»
 		    «message.compile»
 		«ELSE»
@@ -266,7 +282,7 @@ class PseudoGenerator implements IGenerator {
 	'''
 
 	//TODO pass arguments	
-	def compileForResultOrIdentityFunction(Message message)'''
+	def compileForResultOrIdentityFunction(Applicable message)'''
 		«IF message != null»
 			«message.compile»
 		«ELSE»
@@ -282,7 +298,7 @@ class PseudoGenerator implements IGenerator {
 		if (isClassModifier) "static" else ""
 	}
 	
-	def compileReductionWithCriteria(String reductionClass, Message criteria, EmbeddableExpression target) '''
+	def compileReductionWithCriteria(String reductionClass, Applicable criteria, EmbeddableExpression target) '''
 	    new TraversingTransformation(
 	       new IdentityFunction(),
 	       new ConstantFunction(true),
@@ -290,12 +306,12 @@ class PseudoGenerator implements IGenerator {
 	       ).apply(«target.compileForResult»)
 	'''
 	
-	def Object subclassResponsibility() {
-		throw new UnsupportedOperationException()
+	def Object subclassResponsibility(EObject object, String message) {
+		throw new UnsupportedOperationException(object + " should implement " + message)
 	}
 	
 	def dispatch compileForReference(EObject object) {
-		subclassResponsibility()
+		object.subclassResponsibility('compileForReference')
 	}
 	def dispatch compileForReference(Attribute attribute) {
 		'this.' + attribute.getName
@@ -305,6 +321,11 @@ class PseudoGenerator implements IGenerator {
 	}	
 	def dispatch compileForReference(LocalVariable localVariable) {
 		localVariable.getName
-	}	
-	
+	}
+	def joinCompileResults(EList<? extends Expression> expressions) {
+    	expressions.map[it.compileForResult].join(',')
+    }
+    def joinMessages(EList<Message> messages, String selector){
+    	messages.map['(' + it.compile + ')'].join("." + selector)
+    }
 }

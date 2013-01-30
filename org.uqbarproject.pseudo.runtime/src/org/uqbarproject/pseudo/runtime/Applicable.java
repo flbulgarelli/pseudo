@@ -20,4 +20,8 @@ public interface Applicable {
 
   Applicable compose(Applicable other);
 
+  Applicable or(Applicable other);
+
+  Applicable and(Applicable other);
+
 }

@@ -26,12 +26,22 @@ public class MensajesSpec {
   }
 
   @Test
-  public void composicion() throws Exception {
-    fail();
+  public void composicion() throws Throwable {
+    assertEquals(4, new Mensajes().metodo_que_compone());
   }
 
   @Test
-  public void encadenamiento() throws Exception {
+  public void encadenamiento() throws Throwable {
+    assertEquals(BigDecimal.valueOf(3), new Mensajes().metodo_que_encadena());
+  }
+  
+  @Test
+  public void disyuncion() throws Exception {
+    fail();
+  }
+  
+  @Test
+  public void conjuncion() throws Exception {
     fail();
   }
   

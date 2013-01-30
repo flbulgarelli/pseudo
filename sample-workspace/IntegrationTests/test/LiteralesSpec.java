@@ -1,3 +1,4 @@
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -64,5 +65,15 @@ public class LiteralesSpec {
   @Test
   public void soportaNumerosFlotantes() throws Throwable {
     assertEquals(new BigDecimal("5.5"), new Literales().devuelve_cinco_y_medio());
+  }
+  
+  @Test
+  public void soporta_literales_de_clase() throws Exception {
+    fail();
+  }
+  
+  @Test
+  public void soporta_literales_de_mensajes() throws Exception {
+    fail();
   }
 }

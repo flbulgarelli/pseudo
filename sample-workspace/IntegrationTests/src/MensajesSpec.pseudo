@@ -29,9 +29,35 @@ clase Mensajes
   metodo metodo_que_envia_mensaje_de_clase_a_la_instancia
     este.foo
   fin
+  
+  metodo metodo_que_encadena
+    variable contador = nuevo Contador
+    contador.contar luego contar luego contar
+    contador.i
+  fin
+  
+  metodo metodo_que_combina_con_o(persona)
+    persona.mayor_edad o emancipada
+  fin
+  
+  metodo metodo_que_combina_con_y(persona)
+    persona.mayor_edad y argentino
+  fin
+  
+  metodo metodo_que_compone
+    variable hola = " hola "
+    hola.length compuesto trim
+  fin
 
   metodo de clase foo
     4
   fin
 
+fin
+
+clase Contador
+  atributo i = 0
+  metodo contar
+    incrementar i
+  fin
 fin

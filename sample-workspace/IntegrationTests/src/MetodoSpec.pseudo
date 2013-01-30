@@ -35,8 +35,8 @@ clase Metodos
   /* Variables Locales */
   metodo metodo_con_variables_locales
     variable x = 5
-    variable y = x
-    y
+    variable z = x
+    z
   fin
 
   metodo metodo_que_actualiza_variables_locales

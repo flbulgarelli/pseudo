@@ -63,3 +63,11 @@ ACCUMULATE_BY_TOKEN: 'con';
 NEW_TOKEN: 'nuevo';
 INITIALIZATION_BLOCK_TOKEN: 'inicializar';
 INITIALIZE_WITH_TOKEN: 'con' ; 
+
+
+/* Message composition */
+AND_THEN_TOKEN: 'luego';
+COMPOSE_TOKEN: 'compuesto' ;
+
+OR_TOKEN: 'o' ;
+AND_TOKEN: 'y' ;

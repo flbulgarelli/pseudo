@@ -9,6 +9,14 @@ public abstract class AbstractApplicable implements Applicable {
   public Applicable compose(Applicable other) {
     return new ComposedApplicable(other, this);
   }
+  
+  public Applicable or(Applicable other) {
+    throw new UnsupportedOperationException("unimplemented");
+  }
+  
+  public Applicable and(Applicable other) {
+    throw new UnsupportedOperationException("unimplemented");
+  }
 
   @Override
   public boolean applyForBoolean(Object argument) throws Throwable {

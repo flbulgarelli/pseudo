@@ -125,7 +125,33 @@ Initialization:
 ;
 
 MessageSend:
-	receptor = EmbeddableExpression MESSAGE_SEND_TOKEN message = Message 
+	receptor = EmbeddableExpression MESSAGE_SEND_TOKEN message = Applicable 
+;
+
+/*Applicatins are limited to not mix operations on purpose */
+Applicable:
+	Message |
+	ApplicablePipeline |
+	ApplicableComposition |
+	ApplicableDisyuntion |
+	ApplicableConjuntion 
+;
+
+ApplicablePipeline:
+	 messages+=Message (AND_THEN_TOKEN messages+=Message)+
+;
+
+ApplicableComposition:
+	messages+=Message (COMPOSE_TOKEN messages+=Message)+
+;
+
+ApplicableConjuntion:
+	messages+=Message (AND_TOKEN messages+=Message)+
+;
+
+
+ApplicableDisyuntion:
+	messages+=Message (OR_TOKEN messages+=Message)+
 ;
 
 Message:
@@ -137,23 +163,24 @@ SuperSend:
 ;
 
 
+
 ComprehensionExpression:
-	'generar' (mapping=Message 'de')? target=EmbeddableExpression (=>'tal que' condition=Message)?;
+	'generar' (mapping=Applicable 'de')? target=EmbeddableExpression (=>'tal que' condition=Applicable)?;
 
 ForEachExpression:
-	'para cada' ID 'en' (target=EmbeddableExpression) (=>'tal que' condition=Message)? action=Message;
+	'para cada' ID 'en' (target=EmbeddableExpression) (=>'tal que' condition=Applicable)? action=Applicable;
 
 SumExpression:
-	'sumatoria' criteria=Message 'de' target=EmbeddableExpression;
+	'sumatoria' criteria=Applicable 'de' target=EmbeddableExpression;
 
 AverageExpression:
-	'promedio' criteria=Message 'de' target=EmbeddableExpression;
+	'promedio' criteria=Applicable 'de' target=EmbeddableExpression;
 
 MaxExpression:
-	'maximo entre' target=EmbeddableExpression (=>'segun' criteria=Message)?;
+	'maximo entre' target=EmbeddableExpression (=>'segun' criteria=Applicable)?;
 
 MinExpression:
-	'minimo entre' target=EmbeddableExpression (=>'segun' criteria=Message)?;
+	'minimo entre' target=EmbeddableExpression (=>'segun' criteria=Applicable)?;
 
 AssignmentExpression:
 	SET_TOKEN (target=[ecore::EObject]) '=' (value=Expression);
