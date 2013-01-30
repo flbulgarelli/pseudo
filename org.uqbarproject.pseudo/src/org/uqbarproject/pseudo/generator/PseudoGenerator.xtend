@@ -40,6 +40,8 @@ import org.uqbarproject.pseudo.pseudo.EmbeddableExpression
 import org.uqbarproject.pseudo.pseudo.AverageExpression
 import org.uqbarproject.pseudo.pseudo.ConstructionExpression
 import org.uqbarproject.pseudo.pseudo.Parameter
+import org.uqbarproject.pseudo.pseudo.SuperSend
+import static extension org.uqbarproject.pseudo.util.EObjectExtensions.* 
 
 /**
  * @author flbulgareli
@@ -70,6 +72,9 @@ class PseudoGenerator implements IGenerator {
 		}
   	'''
   	def dispatch compile(Method method) '''
+	  «IF method.overrideMethod»
+	  @Override
+	  «ENDIF»
 	  public «method.classMethod.compileClassModifier» Object «method.getName»(«method.parameters.map [ "Object " + it.name ].join(", ")») throws Throwable {
 	  	«IF method.statements.empty»
 	  	return null;
@@ -109,7 +114,6 @@ class PseudoGenerator implements IGenerator {
 	'''
 	//TODO Not an expression, yet
 	def dispatch compile(Message message) '''
-	
 		new MessageSend("«message.selector»"
 		«IF message.arguments.empty»
 		 )
@@ -207,6 +211,9 @@ class PseudoGenerator implements IGenerator {
     }
     def dispatch compileForResult(MessageSend expression) '''
     	«expression.message.compile».apply(«expression.getReceptor.compileForResult»)
+    '''
+    def dispatch compileForResult(SuperSend expression) '''
+    	super.«expression.parentOfType(typeof(Method)).name»(«joinCompileResults(expression.arguments)»);
     '''
 	def dispatch compileForResult(ForEachExpression expression) '''
 	    new Traversing(

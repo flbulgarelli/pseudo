@@ -5,14 +5,12 @@
      * en ingles
 * literales de mensajes
 * Implementar retorno explicto en expresiones cuando no tiene valor de retorno
-* Implementar super
 * implementar reducciones faltantes
 * expresiones matematicas
 * soportar texto libre
 * generacion de stubs
 * etiquetas del ide
 * luego, compuesto, etc
-* constructores
 * extensiones/mixins?
 * integracion con java
 * diccionarios literales
@@ -21,5 +19,8 @@
 * soportar parametros no posicionales? es bueno, pero podria dificular interaccion con Java
 * soportar parametros etiquetados? idem anterior
 * soportar null como absorvente? esopodria dificular mostrar un null object
-* soporta referencias entre elementos a nivel IDE
 * hay una inconsistencia?: al if se le pasa una expresion, a los generadores un mensaje.
+* soportar inicializadores
+* soportar referencias en el init
+* revisar sintaxis del init. es ambigua respecto del token 'con'
+* usar envio estático de mensajes cuando sea posible

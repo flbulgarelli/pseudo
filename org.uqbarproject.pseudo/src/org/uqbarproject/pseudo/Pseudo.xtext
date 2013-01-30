@@ -28,7 +28,7 @@ Member:
 	Attribute | Method;
 
 Method:
-	(METHOD_TOKEN | classMethod?=CLASS_METHOD_TOKEN) 
+    overrideMethod?=OVERRIDE_TOKEN?	(METHOD_TOKEN | classMethod?=CLASS_METHOD_TOKEN) 
 		name=ID 
 		(OPEN_TOKEN ((parameters+=Parameter) (SEPARATOR_TOKEN parameters+=Parameter)*)?  =>CLOSE_TOKEN)?
 	statements+=Statement*
@@ -56,6 +56,7 @@ Expression:
 	
 NonEmbeddableExpression:
 	MessageSend |
+	SuperSend |
 	ConstructionExpression |
 	TraversableExpression |
 	AssignmentExpression |
@@ -114,9 +115,6 @@ WhenExpression:
 	END_TOKEN 
 ;
 
-MessageSend:
-	receptor = EmbeddableExpression MESSAGE_SEND_TOKEN message = Message 
-;
 
 ConstructionExpression:
 	NEW_TOKEN target = [Type] (INITIALIZATION_BLOCK_TOKEN (initializations+=Initialization)+  END_TOKEN)?	
@@ -126,9 +124,18 @@ Initialization:
 	INITIALIZE_WITH_TOKEN attribute=ID  '='  initialValue=Expression
 ;
 
+MessageSend:
+	receptor = EmbeddableExpression MESSAGE_SEND_TOKEN message = Message 
+;
+
 Message:
-	selector=ID 
-	(OPEN_TOKEN (arguments+=EmbeddableExpression (SEPARATOR_TOKEN arguments+=EmbeddableExpression)*)? => CLOSE_TOKEN)?;
+	selector=ID (OPEN_TOKEN (arguments+=EmbeddableExpression (SEPARATOR_TOKEN arguments+=EmbeddableExpression)*)? => CLOSE_TOKEN)?
+;
+
+SuperSend:
+	{SuperSend} SUPER_TOKEN (OPEN_TOKEN (arguments+=EmbeddableExpression (SEPARATOR_TOKEN arguments+=EmbeddableExpression)*)? => CLOSE_TOKEN)?
+;
+
 
 ComprehensionExpression:
 	'generar' (mapping=Message 'de')? target=EmbeddableExpression (=>'tal que' condition=Message)?;

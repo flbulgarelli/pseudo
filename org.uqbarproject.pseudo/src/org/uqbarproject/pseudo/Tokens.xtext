@@ -11,6 +11,8 @@ ATTRIBUTE_TOKEN: 'vi' | 'atributo';
 CLASS_METHOD_TOKEN: 'vc' | 'metodo' 'de' 'clase'  ;
 CLASS_ATTRIBUTE_TOKEN: 'mc' | 'atributo' 'de' 'clase';
 
+OVERRIDE_TOKEN: 'redefinir';
+SUPER_TOKEN: 'padre' | 'super' ;
 /* Generic elemetns lists */
 SEPARATOR_TOKEN: ',';
 OPEN_TOKEN: '(';

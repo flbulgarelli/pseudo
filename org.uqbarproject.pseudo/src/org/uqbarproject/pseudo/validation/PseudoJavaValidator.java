@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.emf.codegen.ecore.genmodel.GenModelPackage.Literals;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -25,8 +26,10 @@ import org.uqbarproject.pseudo.pseudo.Method;
 import org.uqbarproject.pseudo.pseudo.Parameter;
 import org.uqbarproject.pseudo.pseudo.Statement;
 import org.uqbarproject.pseudo.pseudo.StringExpression;
+import org.uqbarproject.pseudo.pseudo.SuperSend;
 import org.uqbarproject.pseudo.pseudo.TrueExpression;
 import org.uqbarproject.pseudo.pseudo.Type;
+import org.uqbarproject.pseudo.util.EObjectExtensions;
 
 public class PseudoJavaValidator extends AbstractPseudoJavaValidator {
 
@@ -100,8 +103,6 @@ public class PseudoJavaValidator extends AbstractPseudoJavaValidator {
     }.checkDuplicates(method);
   }
 
-  // TODO rename declaration to member
-
   @Check
   public void checkDuplicateParameters(Method method) {
     Set<String> parameterNames = new HashSet<String>();
@@ -110,6 +111,14 @@ public class PseudoJavaValidator extends AbstractPseudoJavaValidator {
     }
     if (parameterNames.size() != method.getParameters().size()) {
       error("Duplicate parameters", method, METHOD__PARAMETERS, INSIGNIFICANT_INDEX);
+    }
+  }
+
+  @Check
+  public void checkSuperUsage(SuperSend superSend) {
+    Method method = EObjectExtensions.parentOfTypeOrNull(superSend, Method.class);
+    if (method == null) {
+      error("Bad usage of super. It must be only within a method", superSend, SUPER_SEND__ARGUMENTS, INSIGNIFICANT_INDEX);
     }
   }
 
@@ -151,13 +160,15 @@ public class PseudoJavaValidator extends AbstractPseudoJavaValidator {
       if (target instanceof Attribute)
         checkMayBeNumeric(update, ((Attribute) target).getInitialValue(), feature);
       else if (target instanceof LocalVariable)
+        // TODO acá se podría hacer la inferencia más poderosa, si se usara
+        // recursivamente expressionMayBeNumeric
         checkMayBeNumeric(update, ((LocalVariable) target).getValue(), feature);
     }
-    
+
     private void checkUpdatingExpressionMayBeNumeric(EObject update, Expression target, EReference feature) {
       if (target instanceof IdExpression)
         checkUpdatedVariableMayBeNumeric(update, ((IdExpression) target).getValue(), feature);
-      else 
+      else
         checkMayBeNumeric(update, (Expression) target, feature);
     }
 
