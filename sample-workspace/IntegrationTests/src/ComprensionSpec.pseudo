@@ -15,6 +15,14 @@ clase Comprensiones
   metodo persona_mas_joven(personas)
     minimo entre personas segun edad
   fin
+  
+  metodo suma_edades(personas)
+    sumatoria edad de personas
+  fin
+  
+  metodo promedio_edades(personas)
+    promedio edad de personas
+  fin
 
 fin
 

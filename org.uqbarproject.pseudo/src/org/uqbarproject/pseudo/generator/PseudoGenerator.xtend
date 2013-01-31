@@ -41,12 +41,14 @@ import org.uqbarproject.pseudo.pseudo.AverageExpression
 import org.uqbarproject.pseudo.pseudo.ConstructionExpression
 import org.uqbarproject.pseudo.pseudo.Parameter
 import org.uqbarproject.pseudo.pseudo.SuperSend
-import static extension org.uqbarproject.pseudo.util.EObjectExtensions.*
 import org.uqbarproject.pseudo.pseudo.Applicable
 import org.uqbarproject.pseudo.pseudo.ApplicablePipeline
 import org.uqbarproject.pseudo.pseudo.ApplicableComposition
 import org.uqbarproject.pseudo.pseudo.ApplicableDisyuntion
-import org.uqbarproject.pseudo.pseudo.ApplicableConjuntion 
+import org.uqbarproject.pseudo.pseudo.ApplicableConjuntion
+
+import static extension org.uqbarproject.pseudo.util.EObjectExtensions.*
+import static extension org.uqbarproject.pseudo.SelectorExtensions.* 
 
 /**
  * @author flbulgareli
@@ -80,7 +82,7 @@ class PseudoGenerator implements IGenerator {
 	  «IF method.overrideMethod»
 	  @Override
 	  «ENDIF»
-	  public «method.classMethod.compileClassModifier» Object «method.getName»(«method.parameters.map [ "Object " + it.name ].join(", ")») throws Throwable {
+	  public «method.classMethod.compileClassModifier» Object «method.name.toJavaId»(«method.parameters.map [ "Object " + it.name.toJavaId ].join(", ")») throws Throwable {
 	  	«IF method.statements.empty»
 	  	return null;
 	  	«ELSE»
@@ -99,23 +101,23 @@ class PseudoGenerator implements IGenerator {
 	  }
 	'''
 	def dispatch compile(Attribute declaration) '''
-	  private «declaration.classAttribute.compileClassModifier» Object «declaration.getName» = «declaration.initialValue.compileForResultOrNull»;
+	  private «declaration.classAttribute.compileClassModifier» Object «declaration.name.toJavaId» = «declaration.initialValue.compileForResultOrNull»;
 «««	  TODO REMOVER
-	  public void set«declaration.getName.toFirstUpper»(Object value) {
-	  	this.«declaration.getName» = value;
+	  public void set«declaration.name.toJavaIdPart»(Object value) {
+	  	this.«declaration.name.toJavaId» = value;
 	  }
-	  public Object get«declaration.getName.toFirstUpper»() {
-	  	return this.«declaration.getName»;
+	  public Object get«declaration.name.toJavaIdPart»() {
+	  	return this.«declaration.name.toJavaId»;
 	  }
-	  public Object «declaration.getName»() {
-	  	return this.«declaration.getName»;
+	  public Object «declaration.name.toJavaId»() {
+	  	return this.«declaration.name.toJavaId»;
 	  }
 	'''
 	def dispatch compile(Return ret) '''
 		return «ret.value.compileForResult»;
 	'''
 	def dispatch compile(LocalVariable declaration) '''
-		Object «declaration.getName» = «declaration.getValue.compileForResultOrNull»;
+		Object «declaration.name.toJavaId» = «declaration.getValue.compileForResultOrNull»;
 	'''
 	//TODO Not an expression, yet
 	def dispatch compile(ApplicablePipeline pipeline) '''
@@ -131,7 +133,7 @@ class PseudoGenerator implements IGenerator {
 		«joinMessages(pipeline.messages, "and")»
 	'''
 	def dispatch compile(Message message) '''
-		new MessageSend("«message.selector»"
+		new MessageSend("«message.selector.toJavaId»"
 		«IF message.arguments.empty»
 		 )
 		«ELSE»
@@ -229,7 +231,7 @@ class PseudoGenerator implements IGenerator {
     	«expression.message.compile».apply(«expression.getReceptor.compileForResult»)
     '''
     def dispatch compileForResult(SuperSend expression) '''
-    	super.«expression.parentOfType(typeof(Method)).name»(«joinCompileResults(expression.arguments)»);
+    	super.«expression.parentOfType(typeof(Method)).name.toJavaId»(«joinCompileResults(expression.arguments)»);
     '''
 	def dispatch compileForResult(ForEachExpression expression) '''
 	    new Traversing(
@@ -314,13 +316,13 @@ class PseudoGenerator implements IGenerator {
 		object.subclassResponsibility('compileForReference')
 	}
 	def dispatch compileForReference(Attribute attribute) {
-		'this.' + attribute.getName
+		'this.' + attribute.name.toJavaId
 	}	
 	def dispatch compileForReference(Parameter parameter) {
-		parameter.name
+		parameter.name.toJavaId
 	}	
 	def dispatch compileForReference(LocalVariable localVariable) {
-		localVariable.getName
+		localVariable.name.toJavaId
 	}
 	def joinCompileResults(EList<? extends Expression> expressions) {
     	expressions.map[it.compileForResult].join(',')

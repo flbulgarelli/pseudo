@@ -1,5 +1,6 @@
 package org.uqbarproject.pseudo.runtime;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class TraversingUnitTest {
 
     Object result = new Traversing(new MessageSend("getValue"), new ConstantFunction(true)).apply(cells);
 
-    Assert.assertEquals(50, result);
+    Assert.assertEquals(BigDecimal.valueOf(50), result);
   }
 
   private AbstractApplicable setTime(final Object value) {

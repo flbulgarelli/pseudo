@@ -18,8 +18,8 @@ public class ClaseSpec {
   @Test
   public void puedeDeclararClaseConAtributosYMetodos() throws Exception {
     new ClaseSimpleConAtributosYMetodos();
-    ClaseSimpleConAtributosYMetodos.class.getDeclaredMethod("un_metodo");
-    ClaseSimpleConAtributosYMetodos.class.getDeclaredField("un_atributo");
+    ClaseSimpleConAtributosYMetodos.class.getDeclaredMethod("unMetodo");
+    ClaseSimpleConAtributosYMetodos.class.getDeclaredField("unAtributo");
   }
 
 }

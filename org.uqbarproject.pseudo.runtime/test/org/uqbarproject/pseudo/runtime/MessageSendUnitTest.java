@@ -19,7 +19,7 @@ public class MessageSendUnitTest {
 
   @Test
   public void canSendUnaryMessages() throws Throwable {
-    Assert.assertEquals(10, new MessageSend("getValue").apply(new Cell(10)));
+    Assert.assertEquals(BigDecimal.valueOf(10), new MessageSend("getValue").apply(new Cell(10)));
   }
 
   @Test

@@ -12,6 +12,15 @@ clase TerrenoDeLujo hereda Terreno
   fin
 
 fin
+
+clase TerrenoBerreta hereda Terreno
+
+  metodo costo_por_metro_cuadrado
+    2
+  fin
+
+fin
+
 clase TerrenoDeLaHostia hereda TerrenoDeLujo
 
   redefinir metodo costo_por_metro_cuadrado

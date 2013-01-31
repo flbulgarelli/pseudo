@@ -17,9 +17,9 @@ public class ZoologicoTest {
 	public void filtrado() throws Throwable {
 		Animal animalNuevo = new Animal();
 		zoologico.setAnimales(Arrays.asList(animalNuevo, new Animal() {{
-			setEs_nuevo(false);
+			setEsNuevo(false);
 		}}));
-		assertEquals(Arrays.asList(animalNuevo), zoologico.animales_nuevos());
+		assertEquals(Arrays.asList(animalNuevo), zoologico.animalesNuevos());
 	}
 	
 	@Test

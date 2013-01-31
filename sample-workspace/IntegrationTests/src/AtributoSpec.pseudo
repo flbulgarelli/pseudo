@@ -13,7 +13,7 @@ clase Atributos
   metodo metodo_que_acumula_atributos
     incrementar atributo_con_inicializador con 10
   fin
-
+ 
   metodo metodo_que_decrementa_atributos
     decrementar atributo_con_inicializador
   fin

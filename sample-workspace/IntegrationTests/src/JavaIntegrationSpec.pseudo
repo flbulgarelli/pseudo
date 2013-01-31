@@ -1,0 +1,13 @@
+clase Integraciones 
+  metodo largo_lista
+    variable una_lista = lista()
+    una_lista.size
+  fin
+  
+  metodo remover_todo
+    variable una_lista = lista(4, 5, 9, 0)
+    variable otra_lista = lista(5, 0)
+    una_lista.remove_all(otra_lista)
+    una_lista
+  fin
+fin

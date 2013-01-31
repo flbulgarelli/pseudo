@@ -2,6 +2,7 @@ package org.uqbarproject.pseudo.runtime;
 
 import static junit.framework.Assert.assertEquals;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 
 import org.junit.Test;
@@ -14,7 +15,9 @@ public class TraversingTransformationUnitTest {
       new MessageSend("getValue"),
       new ConstantFunction(true),
       new IdentityFunction());
-    assertEquals(Arrays.asList(10, 50), mapValues.apply(Arrays.asList(new Cell(10), new Cell(50))));
+    assertEquals(
+      Arrays.asList(BigDecimal.valueOf(10), BigDecimal.valueOf(50)),
+      mapValues.apply(Arrays.asList(new Cell(10), new Cell(50))));
   }
 
 }

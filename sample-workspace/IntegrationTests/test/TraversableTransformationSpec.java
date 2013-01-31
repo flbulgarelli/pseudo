@@ -30,7 +30,7 @@ public class TraversableTransformationSpec {
 
   @Test
   public void soporta_map() throws Throwable {
-    assertEquals(Arrays.asList("pepe", "maria", "toto"), new Comprensiones().nombres_de_personas(personas));
+    assertEquals(Arrays.asList("pepe", "maria", "toto"), new Comprensiones().nombresDePersonas(personas));
   }
 
   @Test
@@ -40,17 +40,17 @@ public class TraversableTransformationSpec {
 
   @Test
   public void soporta_filter_con_map() throws Throwable {
-    assertEquals(Arrays.asList("pepe", "maria", "toto"), new Comprensiones().nombres_de_personas_mayores(personas));
+    assertEquals(Arrays.asList("pepe", "maria", "toto"), new Comprensiones().nombresDePersonasMayores(personas));
   }
 
   @Test
-  public void soporta_sumatoria() throws Exception {
-    fail();
+  public void soporta_sumatoria() throws Throwable {
+    assertEquals(BigDecimal.valueOf(15 + 23 + 44), new Comprensiones().sumaEdades(personas));
   }
 
   @Test
-  public void soporta_promedio() throws Exception {
-    fail();
+  public void soporta_promedio() throws Throwable {
+    assertEquals(new BigDecimal("27.3333333333"), new Comprensiones().promedioEdades(personas));
   }
 
   @Test
@@ -65,12 +65,12 @@ public class TraversableTransformationSpec {
 
   @Test
   public void soporta_minimo_segun_criteio() throws Throwable {
-    assertEquals(personas.get(0), new Comprensiones().persona_mas_joven(personas));
+    assertEquals(personas.get(0), new Comprensiones().personaMasJoven(personas));
   }
 
   @Test
   public void soporta_maximo_segun_criterio() throws Throwable {
-    assertEquals(personas.get(2), new Comprensiones().persona_mas_adulta(personas));
+    assertEquals(personas.get(2), new Comprensiones().personaMasAdulta(personas));
   }
 
   @Test

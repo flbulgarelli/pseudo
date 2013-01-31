@@ -24,24 +24,24 @@ public class LiteralesSpec {
   public void soporta_listas_literales() throws Throwable {
     assertEquals(
       Arrays.<Object> asList(BigDecimal.ONE, new BigDecimal("2"), true, "hola"),
-      new Literales().devuelve_lista_llena());
+      new Literales().devuelveListaLlena());
   }
 
   @Test
   public void soporta_listas_vacias_literales() throws Throwable {
-    assertEquals(Arrays.asList(), new Literales().devuelve_lista_vacia());
+    assertEquals(Arrays.asList(), new Literales().devuelveListaVacia());
   }
 
   @Test
   public void soporta_conjuntos_literales() throws Throwable {
     assertEquals(
       new HashSet<Object>(Arrays.<Object> asList(BigDecimal.ONE, new BigDecimal("2"), true, "hola")),
-      new Literales().devuelve_conjunto_lleno());
+      new Literales().devuelveConjuntoLleno());
   }
 
   @Test
   public void soporta_conjuntos_vacios_literales() throws Throwable {
-    assertEquals(new HashSet<Object>(Arrays.asList()), new Literales().devuelve_conjunto_vacio());
+    assertEquals(new HashSet<Object>(Arrays.asList()), new Literales().devuelveConjuntoVacio());
   }
 
   @Test
@@ -51,20 +51,20 @@ public class LiteralesSpec {
 
   @Test
   public void soportaBooleanos() throws Throwable {
-    assertFalse((Boolean) new Literales().devuelve_falso());
-    assertFalse((Boolean) new Literales().devuelve_no());
-    assertTrue((Boolean) new Literales().devuelve_verdadero());
-    assertTrue((Boolean) new Literales().devuelve_si());
+    assertFalse((Boolean) new Literales().devuelveFalso());
+    assertFalse((Boolean) new Literales().devuelveNo());
+    assertTrue((Boolean) new Literales().devuelveVerdadero());
+    assertTrue((Boolean) new Literales().devuelveSi());
   }
 
   @Test
   public void soportaNumerosEnteros() throws Throwable {
-    assertEquals(BigDecimal.valueOf(5), new Literales().devuelve_cinco());
+    assertEquals(BigDecimal.valueOf(5), new Literales().devuelveCinco());
   }
 
   @Test
   public void soportaNumerosFlotantes() throws Throwable {
-    assertEquals(new BigDecimal("5.5"), new Literales().devuelve_cinco_y_medio());
+    assertEquals(new BigDecimal("5.5"), new Literales().devuelveCincoYMedio());
   }
   
   @Test
