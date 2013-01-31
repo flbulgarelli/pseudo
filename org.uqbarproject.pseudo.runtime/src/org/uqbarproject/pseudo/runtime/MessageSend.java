@@ -28,10 +28,16 @@ public class MessageSend extends AbstractApplicable {
   /** Sends this message to the given object */
   private Object sendTo(Object receptor) throws IllegalAccessException, NoSuchMethodException, Throwable {
     try {
-      return resolveMethod(receptor, arguments.length).invoke(receptor, arguments);
+      return adaptResult(resolveMethod(receptor, arguments.length).invoke(receptor, arguments));
     } catch (java.lang.reflect.InvocationTargetException e) {
       throw e.getCause();
     }
+  }
+
+  private Object adaptResult(Object value) {
+    if(value instanceof Number)
+      return BigDecimals.toBigDecimal(value);
+    return value;
   }
 
   /** Performs a naiv method lookup */

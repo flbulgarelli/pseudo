@@ -3,6 +3,7 @@ package org.uqbarproject.pseudo.runtime.reductions;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 
 import org.junit.Test;
@@ -40,12 +41,16 @@ public class ReductionUnitTest {
 
   @Test
   public void sumReductionCalculatesSum() throws Throwable {
-    assertEquals(63, new SumFunction(new IdentityFunction()).apply(Arrays.asList(10, 50, 3)));
+    assertEquals(BigDecimal.valueOf(63), //
+      new SumFunction(new IdentityFunction()).apply( //
+        Arrays.asList(BigDecimal.valueOf(10), BigDecimal.valueOf(50), BigDecimal.valueOf(3))));
   }
 
   @Test
   public void averageReductionCalculatesAverage() throws Throwable {
-    assertEquals(63 / 3.0, new SumFunction(new IdentityFunction()).apply(Arrays.asList(10, 50, 3)));
+    assertEquals(
+      new BigDecimal("0.6666666667"),
+      new AverageFunction(new IdentityFunction()).apply(Arrays.asList(BigDecimal.ONE, BigDecimal.ZERO, BigDecimal.ONE)));
   }
 
   @Test
