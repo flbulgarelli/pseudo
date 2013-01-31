@@ -5,14 +5,28 @@ clase Constructores
   fin
 
   metodo de clase metodo_que_inistancia_e_inicializa
-    nuevo Perro inicializar
+    inicializar Perro
       con nombre = "fido"
       con raza = "terrier"
     fin
   fin
 
-fin
+  metodo de clase metodo_que_inistancia_e_inicializa_verborragico
+    inicializar nuevo Perro
+      con nombre = "fido"
+      con raza = "terrier"
+    fin
+  fin
 
+  metodo de clase metodo_que_inicializa_usando_contexto_externo
+  //    variable i = 0
+    //    inicializar nuevo Perro 
+    //      con nombre = "fido" + incrementar i
+    //      con raza = "terrier"
+    //    fin
+  fin
+
+fin
 clase Perro
   atributo nombre
   atributo raza

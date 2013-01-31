@@ -16,4 +16,9 @@ public class ConstructorSpec {
     assertEquals("fido", perro.getNombre());
   }
 
+  @Test
+  public void soporta_referenciar_contexto_externo() throws Exception {
+    fail();
+  }
+
 }

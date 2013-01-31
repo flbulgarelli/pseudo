@@ -34,10 +34,12 @@ public class PseudoFormatter extends AbstractDeclarativeFormatter {
     c.setLinewrap().after(grammar.getTHEN_TOKENRule());
     c.setLinewrap().around(grammar.getOTHERWISE_TOKENRule());
     
-    c.setLinewrap().before(grammar.getNEW_TOKENRule());
-    c.setLinewrap().after(grammar.getINITIALIZATION_BLOCK_TOKENRule());
-    c.setLinewrap().before(grammar.getINITIALIZE_WITH_TOKENRule());
+    c.setLinewrap().around(grammar.getNewExpressionRule());
     
+    
+    c.setLinewrap().before(grammar.getInitExpressionAccess().getINIT_TOKENParserRuleCall_0());
+    c.setLinewrap().before(grammar.getINIT_WITH_TOKENRule());
+
     c.setSpace("  ");
     
     c.setLinewrap().around(grammar.getEND_TOKENRule());
@@ -58,8 +60,8 @@ public class PseudoFormatter extends AbstractDeclarativeFormatter {
     c.setIndentationDecrement().after(grammar.getWhenExpressionAccess().getDefaultActionExpressionParserRuleCall_1_1_0());
     
     c.setIndentation(
-      grammar.getConstructionExpressionAccess().getINITIALIZATION_BLOCK_TOKENParserRuleCall_2_0(), 
-      grammar.getConstructionExpressionAccess().getEND_TOKENParserRuleCall_2_2());
+      grammar.getInitExpressionAccess().getINIT_TOKENParserRuleCall_0(), 
+      grammar.getInitExpressionAccess().getEND_TOKENParserRuleCall_4());
 
     c.setIndentationIncrement().after(grammar.getMETHOD_TOKENRule());
     c.setIndentationIncrement().after(grammar.getCLASS_METHOD_TOKENRule());

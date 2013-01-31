@@ -13,16 +13,18 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.validation.Check;
 import org.uqbarproject.pseudo.pseudo.Attribute;
 import org.uqbarproject.pseudo.pseudo.CollectionLiteralExpression;
-import org.uqbarproject.pseudo.pseudo.ConstructionExpression;
 import org.uqbarproject.pseudo.pseudo.DecrementExpression;
 import org.uqbarproject.pseudo.pseudo.Expression;
 import org.uqbarproject.pseudo.pseudo.FalseExpression;
 import org.uqbarproject.pseudo.pseudo.IdExpression;
 import org.uqbarproject.pseudo.pseudo.IncrementExpression;
+import org.uqbarproject.pseudo.pseudo.InitExpression;
 import org.uqbarproject.pseudo.pseudo.LocalVariable;
 import org.uqbarproject.pseudo.pseudo.Member;
 import org.uqbarproject.pseudo.pseudo.Method;
+import org.uqbarproject.pseudo.pseudo.NewExpression;
 import org.uqbarproject.pseudo.pseudo.Parameter;
+import org.uqbarproject.pseudo.pseudo.SetupExpression;
 import org.uqbarproject.pseudo.pseudo.Statement;
 import org.uqbarproject.pseudo.pseudo.StringExpression;
 import org.uqbarproject.pseudo.pseudo.SuperSend;
@@ -172,7 +174,9 @@ public class PseudoJavaValidator extends AbstractPseudoJavaValidator {
     }
 
     private void checkMayBeNumeric(EObject update, Expression target, EReference feature) {
-      if (target instanceof ConstructionExpression //
+      if (target instanceof NewExpression //
+        || target instanceof InitExpression //
+        || target instanceof SetupExpression //
         || target instanceof CollectionLiteralExpression //
         || target instanceof StringExpression //
         || target instanceof TrueExpression //

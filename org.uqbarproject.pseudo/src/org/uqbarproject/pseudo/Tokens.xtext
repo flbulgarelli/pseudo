@@ -54,15 +54,16 @@ THROW_TOKEN: 'lanzar';
 /* Assignment tokens */
 
 LET_TOKEN: 'variable';
-SET_TOKEN: 'actualizar';
+ASSIGN_TOKEN: 'actualizar';
 INCREMENT_TOKEN: 'incrementar';
 DECREMENT_TOKEN: 'decrementar';
-ACCUMULATE_BY_TOKEN: 'con';
+ACCUM_BY_TOKEN: 'en';
 
 /* Instantiation tokens */
 NEW_TOKEN: 'nuevo';
-INITIALIZATION_BLOCK_TOKEN: 'inicializar';
-INITIALIZE_WITH_TOKEN: 'con' ; 
+INIT_TOKEN: 'inicializar';
+SETUP_TOKEN: 'configurar';
+INIT_WITH_TOKEN: 'con' ; 
 
 
 /* Message composition */

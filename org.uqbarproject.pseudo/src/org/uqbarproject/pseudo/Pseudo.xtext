@@ -57,12 +57,14 @@ Expression:
 NonEmbeddableExpression:
 	MessageSend |
 	SuperSend |
-	ConstructionExpression |
+	NewExpression |
+	InitExpression |
+	SetupExpression |
 	TraversableExpression |
-	AssignmentExpression |
-	IncrementExpression |
-	DecrementExpression |
 	WhenExpression |
+	AssignExpression | 
+	IncrementExpression | 
+	DecrementExpression |
 	CollectionLiteralExpression ; //TODO es bastante limitante que no se puedan embeber
 	
 EmbeddableExpression:
@@ -116,12 +118,24 @@ WhenExpression:
 ;
 
 
-ConstructionExpression:
-	NEW_TOKEN target = [Type] (INITIALIZATION_BLOCK_TOKEN (initializations+=Initialization)+  END_TOKEN)?	
+NewExpression:
+	NEW_TOKEN target = [Type]	
+;
+
+InitExpression:
+	INIT_TOKEN (NEW_TOKEN)? target=[Type]
+	(initializations+=Initialization)+  
+	END_TOKEN 	
+;
+
+SetupExpression:
+	SETUP_TOKEN target=EmbeddableExpression
+	(initializations+=Initialization)+  
+	END_TOKEN 	
 ;
 
 Initialization:
-	INITIALIZE_WITH_TOKEN attribute=ID  '='  initialValue=Expression
+	INIT_WITH_TOKEN attribute=ID  '='  initialValue=Expression
 ;
 
 MessageSend:
@@ -182,13 +196,12 @@ MaxExpression:
 MinExpression:
 	'minimo entre' target=EmbeddableExpression (=>'segun' criteria=Applicable)?;
 
-AssignmentExpression:
-	SET_TOKEN (target=[ecore::EObject]) '=' (value=Expression);
+AssignExpression:
+	ASSIGN_TOKEN (target=[ecore::EObject]) '=' value=Expression;
 	
 IncrementExpression:
-	INCREMENT_TOKEN target=[ecore::EObject] (ACCUMULATE_BY_TOKEN value = EmbeddableExpression)?
-;
-
+	INCREMENT_TOKEN target=[ecore::EObject] (ACCUM_BY_TOKEN value=Expression)?;
+	
 DecrementExpression:
-	DECREMENT_TOKEN target=[ecore::EObject] (ACCUMULATE_BY_TOKEN value = EmbeddableExpression)?
-;
+	DECREMENT_TOKEN target=[ecore::EObject] (ACCUM_BY_TOKEN value=Expression)?;
+	

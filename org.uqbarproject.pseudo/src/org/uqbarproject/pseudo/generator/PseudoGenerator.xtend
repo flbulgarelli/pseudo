@@ -10,7 +10,6 @@ import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.IFileSystemAccess
 import org.eclipse.xtext.generator.IGenerator
 import org.eclipse.xtext.naming.IQualifiedNameProvider
-import org.uqbarproject.pseudo.pseudo.AssignmentExpression
 import org.uqbarproject.pseudo.pseudo.Attribute
 import org.uqbarproject.pseudo.pseudo.ComprehensionExpression
 import org.uqbarproject.pseudo.pseudo.FalseExpression
@@ -38,7 +37,6 @@ import org.uqbarproject.pseudo.pseudo.MinExpression
 import org.uqbarproject.pseudo.pseudo.SumExpression
 import org.uqbarproject.pseudo.pseudo.EmbeddableExpression
 import org.uqbarproject.pseudo.pseudo.AverageExpression
-import org.uqbarproject.pseudo.pseudo.ConstructionExpression
 import org.uqbarproject.pseudo.pseudo.Parameter
 import org.uqbarproject.pseudo.pseudo.SuperSend
 import org.uqbarproject.pseudo.pseudo.Applicable
@@ -48,7 +46,11 @@ import org.uqbarproject.pseudo.pseudo.ApplicableDisjuntion
 import org.uqbarproject.pseudo.pseudo.ApplicableConjuntion
 
 import static extension org.uqbarproject.pseudo.util.EObjectExtensions.*
-import static extension org.uqbarproject.pseudo.SelectorExtensions.* 
+import static extension org.uqbarproject.pseudo.SelectorExtensions.*
+import org.uqbarproject.pseudo.pseudo.AssignExpression
+import org.uqbarproject.pseudo.pseudo.SetupExpression
+import org.uqbarproject.pseudo.pseudo.InitExpression
+import org.uqbarproject.pseudo.pseudo.NewExpression 
 
 /**
  * @author flbulgareli
@@ -181,7 +183,7 @@ class PseudoGenerator implements IGenerator {
 		)
 	'''
 	
-	def dispatch compileForResult(AssignmentExpression expression) '''
+	def dispatch compileForResult(AssignExpression expression) '''
 		«expression.target.compileForReference» = («expression.value.compileForResult»)
 	'''
 	def dispatch compileForResult(IncrementExpression expression) '''
@@ -258,9 +260,19 @@ class PseudoGenerator implements IGenerator {
 	def dispatch compileForResult(AverageExpression expression) {
 		compileReductionWithCriteria('AverageFunction', expression.criteria, expression.target)
 	}
-	def dispatch compileForResult(ConstructionExpression expression) '''
+	def dispatch compileForResult(NewExpression expression) '''
 		new «expression.target.name»()
 	'''
+	def dispatch compileForResult(InitExpression expression) '''
+		new «expression.target.name»() {{
+			«FOR init : expression.initializations»
+				set«init.attribute.toJavaIdPart»(«init.initialValue.compileForResult»);
+			«ENDFOR»
+		}}
+	'''
+	def dispatch compileForResult(SetupExpression expression) '''
+		«««TODO
+	'''	
 	
 	def compileForBooleanResult(Expression expression) '''
 		(Boolean) («expression.compileForResult»)

@@ -2,11 +2,11 @@ clase CuentaBancaria
   atributo monto = 10
 
   metodo depositar(cantidad)
-    incrementar monto con cantidad
+    incrementar monto en cantidad
   fin
 
   metodo extraer(cantidad)
-    decrementar monto con cantidad
+    decrementar monto en cantidad
   fin
 
   metodo imprimir
