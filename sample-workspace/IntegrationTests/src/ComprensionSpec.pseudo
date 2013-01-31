@@ -29,10 +29,18 @@ fin
 clase Persona
   atributo nombre
   atributo edad
+  atributo nacionalidad 
+  atributo emancipada = no
 
   metodo es_mayor
   //    edad > 18
     si
   fin
+  
+  metodo argentina
+//    nacionalidad = 'argentina'  
+  fin
+  
+  
 
 fin

@@ -37,11 +37,11 @@ clase Mensajes
   fin
   
   metodo metodo_que_combina_con_o(persona)
-    persona.mayor_edad o emancipada
+    persona.es_mayor o emancipada
   fin
   
   metodo metodo_que_combina_con_y(persona)
-    persona.mayor_edad y argentino
+    persona.es_mayor y argentina
   fin
   
   metodo metodo_que_compone

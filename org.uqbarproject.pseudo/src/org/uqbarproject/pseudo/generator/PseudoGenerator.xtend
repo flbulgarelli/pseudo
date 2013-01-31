@@ -44,7 +44,7 @@ import org.uqbarproject.pseudo.pseudo.SuperSend
 import org.uqbarproject.pseudo.pseudo.Applicable
 import org.uqbarproject.pseudo.pseudo.ApplicablePipeline
 import org.uqbarproject.pseudo.pseudo.ApplicableComposition
-import org.uqbarproject.pseudo.pseudo.ApplicableDisyuntion
+import org.uqbarproject.pseudo.pseudo.ApplicableDisjuntion
 import org.uqbarproject.pseudo.pseudo.ApplicableConjuntion
 
 import static extension org.uqbarproject.pseudo.util.EObjectExtensions.*
@@ -126,8 +126,8 @@ class PseudoGenerator implements IGenerator {
 	def dispatch compile(ApplicableComposition pipeline) '''
 		«joinMessages(pipeline.messages, "compose")»
 	'''
-	def dispatch compile(ApplicableDisyuntion pipeline) '''
-		«joinMessages(pipeline.messages, "or")»
+	def dispatch compile(ApplicableDisjuntion pipeline) '''
+		«joinMessages(pipeline.getMessages, "or")»
 	'''
 	def dispatch compile(ApplicableConjuntion pipeline) '''
 		«joinMessages(pipeline.messages, "and")»

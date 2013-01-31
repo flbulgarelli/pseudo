@@ -11,11 +11,11 @@ public abstract class AbstractApplicable implements Applicable {
   }
   
   public Applicable or(Applicable other) {
-    throw new UnsupportedOperationException("unimplemented");
+    return new OrApplicable(other, this);
   }
   
   public Applicable and(Applicable other) {
-    throw new UnsupportedOperationException("unimplemented");
+    return new AndApplicable(other, this);
   }
 
   @Override
