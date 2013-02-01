@@ -75,16 +75,32 @@ class PseudoGenerator implements IGenerator {
 		import org.uqbarproject.pseudo.runtime.*;
 		import org.uqbarproject.pseudo.runtime.reductions.*;
 		public class «type.name» extends «type.effectiveSuperType» {
+
+			public «type.name»() {
+			}
+			«var attributesNames = type.members.filter(typeof(Attribute)).map[it.name.toJavaId]»
+			«IF !attributesNames.empty»
+			public «type.name»(«compileParametersList(attributesNames)») {
+				«FOR attributeName : attributesNames»
+				this.«attributeName» = «attributeName»;
+				«ENDFOR»
+			}		
+			«ENDIF»
+			
 		  	«FOR member : type.members»
 		  	  «member.compile»		
 		  	«ENDFOR»
 		}
   	'''
+  	def compileParametersList(Iterable<String> names) {
+  		names.map [ "Object " + it ].join(", ")
+  	} 
+  	
   	def dispatch compile(Method method) '''
 	  «IF method.overrideMethod»
 	  @Override
 	  «ENDIF»
-	  public «method.classMethod.compileClassModifier» Object «method.name.toJavaId»(«method.parameters.map [ "Object " + it.name.toJavaId ].join(", ")») throws Throwable {
+	  public «method.classMethod.compileClassModifier» Object «method.name.toJavaId»(«compileParametersList(method.parameters.map [ it.name.toJavaId ])») throws Throwable {
 	  	«IF method.statements.empty»
 	  	return null;
 	  	«ELSE»
@@ -261,7 +277,7 @@ class PseudoGenerator implements IGenerator {
 		compileReductionWithCriteria('AverageFunction', expression.criteria, expression.target)
 	}
 	def dispatch compileForResult(NewExpression expression) '''
-		new «expression.target.name»()
+		new «expression.target.name»(«joinCompileResults(expression.arguments)»)
 	'''
 	def dispatch compileForResult(InitExpression expression) '''
 		new «expression.target.name»() {{

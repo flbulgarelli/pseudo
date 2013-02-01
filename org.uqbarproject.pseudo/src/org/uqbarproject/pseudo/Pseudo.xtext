@@ -3,13 +3,11 @@ grammar org.uqbarproject.pseudo.Pseudo with org.uqbarproject.pseudo.Tokens
 /*
  * 
 lambdas? 
-sin sobrecarga
 mixins
 constructores alla scala
 sin paquetes
 orientado a mensajes
 composicion de computaciones x LUEGO y
-* variables automaticas?
  * 
  */
 generate pseudo "http://www.uqbarproject.org/pseudo/Pseudo"
@@ -119,7 +117,7 @@ WhenExpression:
 
 
 NewExpression:
-	NEW_TOKEN target = [Type]	
+	NEW_TOKEN target = [Type] (OPEN_TOKEN (arguments+=EmbeddableExpression (SEPARATOR_TOKEN arguments+=EmbeddableExpression)*)? => CLOSE_TOKEN)?
 ;
 
 InitExpression:

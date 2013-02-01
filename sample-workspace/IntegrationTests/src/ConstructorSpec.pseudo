@@ -25,6 +25,10 @@ clase Constructores
     //      con raza = "terrier"
     //    fin
   fin
+  
+  metodo metodo_que_instancia_con_argumentos
+    nuevo Perro("fido", "terrier")
+  fin
 
 fin
 clase Perro
