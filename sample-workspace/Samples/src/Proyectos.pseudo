@@ -1,0 +1,20 @@
+clase TareaCompuesta
+  atributo subtareas
+  
+  metodo tiempo
+    sumatoria tiempo de subtareas
+  fin
+fin
+
+clase TareaSimple
+  atributo tiempo
+fin
+
+clase Proyecto
+  atributo tareas
+ 
+  metodo tarea_critica
+    maximo entre tareas segun tiempo
+  fin
+
+fin

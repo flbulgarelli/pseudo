@@ -22,5 +22,7 @@
 * hay una inconsistencia?: al if se le pasa una expresion, a los generadores un mensaje.
 * soportar inicializadores
 * soportar referencias en el init
-* revisar sintaxis del init. es ambigua respecto del token 'con'
 * usar envio estático de mensajes cuando sea posible
+* soportar excepciones
+* soportar paréntesis en lanzar, error, inicializar, nuevo, etc
+* soportar anidar expresiones
