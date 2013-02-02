@@ -37,24 +37,20 @@ Parameter:
 ;	
 
 Statement:
-	Expression | Return | LocalVariable ;
+	ExpressionLevel2 | Return | LocalVariable ;
 
 Return:
-	RETURN_TOKEN value=EmbeddableExpression;
+	RETURN_TOKEN value=ExpressionLevel2;
 	
 LocalVariable:
-	LET_TOKEN (name=ID) ('=' (value=Expression))?;
+	LET_TOKEN (name=ID) ('=' (value=ExpressionLevel2))?;
 
 Attribute:
-	(ATTRIBUTE_TOKEN|classAttribute?=CLASS_ATTRIBUTE_TOKEN) name=ID ('=' initialValue=Expression)?;
+	(ATTRIBUTE_TOKEN|classAttribute?=CLASS_ATTRIBUTE_TOKEN) name=ID ('=' initialValue=ExpressionLevel2)?;
 
-Expression:
-	EmbeddableExpression |
-	NonEmbeddableExpression;
-	
-NonEmbeddableExpression:
-	MessageSend |
-	SuperSend |
+ExpressionLevel2 returns Expression:
+	ExpressionLevel1 |
+	MessageSendExpression |
 	NewExpression |
 	InitExpression |
 	SetupExpression |
@@ -63,21 +59,41 @@ NonEmbeddableExpression:
 	AssignExpression | 
 	IncrementExpression | 
 	DecrementExpression |
-	CollectionLiteralExpression ; //TODO es bastante limitante que no se puedan embeber
-	
-EmbeddableExpression:
-	{IdExpression} value=[ecore::EObject] |
-	{StringExpression} value=STRING |
-	{NumberExpression} value=Number |
+	CollectionLiteralExpression ;
+
+ExpressionLevel1 returns Expression:
+	ExpressionLevel0 |
+	SuperSend 
+;
+
+ExpressionLevel0 returns Expression:
+	IdExpression |
+	StringExpression |
+	NumberExpression |
 	{NullExpression} NULL_TOKEN |
 	{TrueExpression} TRUE_TOKEN |
 	{FalseExpression} FALSE_TOKEN |
-	{SelfExpression} SELF_TOKEN 
-//TODO	soportar? '(' NonEmbeddableExpression ')'
+	{SelfExpression} SELF_TOKEN //|
+//	OPEN_TOKEN ExpressionLevel2 => CLOSE_TOKEN
 	;
+	
+IdExpression:
+	value=[ecore::EObject]
+;	
+StringExpression:
+	value=STRING
+;
+	
+NumberExpression:
+	value=Number
+;	
 
 Number:
 	INT ('.' INT)?;
+
+MessageSendExpression returns Expression:
+	ExpressionLevel1  ({MessageSendExpression.receptor=current} MESSAGE_SEND_TOKEN message=Applicable)+ 
+;
 
 TraversableExpression:
 //TODO ojo que se necesita aplicacion parcial o lambdas
@@ -96,28 +112,28 @@ CollectionLiteralExpression:
 ;
 
 ListLiteralExpression:
-	{ListLiteralExpression} LIST_OPEN_TOKEN (elements+=EmbeddableExpression (SEPARATOR_TOKEN elements+=EmbeddableExpression)*)? => LIST_CLOSE_TOKEN	
+	{ListLiteralExpression} LIST_OPEN_TOKEN (elements+=ExpressionLevel2 (SEPARATOR_TOKEN elements+=ExpressionLevel2)*)? => LIST_CLOSE_TOKEN	
 ;
 
 SetLiteralExpression:
-	{SetLiteralExpression} SET_OPEN_TOKEN (elements+=EmbeddableExpression (SEPARATOR_TOKEN elements+=EmbeddableExpression)*)? => SET_CLOSE_TOKEN	
+	{SetLiteralExpression} SET_OPEN_TOKEN (elements+=ExpressionLevel2 (SEPARATOR_TOKEN elements+=ExpressionLevel2)*)? => SET_CLOSE_TOKEN	
 ;
 
-RangeLiteralExpression:
-	'rango desde' start =  EmbeddableExpression 'hasta' end = EmbeddableExpression 
-;
+//RangeLiteralExpression:
+//	'rango desde' start =  EmbeddableExpression 'hasta' end = EmbeddableExpression 
+//;
 
 
 WhenExpression:
-	(WHEN_TOKEN (cases+=Expression) 
-	THEN_TOKEN actions+= Expression)+ 
-	(OTHERWISE_TOKEN defaultAction=Expression)?
+	(WHEN_TOKEN (cases+=ExpressionLevel2) 
+	THEN_TOKEN actions+= ExpressionLevel2)+ 
+	(OTHERWISE_TOKEN defaultAction=ExpressionLevel2)?
 	END_TOKEN 
 ;
 
 
 NewExpression:
-	NEW_TOKEN target = [Type] (OPEN_TOKEN (arguments+=EmbeddableExpression (SEPARATOR_TOKEN arguments+=EmbeddableExpression)*)? => CLOSE_TOKEN)?
+	NEW_TOKEN target = [Type] (OPEN_TOKEN (arguments+=ExpressionLevel2 (SEPARATOR_TOKEN arguments+=ExpressionLevel2)*)? => CLOSE_TOKEN)?
 ;
 
 InitExpression:
@@ -127,18 +143,15 @@ InitExpression:
 ;
 
 SetupExpression:
-	SETUP_TOKEN target=EmbeddableExpression
+	SETUP_TOKEN target=ExpressionLevel2
 	(initializations+=Initialization)+  
 	END_TOKEN 	
 ;
 
 Initialization:
-	INIT_WITH_TOKEN attribute=ID  '='  initialValue=Expression
+	INIT_WITH_TOKEN attribute=ID  '='  initialValue=ExpressionLevel2
 ;
 
-MessageSend:
-	receptor = EmbeddableExpression MESSAGE_SEND_TOKEN message = Applicable 
-;
 
 /*Applicatins are limited to not mix operations on purpose */
 Applicable:
@@ -167,39 +180,37 @@ ApplicableDisjuntion:
 ;
 
 Message:
-	selector=ID (OPEN_TOKEN (arguments+=EmbeddableExpression (SEPARATOR_TOKEN arguments+=EmbeddableExpression)*)? => CLOSE_TOKEN)?
+	selector=ID (OPEN_TOKEN (arguments+=ExpressionLevel1 (SEPARATOR_TOKEN arguments+=ExpressionLevel1)*)? => CLOSE_TOKEN)?
 ;
 
 SuperSend:
-	{SuperSend} SUPER_TOKEN (OPEN_TOKEN (arguments+=EmbeddableExpression (SEPARATOR_TOKEN arguments+=EmbeddableExpression)*)? => CLOSE_TOKEN)?
+	{SuperSend} SUPER_TOKEN (OPEN_TOKEN (arguments+=ExpressionLevel0 (SEPARATOR_TOKEN arguments+=ExpressionLevel0)*)? => CLOSE_TOKEN)?
 ;
 
-
-
 ComprehensionExpression:
-	'generar' (mapping=Applicable 'de')? target=EmbeddableExpression (=>'tal que' condition=Applicable)?;
+	'generar' (mapping=Applicable 'de')? target=ExpressionLevel1 (=>'tal que' condition=Applicable)?;
 
 ForEachExpression:
-	'para cada' ID 'en' (target=EmbeddableExpression) (=>'tal que' condition=Applicable)? action=Applicable;
+	'para cada' ID 'en' (target=ExpressionLevel1) (=>'tal que' condition=Applicable)? action=Applicable;
 
 SumExpression:
-	'sumatoria' criteria=Applicable 'de' target=EmbeddableExpression;
+	'sumatoria' criteria=Applicable 'de' target=ExpressionLevel1;
 
 AverageExpression:
-	'promedio' criteria=Applicable 'de' target=EmbeddableExpression;
+	'promedio' criteria=Applicable 'de' target=ExpressionLevel1;
 
 MaxExpression:
-	'maximo entre' target=EmbeddableExpression (=>'segun' criteria=Applicable)?;
+	'maximo entre' target=ExpressionLevel1 (=>'segun' criteria=Applicable)?;
 
 MinExpression:
-	'minimo entre' target=EmbeddableExpression (=>'segun' criteria=Applicable)?;
+	'minimo entre' target=ExpressionLevel1 (=>'segun' criteria=Applicable)?;
 
 AssignExpression:
-	ASSIGN_TOKEN (target=[ecore::EObject]) '=' value=Expression;
+	ASSIGN_TOKEN (target=[ecore::EObject]) '=' value=ExpressionLevel2;
 	
 IncrementExpression:
-	INCREMENT_TOKEN target=[ecore::EObject] (ACCUM_BY_TOKEN value=Expression)?;
+	INCREMENT_TOKEN target=[ecore::EObject] (ACCUM_BY_TOKEN value=ExpressionLevel2)?;
 	
 DecrementExpression:
-	DECREMENT_TOKEN target=[ecore::EObject] (ACCUM_BY_TOKEN value=Expression)?;
+	DECREMENT_TOKEN target=[ecore::EObject] (ACCUM_BY_TOKEN value=ExpressionLevel2)?;
 	

@@ -10,47 +10,46 @@ import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.IFileSystemAccess
 import org.eclipse.xtext.generator.IGenerator
 import org.eclipse.xtext.naming.IQualifiedNameProvider
+import org.uqbarproject.pseudo.pseudo.Applicable
+import org.uqbarproject.pseudo.pseudo.ApplicableComposition
+import org.uqbarproject.pseudo.pseudo.ApplicableConjuntion
+import org.uqbarproject.pseudo.pseudo.ApplicableDisjuntion
+import org.uqbarproject.pseudo.pseudo.ApplicablePipeline
+import org.uqbarproject.pseudo.pseudo.AssignExpression
 import org.uqbarproject.pseudo.pseudo.Attribute
-import org.uqbarproject.pseudo.pseudo.ComprehensionExpression
-import org.uqbarproject.pseudo.pseudo.FalseExpression
-import org.uqbarproject.pseudo.pseudo.ForEachExpression
-import org.uqbarproject.pseudo.pseudo.IdExpression
-import org.uqbarproject.pseudo.pseudo.WhenExpression
-import org.uqbarproject.pseudo.pseudo.Message
+import org.uqbarproject.pseudo.pseudo.AverageExpression
+import org.uqbarproject.pseudo.pseudo.DecrementExpression
 import org.uqbarproject.pseudo.pseudo.Expression
+import org.uqbarproject.pseudo.pseudo.FalseExpression
+import org.uqbarproject.pseudo.pseudo.IdExpression
+import org.uqbarproject.pseudo.pseudo.IncrementExpression
+import org.uqbarproject.pseudo.pseudo.InitExpression
+import org.uqbarproject.pseudo.pseudo.ListLiteralExpression
+import org.uqbarproject.pseudo.pseudo.LocalVariable
+import org.uqbarproject.pseudo.pseudo.Message
+import org.uqbarproject.pseudo.pseudo.MessageSendExpression
 import org.uqbarproject.pseudo.pseudo.Method
-import org.uqbarproject.pseudo.pseudo.Return
+import org.uqbarproject.pseudo.pseudo.NewExpression
 import org.uqbarproject.pseudo.pseudo.NullExpression
 import org.uqbarproject.pseudo.pseudo.NumberExpression
+import org.uqbarproject.pseudo.pseudo.Parameter
+import org.uqbarproject.pseudo.pseudo.Return
 import org.uqbarproject.pseudo.pseudo.SelfExpression
-import org.uqbarproject.pseudo.pseudo.MessageSend
+import org.uqbarproject.pseudo.pseudo.SetLiteralExpression
+import org.uqbarproject.pseudo.pseudo.SetupExpression
 import org.uqbarproject.pseudo.pseudo.StringExpression
+import org.uqbarproject.pseudo.pseudo.SumExpression
+import org.uqbarproject.pseudo.pseudo.SuperSend
 import org.uqbarproject.pseudo.pseudo.TrueExpression
 import org.uqbarproject.pseudo.pseudo.Type
-import org.uqbarproject.pseudo.pseudo.LocalVariable
-import org.uqbarproject.pseudo.pseudo.IncrementExpression
-import org.uqbarproject.pseudo.pseudo.DecrementExpression
-import org.uqbarproject.pseudo.pseudo.ListLiteralExpression
-import org.uqbarproject.pseudo.pseudo.SetLiteralExpression
-import org.uqbarproject.pseudo.pseudo.MaxExpression
-import org.uqbarproject.pseudo.pseudo.MinExpression
-import org.uqbarproject.pseudo.pseudo.SumExpression
-import org.uqbarproject.pseudo.pseudo.EmbeddableExpression
-import org.uqbarproject.pseudo.pseudo.AverageExpression
-import org.uqbarproject.pseudo.pseudo.Parameter
-import org.uqbarproject.pseudo.pseudo.SuperSend
-import org.uqbarproject.pseudo.pseudo.Applicable
-import org.uqbarproject.pseudo.pseudo.ApplicablePipeline
-import org.uqbarproject.pseudo.pseudo.ApplicableComposition
-import org.uqbarproject.pseudo.pseudo.ApplicableDisjuntion
-import org.uqbarproject.pseudo.pseudo.ApplicableConjuntion
+import org.uqbarproject.pseudo.pseudo.WhenExpression
 
-import static extension org.uqbarproject.pseudo.util.EObjectExtensions.*
 import static extension org.uqbarproject.pseudo.SelectorExtensions.*
-import org.uqbarproject.pseudo.pseudo.AssignExpression
-import org.uqbarproject.pseudo.pseudo.SetupExpression
-import org.uqbarproject.pseudo.pseudo.InitExpression
-import org.uqbarproject.pseudo.pseudo.NewExpression 
+import static extension org.uqbarproject.pseudo.util.EObjectExtensions.*
+import org.uqbarproject.pseudo.pseudo.MinExpression
+import org.uqbarproject.pseudo.pseudo.MaxExpression
+import org.uqbarproject.pseudo.pseudo.ComprehensionExpression
+import org.uqbarproject.pseudo.pseudo.ForEachExpression 
 
 /**
  * @author flbulgareli
@@ -245,8 +244,8 @@ class PseudoGenerator implements IGenerator {
     	new java.util.HashSet(java.util.Arrays.asList(«joinCompileResults(expression.elements)»))
     '''
 
-    def dispatch compileForResult(MessageSend expression) '''
-    	«expression.message.compile».apply(«expression.getReceptor.compileForResult»)
+    def dispatch compileForResult(MessageSendExpression expression) '''
+    	«expression.getMessage.compile».apply(«expression.getReceptor.compileForResult»)
     '''
     def dispatch compileForResult(SuperSend expression) '''
     	super.«expression.parentOfType(typeof(Method)).name.toJavaId»(«joinCompileResults(expression.arguments)»);
@@ -328,7 +327,7 @@ class PseudoGenerator implements IGenerator {
 		if (isClassModifier) "static" else ""
 	}
 	
-	def compileReductionWithCriteria(String reductionClass, Applicable criteria, EmbeddableExpression target) '''
+	def compileReductionWithCriteria(String reductionClass, Applicable criteria, Expression target) '''
 	    new TraversingTransformation(
 	       new IdentityFunction(),
 	       new ConstantFunction(true),
