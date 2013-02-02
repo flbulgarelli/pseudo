@@ -11,10 +11,6 @@ import org.eclipse.xtext.generator.IFileSystemAccess
 import org.eclipse.xtext.generator.IGenerator
 import org.eclipse.xtext.naming.IQualifiedNameProvider
 import org.uqbarproject.pseudo.pseudo.Applicable
-import org.uqbarproject.pseudo.pseudo.ApplicableComposition
-import org.uqbarproject.pseudo.pseudo.ApplicableConjuntion
-import org.uqbarproject.pseudo.pseudo.ApplicableDisjuntion
-import org.uqbarproject.pseudo.pseudo.ApplicablePipeline
 import org.uqbarproject.pseudo.pseudo.AssignExpression
 import org.uqbarproject.pseudo.pseudo.Attribute
 import org.uqbarproject.pseudo.pseudo.AverageExpression
@@ -51,7 +47,7 @@ import org.uqbarproject.pseudo.pseudo.ComparisonExpression
 import org.uqbarproject.pseudo.pseudo.ComparisonOperation
 
 import static extension org.uqbarproject.pseudo.SelectorExtensions.*
-import static extension org.uqbarproject.pseudo.util.EObjectExtensions.* 
+import static extension org.uqbarproject.pseudo.util.EObjectExtensions.*
 
 /**
  * @author flbulgareli
@@ -134,19 +130,15 @@ class PseudoGenerator implements IGenerator {
 	def dispatch compile(LocalVariable declaration) '''
 		Object «declaration.name.toJavaId» = «declaration.getValue.compileForResultOrNull»;
 	'''
-	//TODO Not an expression, yet
-	def dispatch compile(ApplicablePipeline pipeline) '''
-		«joinCompileMessages(pipeline.messages, "andThen")»
+	def dispatch compile(Applicable pipeline) '''
+		«pipeline.left.compile».«pipeline.compileOperation»(«pipeline.right.compile»)
 	'''
-	def dispatch compile(ApplicableComposition pipeline) '''
-		«joinCompileMessages(pipeline.messages, "compose")»
-	'''
-	def dispatch compile(ApplicableDisjuntion pipeline) '''
-		«joinCompileMessages(pipeline.getMessages, "or")»
-	'''
-	def dispatch compile(ApplicableConjuntion pipeline) '''
-		«joinCompileMessages(pipeline.messages, "and")»
-	'''
+	def compileOperation(Applicable operation) {
+		if(operation.andThen) 'andThen'
+		else if(operation.compose) 'compose'
+		else if(operation.or) 'or'
+		else if(operation.and) 'and'
+	}
 	def dispatch compile(Message message) '''
 		new MessageSend("«message.selector.toJavaId»"
 		«IF message.arguments.empty»
@@ -367,9 +359,6 @@ class PseudoGenerator implements IGenerator {
 	}
 	def joinCompileExpressions(EList<? extends Expression> expressions) {
     	expressions.map[it.compileForResult].join(',')
-    }
-    def joinCompileMessages(EList<Message> messages, String selector){
-    	messages.map['(' + it.compile + ')'].join("." + selector)
     }
   	def joinCompileParameters(Iterable<String> names) {
   		names.map [ "Object " + it ].join(", ")

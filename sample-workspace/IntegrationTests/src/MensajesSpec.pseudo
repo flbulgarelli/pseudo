@@ -28,7 +28,7 @@ clase Mensajes
 
   metodo metodo_que_envia_mensaje_de_clase_a_la_instancia
     este.foo
-  fin
+  fin 
   
   metodo metodo_que_encadena
     variable contador = nuevo Contador
@@ -47,6 +47,11 @@ clase Mensajes
   metodo metodo_que_compone
     variable hola = " hola "
     hola.length compuesto trim
+  fin
+  
+  metodo metodo_que_pasa_literales_de_lista_como_argumentos
+    variable l = lista()
+    l.add_all(conjunto(4, 5))
   fin
 
   metodo de clase foo

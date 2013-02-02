@@ -37,22 +37,27 @@ Parameter:
 ;	
 
 Statement:
-	ExpressionLevel3 | Return | LocalVariable ;
+	ExpressionLevel4 | Return | LocalVariable ;
 
 Return:
-	RETURN_TOKEN value=ExpressionLevel3;
+	RETURN_TOKEN value=ExpressionLevel4;
 	
 LocalVariable:
-	LET_TOKEN (name=ID) ('=' (value=ExpressionLevel3))?;
+	LET_TOKEN (name=ID) ('=' (value=ExpressionLevel4))?;
 
 Attribute:
-	(ATTRIBUTE_TOKEN|classAttribute?=CLASS_ATTRIBUTE_TOKEN) name=ID ('=' initialValue=ExpressionLevel3)?;
+	(ATTRIBUTE_TOKEN|classAttribute?=CLASS_ATTRIBUTE_TOKEN) name=ID ('=' initialValue=ExpressionLevel4)?;
 
-ExpressionLevel3 returns Expression:
-	ComparisonExpression | 
+//Max prioirty
+ExpressionLevel4 returns Expression:
+	ExpressionLevel3 | 
 	AssignExpression | 
 	IncrementExpression | 
 	DecrementExpression 
+;
+
+ExpressionLevel3 returns Expression:
+	ComparisonExpression 
 ;
 
 ExpressionLevel2 returns Expression:
@@ -60,7 +65,7 @@ ExpressionLevel2 returns Expression:
 	NewExpression |
 	InitExpression |
 	SetupExpression |
-	TraversableExpression |
+	TraversableExpression | //TODO revise syntax and priority
 	WhenExpression |
 	CollectionLiteralExpression
 ;
@@ -70,6 +75,7 @@ ExpressionLevel1 returns Expression:
 	SuperSend 
 ;
 
+//Min prioirty
 ExpressionLevel0 returns Expression:
 	IdExpression |
 	StringExpression |
@@ -130,11 +136,11 @@ CollectionLiteralExpression:
 ;
 
 ListLiteralExpression:
-	{ListLiteralExpression} LIST_OPEN_TOKEN (elements+=ExpressionLevel3 (SEPARATOR_TOKEN elements+=ExpressionLevel3)*)? => LIST_CLOSE_TOKEN	
+	{ListLiteralExpression} LIST_OPEN_TOKEN (elements+=ExpressionLevel4 (SEPARATOR_TOKEN elements+=ExpressionLevel4)*)? => LIST_CLOSE_TOKEN	
 ;
 
 SetLiteralExpression:
-	{SetLiteralExpression} SET_OPEN_TOKEN (elements+=ExpressionLevel3 (SEPARATOR_TOKEN elements+=ExpressionLevel3)*)? => SET_CLOSE_TOKEN	
+	{SetLiteralExpression} SET_OPEN_TOKEN (elements+=ExpressionLevel4 (SEPARATOR_TOKEN elements+=ExpressionLevel4)*)? => SET_CLOSE_TOKEN	
 ;
 
 //RangeLiteralExpression:
@@ -143,15 +149,15 @@ SetLiteralExpression:
 
 
 WhenExpression:
-	(WHEN_TOKEN (cases+=ExpressionLevel3) 
-	THEN_TOKEN actions+= ExpressionLevel3)+ 
-	(OTHERWISE_TOKEN defaultAction=ExpressionLevel3)?
+	(WHEN_TOKEN (cases+=ExpressionLevel4) 
+	THEN_TOKEN actions+= ExpressionLevel4)+ 
+	(OTHERWISE_TOKEN defaultAction=ExpressionLevel4)?
 	END_TOKEN 
 ;
 
 
 NewExpression:
-	NEW_TOKEN target = [Type] (OPEN_TOKEN (arguments+=ExpressionLevel3 (SEPARATOR_TOKEN arguments+=ExpressionLevel3)*)? => CLOSE_TOKEN)?
+	NEW_TOKEN target = [Type] (OPEN_TOKEN (arguments+=ExpressionLevel4 (SEPARATOR_TOKEN arguments+=ExpressionLevel4)*)? => CLOSE_TOKEN)?
 ;
 
 InitExpression:
@@ -161,55 +167,33 @@ InitExpression:
 ;
 
 SetupExpression:
-	SETUP_TOKEN target=ExpressionLevel3
+	SETUP_TOKEN target=ExpressionLevel4
 	(initializations+=Initialization)+  
 	END_TOKEN 	
 ;
 
 Initialization:
-	INIT_WITH_TOKEN attribute=ID  '='  initialValue=ExpressionLevel3
+	INIT_WITH_TOKEN attribute=ID  '='  initialValue=ExpressionLevel4
+;
+
+Applicable returns Applicable:
+	Message ({Applicable.left=current} (andThen?=AND_THEN_TOKEN | compose?=COMPOSE_TOKEN | or?=OR_TOKEN | and?=AND_TOKEN) right=Message)*
 ;
 
 
-/*Applicatins are limited to not mix operations on purpose */
-Applicable:
-	Message |
-	ApplicablePipeline |
-	ApplicableComposition |
-	ApplicableDisjuntion |
-	ApplicableConjuntion 
-;
-
-ApplicablePipeline:
-	 messages+=Message (AND_THEN_TOKEN messages+=Message)+
-;
-
-ApplicableComposition:
-	messages+=Message (COMPOSE_TOKEN messages+=Message)+
-;
-
-ApplicableConjuntion:
-	messages+=Message (AND_TOKEN messages+=Message)+
-;
-
-
-ApplicableDisjuntion:
-	messages+=Message (OR_TOKEN messages+=Message)+
-;
-
-Message:
-	selector=ID (OPEN_TOKEN (arguments+=ExpressionLevel1 (SEPARATOR_TOKEN arguments+=ExpressionLevel1)*)? => CLOSE_TOKEN)?
+Message returns Applicable:
+	{Message} selector=ID (OPEN_TOKEN (arguments+=ExpressionLevel4 (SEPARATOR_TOKEN arguments+=ExpressionLevel4)*)? => CLOSE_TOKEN)?
 ;
 
 SuperSend:
-	{SuperSend} SUPER_TOKEN (OPEN_TOKEN (arguments+=ExpressionLevel0 (SEPARATOR_TOKEN arguments+=ExpressionLevel0)*)? => CLOSE_TOKEN)?
+	{SuperSend} SUPER_TOKEN (OPEN_TOKEN (arguments+=ExpressionLevel4 (SEPARATOR_TOKEN arguments+=ExpressionLevel4)*)? => CLOSE_TOKEN)?
 ;
 
 ComprehensionExpression:
-	'generar' (mapping=Applicable 'de')? target=ExpressionLevel1 (=>'tal que' condition=Applicable)?;
+	'generar' (mapping=Applicable 'de')? target=ExpressionLevel1 (=>'tal' 'que' condition=Applicable)?;
 
 ForEachExpression:
-	'para cada' ID 'en' (target=ExpressionLevel1) (=>'tal que' condition=Applicable)? action=Applicable;
+	'para' 'cada' ID 'en' (target=ExpressionLevel1) (=>'tal' 'que' condition=Applicable)? action=Applicable;
 
 SumExpression:
 	'sumatoria' criteria=Applicable 'de' target=ExpressionLevel1;
