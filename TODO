@@ -26,3 +26,4 @@
 * soportar excepciones
 * soportar paréntesis en lanzar, error, inicializar, nuevo, etc
 * soportar anidar expresiones
+* soportar secuencias de acciones en when y try catch?

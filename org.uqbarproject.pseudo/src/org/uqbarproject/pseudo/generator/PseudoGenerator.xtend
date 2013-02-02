@@ -48,6 +48,8 @@ import org.uqbarproject.pseudo.pseudo.ComparisonOperation
 
 import static extension org.uqbarproject.pseudo.SelectorExtensions.*
 import static extension org.uqbarproject.pseudo.util.EObjectExtensions.*
+import org.uqbarproject.pseudo.pseudo.ThrowExpression
+import org.uqbarproject.pseudo.pseudo.TryCatchExpression
 
 /**
  * @author flbulgareli
@@ -175,6 +177,13 @@ class PseudoGenerator implements IGenerator {
 		}
 		«ENDIF»		
 	'''
+	def dispatch compile(TryCatchExpression expression) '''
+		try {
+			«expression.action.compile»
+		} catch (Throwable e) {
+			«expression.catchAction.compile»
+		}
+	'''
 	 
 	def dispatch compileForResult(WhenExpression expression) '''
 		((«expression.cases.get(0).compileForBooleanResult») ? 
@@ -255,7 +264,9 @@ class PseudoGenerator implements IGenerator {
     def dispatch compileForResult(SetLiteralExpression expression) '''
     	new java.util.HashSet(java.util.Arrays.asList(«joinCompileExpressions(expression.elements)»))
     '''
-
+    def dispatch compileForResult(ThrowExpression expression) '''
+    	throw «expression.throwable.compileForResult»
+    '''
     def dispatch compileForResult(MessageSendExpression expression) '''
     	«expression.getMessage.compile».apply(«expression.getReceptor.compileForResult»)
     '''

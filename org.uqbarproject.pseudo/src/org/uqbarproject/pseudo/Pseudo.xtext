@@ -62,11 +62,13 @@ ExpressionLevel3 returns Expression:
 
 ExpressionLevel2 returns Expression:
 	MessageSendExpression |
+	ThrowExpression |
 	NewExpression |
 	InitExpression |
 	SetupExpression |
 	TraversableExpression | //TODO revise syntax and priority
 	WhenExpression |
+	TryCatchExpression |
 	CollectionLiteralExpression
 ;
 
@@ -155,6 +157,15 @@ WhenExpression:
 	END_TOKEN 
 ;
 
+TryCatchExpression:
+	TRY_TOKEN 
+		action= ExpressionLevel4
+	CATCH_TOKEN  
+		catchAction=ExpressionLevel4	
+	END_TOKEN 
+;
+
+
 
 NewExpression:
 	NEW_TOKEN target = [Type] (OPEN_TOKEN (arguments+=ExpressionLevel4 (SEPARATOR_TOKEN arguments+=ExpressionLevel4)*)? => CLOSE_TOKEN)?
@@ -188,6 +199,12 @@ Message returns Applicable:
 SuperSend:
 	{SuperSend} SUPER_TOKEN (OPEN_TOKEN (arguments+=ExpressionLevel4 (SEPARATOR_TOKEN arguments+=ExpressionLevel4)*)? => CLOSE_TOKEN)?
 ;
+
+ThrowExpression:
+	(ERROR_TOKEN | THROW_TOKEN) throwable=ExpressionLevel2
+;
+
+
 
 ComprehensionExpression:
 	'generar' (mapping=Applicable 'de')? target=ExpressionLevel1 (=>'tal' 'que' condition=Applicable)?;

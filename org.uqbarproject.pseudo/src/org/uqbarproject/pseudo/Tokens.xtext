@@ -50,6 +50,9 @@ OTHERWISE_TOKEN: 'caso contrario' | 'otro caso';
 
 RETURN_TOKEN: 'devolver';
 THROW_TOKEN: 'lanzar';
+ERROR_TOKEN: 'error';
+TRY_TOKEN: 'intentar';
+CATCH_TOKEN: 'capturar';
 
 /* Assignment tokens */
 

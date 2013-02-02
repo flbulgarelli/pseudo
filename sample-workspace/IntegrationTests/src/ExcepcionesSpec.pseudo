@@ -1,0 +1,20 @@
+clase Excepciones
+
+  metodo metodo_que_lanza_error
+    error "ups!"
+  fin
+  
+  metodo metodo_que_lanza_excepcion
+    lanzar nuevo RuntimeException
+  fin
+  
+  metodo metodo_que_captura_excepcion
+    intentar
+      error ""
+    capturar(excepcion)
+      //hacer algo..
+      lanzar excepcion
+    fin
+  fin
+
+fin
