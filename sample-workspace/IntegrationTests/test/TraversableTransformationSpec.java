@@ -35,7 +35,7 @@ public class TraversableTransformationSpec {
 
   @Test
   public void soporta_filter() throws Throwable {
-    fail();
+    assertEquals(personas.subList(1, 3), new Comprensiones().personasMayores(personas));
   }
 
   @Test
@@ -54,13 +54,13 @@ public class TraversableTransformationSpec {
   }
 
   @Test
-  public void soporta_maximo() throws Exception {
-    fail();
+  public void soporta_maximo() throws Throwable {
+    assertEquals(personas.get(2).getEdad(), new Comprensiones().edadMaxima(personas));
   }
 
   @Test
-  public void soporta_minimo() throws Exception {
-    fail();
+  public void soporta_minimo() throws Throwable {
+    assertEquals(personas.get(0).getEdad(), new Comprensiones().edadMinima(personas));
   }
 
   @Test

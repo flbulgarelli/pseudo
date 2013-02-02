@@ -7,6 +7,10 @@ clase Comprensiones
   metodo nombres_de_personas_mayores(personas)
     generar nombre de personas tal que es_mayor
   fin
+  
+  metodo personas_mayores(personas)
+    generar personas tal que es_mayor
+  fin
 
   metodo persona_mas_adulta(personas)
     maximo entre personas segun edad
@@ -22,6 +26,16 @@ clase Comprensiones
   
   metodo promedio_edades(personas)
     promedio edad de personas
+  fin
+  
+  metodo edad_minima(personas)
+    variable edades = generar edad de personas
+    minimo entre edades 
+  fin
+  
+  metodo edad_maxima(personas)
+    variable edades = generar edad de personas
+    maximo entre edades 
   fin
 
 fin
