@@ -43,15 +43,15 @@ import org.uqbarproject.pseudo.pseudo.SuperSend
 import org.uqbarproject.pseudo.pseudo.TrueExpression
 import org.uqbarproject.pseudo.pseudo.Type
 import org.uqbarproject.pseudo.pseudo.WhenExpression
-
-import static extension org.uqbarproject.pseudo.SelectorExtensions.*
-import static extension org.uqbarproject.pseudo.util.EObjectExtensions.*
 import org.uqbarproject.pseudo.pseudo.MinExpression
 import org.uqbarproject.pseudo.pseudo.MaxExpression
 import org.uqbarproject.pseudo.pseudo.ComprehensionExpression
 import org.uqbarproject.pseudo.pseudo.ForEachExpression
 import org.uqbarproject.pseudo.pseudo.ComparisonExpression
-import org.uqbarproject.pseudo.pseudo.ComparisonOperation 
+import org.uqbarproject.pseudo.pseudo.ComparisonOperation
+
+import static extension org.uqbarproject.pseudo.SelectorExtensions.*
+import static extension org.uqbarproject.pseudo.util.EObjectExtensions.* 
 
 /**
  * @author flbulgareli
@@ -81,7 +81,7 @@ class PseudoGenerator implements IGenerator {
 			}
 			«var attributesNames = type.members.filter(typeof(Attribute)).map[it.name.toJavaId]»
 			«IF !attributesNames.empty»
-			public «type.name»(«compileParametersList(attributesNames)») {
+			public «type.name»(«joinCompileParameters(attributesNames)») {
 				«FOR attributeName : attributesNames»
 				this.«attributeName» = «attributeName»;
 				«ENDFOR»
@@ -93,15 +93,11 @@ class PseudoGenerator implements IGenerator {
 		  	«ENDFOR»
 		}
   	'''
-  	def compileParametersList(Iterable<String> names) {
-  		names.map [ "Object " + it ].join(", ")
-  	} 
-  	
   	def dispatch compile(Method method) '''
 	  «IF method.overrideMethod»
 	  @Override
 	  «ENDIF»
-	  public «method.classMethod.compileClassModifier» Object «method.name.toJavaId»(«compileParametersList(method.parameters.map [ it.name.toJavaId ])») throws Throwable {
+	  public «method.classMethod.compileClassModifier» Object «method.name.toJavaId»(«joinCompileParameters(method.parameters.map [ it.name.toJavaId ])») throws Throwable {
 	  	«IF method.statements.empty»
 	  	return null;
 	  	«ELSE»
@@ -140,23 +136,23 @@ class PseudoGenerator implements IGenerator {
 	'''
 	//TODO Not an expression, yet
 	def dispatch compile(ApplicablePipeline pipeline) '''
-		«joinMessages(pipeline.messages, "andThen")»
+		«joinCompileMessages(pipeline.messages, "andThen")»
 	'''
 	def dispatch compile(ApplicableComposition pipeline) '''
-		«joinMessages(pipeline.messages, "compose")»
+		«joinCompileMessages(pipeline.messages, "compose")»
 	'''
 	def dispatch compile(ApplicableDisjuntion pipeline) '''
-		«joinMessages(pipeline.getMessages, "or")»
+		«joinCompileMessages(pipeline.getMessages, "or")»
 	'''
 	def dispatch compile(ApplicableConjuntion pipeline) '''
-		«joinMessages(pipeline.messages, "and")»
+		«joinCompileMessages(pipeline.messages, "and")»
 	'''
 	def dispatch compile(Message message) '''
 		new MessageSend("«message.selector.toJavaId»"
 		«IF message.arguments.empty»
 		 )
 		«ELSE»
-		, «joinCompileResults(message.arguments)»)
+		, «joinCompileExpressions(message.arguments)»)
 		«ENDIF»
 	'''
 
@@ -257,17 +253,17 @@ class PseudoGenerator implements IGenerator {
         false
     '''
     def dispatch compileForResult(ListLiteralExpression expression) '''
-    	new java.util.LinkedList(java.util.Arrays.asList(«joinCompileResults(expression.elements)»))
+    	new java.util.LinkedList(java.util.Arrays.asList(«joinCompileExpressions(expression.elements)»))
     '''
     def dispatch compileForResult(SetLiteralExpression expression) '''
-    	new java.util.HashSet(java.util.Arrays.asList(«joinCompileResults(expression.elements)»))
+    	new java.util.HashSet(java.util.Arrays.asList(«joinCompileExpressions(expression.elements)»))
     '''
 
     def dispatch compileForResult(MessageSendExpression expression) '''
     	«expression.getMessage.compile».apply(«expression.getReceptor.compileForResult»)
     '''
     def dispatch compileForResult(SuperSend expression) '''
-    	super.«expression.parentOfType(typeof(Method)).name.toJavaId»(«joinCompileResults(expression.arguments)»);
+    	super.«expression.parentOfType(typeof(Method)).name.toJavaId»(«joinCompileExpressions(expression.arguments)»);
     '''
 	def dispatch compileForResult(ForEachExpression expression) '''
 	    new Traversing(
@@ -295,7 +291,7 @@ class PseudoGenerator implements IGenerator {
 		compileReductionWithCriteria('AverageFunction', expression.criteria, expression.target)
 	}
 	def dispatch compileForResult(NewExpression expression) '''
-		new «expression.target.name»(«joinCompileResults(expression.arguments)»)
+		new «expression.target.name»(«joinCompileExpressions(expression.arguments)»)
 	'''
 	def dispatch compileForResult(InitExpression expression) '''
 		new «expression.target.name»() {{
@@ -357,10 +353,6 @@ class PseudoGenerator implements IGenerator {
 	       ).apply(«target.compileForResult»)
 	'''
 	
-	def Object subclassResponsibility(EObject object, String message) {
-		throw new UnsupportedOperationException(object + " should implement " + message)
-	}
-	
 	def dispatch compileForReference(EObject object) {
 		object.subclassResponsibility('compileForReference')
 	}
@@ -373,10 +365,15 @@ class PseudoGenerator implements IGenerator {
 	def dispatch compileForReference(LocalVariable localVariable) {
 		localVariable.name.toJavaId
 	}
-	def joinCompileResults(EList<? extends Expression> expressions) {
+	def joinCompileExpressions(EList<? extends Expression> expressions) {
     	expressions.map[it.compileForResult].join(',')
     }
-    def joinMessages(EList<Message> messages, String selector){
+    def joinCompileMessages(EList<Message> messages, String selector){
     	messages.map['(' + it.compile + ')'].join("." + selector)
     }
+  	def joinCompileParameters(Iterable<String> names) {
+  		names.map [ "Object " + it ].join(", ")
+  	} 
+  	
+    
 }

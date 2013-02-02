@@ -21,4 +21,9 @@ public class EObjectExtensions {
 
     return parentOfTypeOrNull(eObject.eContainer(), type);
   }
+
+  public static Object subclassResponsibility(EObject object, String message) {
+    throw new UnsupportedOperationException(object + " should implement " + message);
+  }
+
 }
