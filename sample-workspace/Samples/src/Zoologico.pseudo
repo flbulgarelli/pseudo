@@ -3,7 +3,7 @@ clase Zoologico
 
   metodo agregar_animal(animal)
     animal.ingreso
-    animales.agregar // a animal
+    animales.add(animal)
   fin
 
   metodo animal_mas_pesado

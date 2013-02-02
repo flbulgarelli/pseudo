@@ -8,7 +8,7 @@ clase Golondrina
   fin
 
   metodo esta_sana
-    energia //> 100
+    energia > 100
   fin
 
   metodo volar_a(una_ciudad)
