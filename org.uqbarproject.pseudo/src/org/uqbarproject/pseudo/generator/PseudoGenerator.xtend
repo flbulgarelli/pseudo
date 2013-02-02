@@ -87,6 +87,11 @@ class PseudoGenerator implements IGenerator {
 		  	«FOR member : type.members»
 		  	  «member.compile»		
 		  	«ENDFOR»
+		  	
+		  	@Override
+		  	public String toString() {
+		  		return "«type.name»[«type.members.filter(typeof(Attribute)).map[it.name + '="+'+it.name.toJavaId+'+"'].join(", ")»]";	
+			}
 		}
   	'''
   	def dispatch compile(Method method) '''
