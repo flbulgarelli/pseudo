@@ -36,13 +36,26 @@ public class MensajesSpec {
   }
   
   @Test
+  public void comparacion_es_null_safe() throws Throwable {
+    assertFalse((Boolean)new Persona().argentina());
+  }
+  
+  @Test
   public void disyuncion() throws Throwable {
-    assertTrue((Boolean)new Mensajes().metodoQueCombinaConO(new Persona()));
+    Persona persona = new Persona() {{
+      setEmancipada(true);
+      setEdad(BigDecimal.valueOf(15));
+    }};
+    assertTrue((Boolean)new Mensajes().mayorOEmancipada(persona));
   }
   
   @Test
   public void conjuncion() throws Throwable {
-    assertTrue((Boolean)new Mensajes().metodoQueCombinaConY(new Persona()));
+    Persona persona = new Persona() {{
+      setNacionalidad("argentina");
+      setEdad(BigDecimal.valueOf(30));
+    }};
+    assertTrue((Boolean)new Mensajes().mayorYArgentina(persona));
   }
   
   @Test

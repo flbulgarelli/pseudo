@@ -36,11 +36,11 @@ clase Mensajes
     contador.i
   fin
   
-  metodo metodo_que_combina_con_o(persona)
+  metodo mayor_o_emancipada(persona)
     persona.es_mayor o emancipada
   fin
   
-  metodo metodo_que_combina_con_y(persona)
+  metodo mayor_y_argentina(persona)
     persona.es_mayor y argentina
   fin
   

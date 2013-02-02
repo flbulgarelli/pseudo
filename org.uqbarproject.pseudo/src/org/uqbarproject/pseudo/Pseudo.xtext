@@ -37,29 +37,33 @@ Parameter:
 ;	
 
 Statement:
-	ExpressionLevel2 | Return | LocalVariable ;
+	ExpressionLevel3 | Return | LocalVariable ;
 
 Return:
-	RETURN_TOKEN value=ExpressionLevel2;
+	RETURN_TOKEN value=ExpressionLevel3;
 	
 LocalVariable:
-	LET_TOKEN (name=ID) ('=' (value=ExpressionLevel2))?;
+	LET_TOKEN (name=ID) ('=' (value=ExpressionLevel3))?;
 
 Attribute:
-	(ATTRIBUTE_TOKEN|classAttribute?=CLASS_ATTRIBUTE_TOKEN) name=ID ('=' initialValue=ExpressionLevel2)?;
+	(ATTRIBUTE_TOKEN|classAttribute?=CLASS_ATTRIBUTE_TOKEN) name=ID ('=' initialValue=ExpressionLevel3)?;
+
+ExpressionLevel3 returns Expression:
+	ComparisonExpression | 
+	AssignExpression | 
+	IncrementExpression | 
+	DecrementExpression 
+;
 
 ExpressionLevel2 returns Expression:
-	ExpressionLevel1 |
 	MessageSendExpression |
 	NewExpression |
 	InitExpression |
 	SetupExpression |
 	TraversableExpression |
 	WhenExpression |
-	AssignExpression | 
-	IncrementExpression | 
-	DecrementExpression |
-	CollectionLiteralExpression ;
+	CollectionLiteralExpression
+;
 
 ExpressionLevel1 returns Expression:
 	ExpressionLevel0 |
@@ -92,8 +96,22 @@ Number:
 	INT ('.' INT)?;
 
 MessageSendExpression returns Expression:
-	ExpressionLevel1  ({MessageSendExpression.receptor=current} MESSAGE_SEND_TOKEN message=Applicable)+ 
+	ExpressionLevel1  ({MessageSendExpression.receptor=current} MESSAGE_SEND_TOKEN message=Applicable)* 
 ;
+
+ComparisonExpression returns Expression:
+	ExpressionLevel2 ({ComparisonExpression.left=current} op=ComparisonOperation right=ExpressionLevel2)? 
+;
+
+enum ComparisonOperation:
+	GT='>' |
+	LT='<' |
+	GTE= '>=' |
+	LTE= '<=' |
+	EQ='=' |
+	NEQ='/='
+;
+
 
 TraversableExpression:
 //TODO ojo que se necesita aplicacion parcial o lambdas
@@ -112,11 +130,11 @@ CollectionLiteralExpression:
 ;
 
 ListLiteralExpression:
-	{ListLiteralExpression} LIST_OPEN_TOKEN (elements+=ExpressionLevel2 (SEPARATOR_TOKEN elements+=ExpressionLevel2)*)? => LIST_CLOSE_TOKEN	
+	{ListLiteralExpression} LIST_OPEN_TOKEN (elements+=ExpressionLevel3 (SEPARATOR_TOKEN elements+=ExpressionLevel3)*)? => LIST_CLOSE_TOKEN	
 ;
 
 SetLiteralExpression:
-	{SetLiteralExpression} SET_OPEN_TOKEN (elements+=ExpressionLevel2 (SEPARATOR_TOKEN elements+=ExpressionLevel2)*)? => SET_CLOSE_TOKEN	
+	{SetLiteralExpression} SET_OPEN_TOKEN (elements+=ExpressionLevel3 (SEPARATOR_TOKEN elements+=ExpressionLevel3)*)? => SET_CLOSE_TOKEN	
 ;
 
 //RangeLiteralExpression:
@@ -125,15 +143,15 @@ SetLiteralExpression:
 
 
 WhenExpression:
-	(WHEN_TOKEN (cases+=ExpressionLevel2) 
-	THEN_TOKEN actions+= ExpressionLevel2)+ 
-	(OTHERWISE_TOKEN defaultAction=ExpressionLevel2)?
+	(WHEN_TOKEN (cases+=ExpressionLevel3) 
+	THEN_TOKEN actions+= ExpressionLevel3)+ 
+	(OTHERWISE_TOKEN defaultAction=ExpressionLevel3)?
 	END_TOKEN 
 ;
 
 
 NewExpression:
-	NEW_TOKEN target = [Type] (OPEN_TOKEN (arguments+=ExpressionLevel2 (SEPARATOR_TOKEN arguments+=ExpressionLevel2)*)? => CLOSE_TOKEN)?
+	NEW_TOKEN target = [Type] (OPEN_TOKEN (arguments+=ExpressionLevel3 (SEPARATOR_TOKEN arguments+=ExpressionLevel3)*)? => CLOSE_TOKEN)?
 ;
 
 InitExpression:
@@ -143,13 +161,13 @@ InitExpression:
 ;
 
 SetupExpression:
-	SETUP_TOKEN target=ExpressionLevel2
+	SETUP_TOKEN target=ExpressionLevel3
 	(initializations+=Initialization)+  
 	END_TOKEN 	
 ;
 
 Initialization:
-	INIT_WITH_TOKEN attribute=ID  '='  initialValue=ExpressionLevel2
+	INIT_WITH_TOKEN attribute=ID  '='  initialValue=ExpressionLevel3
 ;
 
 
@@ -206,11 +224,11 @@ MinExpression:
 	'minimo entre' target=ExpressionLevel1 (=>'segun' criteria=Applicable)?;
 
 AssignExpression:
-	ASSIGN_TOKEN (target=[ecore::EObject]) '=' value=ExpressionLevel2;
+	ASSIGN_TOKEN (target=[ecore::EObject]) '=' value=ExpressionLevel3;
 	
 IncrementExpression:
-	INCREMENT_TOKEN target=[ecore::EObject] (ACCUM_BY_TOKEN value=ExpressionLevel2)?;
+	INCREMENT_TOKEN target=[ecore::EObject] (ACCUM_BY_TOKEN value=ExpressionLevel3)?;
 	
 DecrementExpression:
-	DECREMENT_TOKEN target=[ecore::EObject] (ACCUM_BY_TOKEN value=ExpressionLevel2)?;
+	DECREMENT_TOKEN target=[ecore::EObject] (ACCUM_BY_TOKEN value=ExpressionLevel3)?;
 	

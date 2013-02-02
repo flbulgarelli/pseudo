@@ -49,7 +49,9 @@ import static extension org.uqbarproject.pseudo.util.EObjectExtensions.*
 import org.uqbarproject.pseudo.pseudo.MinExpression
 import org.uqbarproject.pseudo.pseudo.MaxExpression
 import org.uqbarproject.pseudo.pseudo.ComprehensionExpression
-import org.uqbarproject.pseudo.pseudo.ForEachExpression 
+import org.uqbarproject.pseudo.pseudo.ForEachExpression
+import org.uqbarproject.pseudo.pseudo.ComparisonExpression
+import org.uqbarproject.pseudo.pseudo.ComparisonOperation 
 
 /**
  * @author flbulgareli
@@ -197,6 +199,23 @@ class PseudoGenerator implements IGenerator {
 		«ENDIF»
 		)
 	'''
+	def dispatch compileForResult(ComparisonExpression expression) '''
+		«IF expression.op == ComparisonOperation::EQ»
+		«expression.left.compileForResult».equals(«expression.right.compileForResult»)
+		«ELSEIF expression.op == ComparisonOperation::NEQ»
+		!«expression.left.compileForResult».equals(«expression.right.compileForResult»)
+		«ELSE»
+		((Comparable)«expression.left.compileForResult»).compareTo(«expression.right.compileForResult») «expression.op.build»
+		«ENDIF»
+	'''	
+	def build(ComparisonOperation op) {
+		switch op {
+			case ComparisonOperation::LT: '< 0'
+			case ComparisonOperation::GT: '> 0'
+			case ComparisonOperation::LTE: '<= 0'
+			case ComparisonOperation::GTE: '>= 0'
+		}
+	}
 	
 	def dispatch compileForResult(AssignExpression expression) '''
 		«expression.target.compileForReference» = («expression.value.compileForResult»)
@@ -289,8 +308,11 @@ class PseudoGenerator implements IGenerator {
 		«««TODO
 	'''	
 	
-	def compileForBooleanResult(Expression expression) '''
+	def dispatch compileForBooleanResult(Expression expression) '''
 		(Boolean) («expression.compileForResult»)
+	'''
+	def dispatch compileForBooleanResult(MessageSendExpression expression) '''
+		«expression.message.compile».applyForBoolean(«expression.receptor.compileForResult»)
 	'''
 	
 	def compileForResultOrNull(Expression expression) {

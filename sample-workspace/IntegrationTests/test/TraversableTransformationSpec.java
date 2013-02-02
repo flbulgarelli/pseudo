@@ -40,7 +40,7 @@ public class TraversableTransformationSpec {
 
   @Test
   public void soporta_filter_con_map() throws Throwable {
-    assertEquals(Arrays.asList("pepe", "maria", "toto"), new Comprensiones().nombresDePersonasMayores(personas));
+    assertEquals(Arrays.asList("maria", "toto"), new Comprensiones().nombresDePersonasMayores(personas));
   }
 
   @Test
