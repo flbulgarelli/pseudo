@@ -212,7 +212,7 @@ class PseudoGenerator implements IGenerator {
 		«ELSEIF expression.op == ComparisonOperation::NEQ»
 		!«expression.left.compileForResult».equals(«expression.right.compileForResult»)
 		«ELSE»
-		((Comparable)«expression.left.compileForResult»).compareTo(«expression.right.compileForResult») «expression.op.build»
+		((Comparable)(«expression.left.compileForResult»)).compareTo(«expression.right.compileForResult») «expression.op.build»
 		«ENDIF»
 	'''	
 	def build(ComparisonOperation op) {
