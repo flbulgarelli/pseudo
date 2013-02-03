@@ -1,20 +1,20 @@
-clase Golondrina
-  atributo nombre
-  atributo energia = 100
-  atributo ciudad_actual
+class Golondrina
+  attr nombre
+  attr energia = 100
+  attr ciudad_actual
 
-  metodo comer(gramos_de_alpise)
-    incrementar energia en gramos_de_alpise /// 10)                
-  fin
+  def comer(gramos_de_alpise)
+    incr energia by gramos_de_alpise /// 10)                
+  end
 
-  metodo esta_sana
+  def esta_sana
     energia > 100
-  fin
+  end
 
-  metodo volar_a(una_ciudad)
-    variable distancia = ciudad_actual.distancia(una_ciudad)
-    actualizar ciudad_actual = una_ciudad
-    decrementar energia en distancia
-  fin
+  def volar_a(una_ciudad)
+    var distancia = ciudad_actual.distancia(una_ciudad)
+    set ciudad_actual = una_ciudad
+    decr energia by distancia
+  end
 
-fin 
+end 

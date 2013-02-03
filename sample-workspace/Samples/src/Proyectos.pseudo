@@ -1,20 +1,20 @@
-clase TareaCompuesta
-  atributo subtareas
+class TareaCompuesta
+  attr subtareas
   
-  metodo tiempo
+  def tiempo
     sumatoria tiempo de subtareas
-  fin
-fin
+  end
+end
 
-clase TareaSimple
-  atributo tiempo
-fin
+class TareaSimple
+  attr tiempo
+end
 
-clase Proyecto
-  atributo tareas
+class Proyecto
+  attr tareas
  
-  metodo tarea_critica
+  def tarea_critica
     maximo segun tiempo entre tareas 
-  fin
+  end
 
-fin
+end

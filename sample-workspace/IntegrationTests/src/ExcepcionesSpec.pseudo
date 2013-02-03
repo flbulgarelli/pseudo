@@ -1,20 +1,20 @@
-clase Excepciones
+class Excepciones
 
-//  metodo metodo_que_lanza_error
+//  def def_que_lanza_error
 //    error "ups!"
-//  fin
+//  end
 //  
-//  metodo metodo_que_lanza_excepcion
+//  def def_que_lanza_excepcion
 //    lanzar 1//nuevo RuntimeException
-//  fin
+//  end
 //  
-//  metodo metodo_que_captura_excepcion
+//  def def_que_captura_excepcion
 //    intentar
 //      error ""
 //    capturar//(excepcion)
 //      //hacer algo..
 //      lanzar 1//excepcion
-//    fin
-//  fin
+//    end
+//  end
 
-fin
+end

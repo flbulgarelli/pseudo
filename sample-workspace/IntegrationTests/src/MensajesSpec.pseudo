@@ -1,68 +1,68 @@
-clase Mensajes
+class Mensajes
 
   /* delegacion en self */
-  metodo metodo_que_delega_en_si_mismo
-    este.metodo_delegado
-  fin
+  def def_que_delega_en_si_mismo
+    self.def_delegado
+  end
 
-  metodo metodo_delegado
+  def def_delegado
     5
-  fin
+  end
 
-  metodo metodo_que_pasa_parametros(parametro1, parametro2)
-    este.metodo_delegado_con_parametros(parametro1, parametro2)
-  fin
+  def def_que_pasa_parametros(parametro1, parametro2)
+    self.def_delegado_con_parametros(parametro1, parametro2)
+  end
 
-  metodo metodo_delegado_con_parametros(parametro1, parametro2)
+  def def_delegado_con_parametros(parametro1, parametro2)
     parametro1.add(parametro2)
-  fin
+  end
 
-  metodo metodo_que_delega_en_otro_objeto
+  def def_que_delega_en_otro_objeto
     5.toString
-  fin
+  end
 
-  metodo metodo_que_envia_mensaje_a_la_clase
-    variable mi_clase = este.getClass
-    mi_clase.foo
-  fin
+  def def_que_envia_mensaje_a_la_class
+    var mi_class = self.getClass
+    mi_class.foo
+  end
 
-  metodo metodo_que_envia_mensaje_de_clase_a_la_instancia
-    este.foo
-  fin 
+  def def_que_envia_mensaje_de_class_a_la_instancia
+    self.foo
+  end 
   
-  metodo metodo_que_encadena
-    variable contador = nuevo Contador
-    contador.contar luego contar luego contar
+  def def_que_encadena
+    var contador = new Contador
+    contador.contar >> contar >> contar
     contador.i
-  fin
+  end
   
-  metodo mayor_o_emancipada(persona)
-    persona.es_mayor o emancipada
-  fin
+  def mayor_o_emancipada(persona)
+    persona.es_mayor or emancipada
+  end
   
-  metodo mayor_y_argentina(persona)
-    persona.es_mayor y argentina
-  fin
+  def mayor_y_argentina(persona)
+    persona.es_mayor and argentina
+  end
   
-  metodo metodo_que_compone
-    variable hola = " hola "
-    hola.length compuesto trim
-  fin
+  def def_que_compone
+    var hola = " hola "
+    hola.length · trim
+  end
   
-  metodo metodo_que_pasa_literales_de_lista_como_argumentos
-    variable l = lista()
-    l.add_all(conjunto(4, 5))
-  fin
+  def def_que_pasa_literales_de_list_como_argumentos
+    var l = list()
+    l.add_all(set(4, 5))
+  end
 
-  metodo de clase foo
+  classdef foo
     4
-  fin
+  end
 
-fin
+end
 
-clase Contador
-  atributo i = 0
-  metodo contar
-    incrementar i
-  fin
-fin
+class Contador
+  attr i = 0
+  def contar
+    incr i
+  end
+end

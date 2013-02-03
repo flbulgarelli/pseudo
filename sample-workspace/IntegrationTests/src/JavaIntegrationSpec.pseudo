@@ -1,13 +1,13 @@
-clase Integraciones 
-  metodo largo_lista
-    variable una_lista = lista()
-    una_lista.size
-  fin
+class Integraciones 
+  def largo_list
+    var una_list = list()
+    una_list.size
+  end
   
-  metodo remover_todo
-    variable una_lista = lista(4, 5, 9, 0)
-    variable otra_lista = lista(5, 0)
-    una_lista.remove_all(otra_lista)
-    una_lista
-  fin
-fin
+  def remover_todo
+    var una_list = list(4, 5, 9, 0)
+    var otra_list = list(5, 0)
+    una_list.remove_all(otra_list)
+    una_list
+  end
+end

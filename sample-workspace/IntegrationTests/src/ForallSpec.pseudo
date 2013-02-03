@@ -1,0 +1,30 @@
+class Observador
+  attr notificado = no
+  attr ultimo_evento
+
+  def notificar
+    set notificado = yes
+  end
+
+  def notificar_de(evento)
+    set notificado = yes
+    set ultimo_evento = evento
+  end 
+ 
+end
+class Observable 
+  attr observadores = list()
+  
+  def registrar_observador(observador)
+    observadores.add(observador)
+  end
+ 
+  def notificar_a_todos
+    forall observadores notificar
+  end 
+ 
+  def notificar_a_todos_de(evento)
+    forall observadores notificar_de(evento)
+  end
+
+end

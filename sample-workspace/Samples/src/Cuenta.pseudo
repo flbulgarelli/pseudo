@@ -1,18 +1,18 @@
-clase CuentaBancaria
-  atributo monto = 10
+class CuentaBancaria
+  attr monto = 10
 
-  metodo depositar(cantidad)
-    incrementar monto en cantidad
-  fin
+  def depositar(cantidad)
+    incr monto by cantidad
+  end
 
-  metodo extraer(cantidad)
-    decrementar monto en cantidad
-  fin
+  def extraer(cantidad)
+    decr monto by cantidad
+  end
 
-  metodo imprimir
+  def imprimir
   //    'Cuenta(' // ++ monto ++ ')' 
-  fin
+  end
 
-fin
+end
  
 

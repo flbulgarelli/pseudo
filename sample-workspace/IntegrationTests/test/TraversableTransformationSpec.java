@@ -30,47 +30,47 @@ public class TraversableTransformationSpec {
 
   @Test
   public void soporta_map() throws Throwable {
-    assertEquals(Arrays.asList("pepe", "maria", "toto"), new Comprensiones().nombresDePersonas(personas));
+    assertEquals(Arrays.asList("pepe", "maria", "toto"), new Comprehensions().nombresDePersonas(personas));
   }
 
   @Test
   public void soporta_filter() throws Throwable {
-    assertEquals(personas.subList(1, 3), new Comprensiones().personasMayores(personas));
+    assertEquals(personas.subList(1, 3), new Comprehensions().personasMayores(personas));
   }
 
   @Test
   public void soporta_filter_con_map() throws Throwable {
-    assertEquals(Arrays.asList("maria", "toto"), new Comprensiones().nombresDePersonasMayores(personas));
+    assertEquals(Arrays.asList("maria", "toto"), new Comprehensions().nombresDePersonasMayores(personas));
   }
 
   @Test
   public void soporta_sumatoria() throws Throwable {
-    assertEquals(BigDecimal.valueOf(15 + 23 + 44), new Comprensiones().sumaEdades(personas));
+    assertEquals(BigDecimal.valueOf(15 + 23 + 44), new Comprehensions().sumaEdades(personas));
   }
 
   @Test
   public void soporta_promedio() throws Throwable {
-    assertEquals(new BigDecimal("27.3333333333"), new Comprensiones().promedioEdades(personas));
+    assertEquals(new BigDecimal("27.3333333333"), new Comprehensions().promedioEdades(personas));
   }
 
   @Test
   public void soporta_maximo() throws Throwable {
-    assertEquals(personas.get(2).getEdad(), new Comprensiones().edadMaxima(personas));
+    assertEquals(personas.get(2).getEdad(), new Comprehensions().edadMaxima(personas));
   }
 
   @Test
   public void soporta_minimo() throws Throwable {
-    assertEquals(personas.get(0).getEdad(), new Comprensiones().edadMinima(personas));
+    assertEquals(personas.get(0).getEdad(), new Comprehensions().edadMinima(personas));
   }
 
   @Test
   public void soporta_minimo_segun_criteio() throws Throwable {
-    assertEquals(personas.get(0), new Comprensiones().personaMasJoven(personas));
+    assertEquals(personas.get(0), new Comprehensions().personaMasJoven(personas));
   }
 
   @Test
   public void soporta_maximo_segun_criterio() throws Throwable {
-    assertEquals(personas.get(2), new Comprensiones().personaMasAdulta(personas));
+    assertEquals(personas.get(2), new Comprehensions().personaMasAdulta(personas));
   }
 
   @Test

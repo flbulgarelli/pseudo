@@ -1,49 +1,49 @@
-clase Zoologico
-  atributo animales = lista()
+class Zoologico
+  attr animales = list()
 
-  metodo agregar_animal(animal)
+  def agregar_animal(animal)
     animal.ingreso
     animales.add(animal)
-  fin
+  end
 
-  metodo animal_mas_pesado
+  def animal_mas_pesado
     maximo segun peso entre animales 
-  fin
+  end
 
-  metodo animal_mas_liviano
+  def animal_mas_liviano
     minimo segun peso entre animales 
-  fin
+  end
 
-  metodo peso_total
+  def peso_total
     sumatoria peso de animales
-  fin
+  end
 
-  metodo peso_promedio_animales
+  def peso_promedio_animales
     promedio peso de animales
-  fin
+  end
 
-  metodo animales_nuevos
+  def animales_nuevos
     animales tal que esNuevo
-  fin
+  end
 
-  metodo nombre_animales
-    generar nombre de animales
-  fin
+  def nombre_animales
+    gen nombre de animales
+  end
 
-  metodo alimentar_animales
-    para todos en animales alimentar
-  fin
+  def alimentar_animales
+    forall animales alimentar
+  end
 
-  metodo imprimir
-    cuando este.tiene_animales entonces
+  def imprimir
+    when self.tiene_animales then
       'Un Zoologico con animales'
-    caso contrario
+    otherwise
       'Un Zoologico vacio'
-    fin
-  fin
+    end
+  end
 
-  metodo tiene_animales
+  def tiene_animales
     animales.esta_vacia
-  fin
+  end
 
-fin
+end

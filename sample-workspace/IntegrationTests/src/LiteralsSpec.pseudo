@@ -1,0 +1,56 @@
+class Literales
+
+  def devuelve_cinco
+    5
+  end
+
+  def devuelve_cinco_y_medio
+    5.5
+  end
+
+  def devuelve_list_vacia
+    list()
+  end
+
+  def devuelve_set_vacio
+    set()
+  end
+
+  def devuelve_list_llena
+    list(1, 2, true, 'hola')
+  end
+  
+  def soporta_lists_de_lists
+    list(list(), list(4, list(5)))
+  end
+  
+  def soporta_lists_de_envios
+    list(4.toString, "")
+  end
+  
+  def soporta_lists_con_incrementos
+    var i = 0
+    list(incr i, incr i, incr i)
+  end
+
+  def devuelve_set_lleno
+    set(1, 2, true, 'hola')
+  end
+
+  def devuelve_si
+    yes
+  end
+
+  def devuelve_no
+    no
+  end
+
+  def devuelve_falso
+    false
+  end
+
+  def devuelve_true
+    true
+  end
+
+end

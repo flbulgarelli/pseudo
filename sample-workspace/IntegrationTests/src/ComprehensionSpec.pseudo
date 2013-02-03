@@ -1,0 +1,59 @@
+class Comprehensions
+
+  def people_names(people)
+    select name from people
+  end
+
+  def nombres_de_personas_mayores(people)
+    select name from people where is_old
+  end
+  
+  def old_people(people)
+    people where is_old
+  end
+
+  def persona_mas_adulta(people)
+    max by age from people
+  end
+
+  def persona_mas_joven(people)
+    min by age from people 
+  end
+  
+  def suma_edades(personas)
+    sum edad from personas
+  end
+  
+  def promedio_edades(personas)
+    average age from personas
+  end
+  
+  def edad_minima(personas)
+    min from gen edad from personas 
+  end
+  
+  def edad_maxima(personas)
+    max from gen edad from personas 
+  end
+  
+  def todos_mayores_de_edad(personas)
+    all es_mayor from personas
+  end
+
+end
+
+class Persona
+  attr nombre
+  attr edad
+  attr nacionalidad 
+  attr emancipada = no
+
+  def es_mayor
+    edad > 18
+  end
+  
+  def argentina
+    nacionalidad = 'argentina'  
+  end
+
+end

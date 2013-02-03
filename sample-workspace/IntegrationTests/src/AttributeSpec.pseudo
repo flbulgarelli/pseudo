@@ -1,0 +1,21 @@
+class Attributes
+  attr attr_without_initializer
+  attr attr_with_initializer = 10
+
+  def set_attribute
+    set attr_with_initializer = 6
+  end
+
+  def inc_attribute
+    incr attr_with_initializer
+  end
+
+  def accum_attribute
+    incr attr_with_initializer by 10
+  end
+
+  def decrement_attribute
+    decr attr_with_initializer
+  end
+
+end

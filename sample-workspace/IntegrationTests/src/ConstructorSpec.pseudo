@@ -1,37 +1,37 @@
-clase Constructores
+class Constructores
 
-  metodo de clase metodo_que_instancia
-    nuevo Perro
-  fin
+  classdef def_que_instancia
+    new Perro
+  end
 
-  metodo de clase metodo_que_inistancia_e_inicializa
-    inicializar Perro
-      con nombre = "fido"
-      con raza = "terrier"
-    fin
-  fin
+  classdef def_que_inistancia_e_inicializa
+    init Perro
+      with nombre = "fido"
+      with raza = "terrier"
+    end
+  end
 
-  metodo de clase metodo_que_inistancia_e_inicializa_verborragico
-    inicializar nuevo Perro
-      con nombre = "fido"
-      con raza = "terrier"
-    fin
-  fin
+  classdef def_que_inistancia_e_inicializa_verborragico
+    init new Perro
+      with nombre = "fido"
+      with raza = "terrier"
+    end
+  end
 
-  metodo de clase metodo_que_inicializa_usando_contexto_externo
-  //    variable i = 0
-    //    inicializar nuevo Perro 
-    //      con nombre = "fido" + incrementar i
+  classdef def_que_inicializa_usando_contexto_externo
+  //    var i = 0
+    //    inicializar new Perro 
+    //      con nombre = "fido" + incr i
     //      con raza = "terrier"
-    //    fin
-  fin
+    //    end
+  end
   
-  metodo metodo_que_instancia_con_argumentos
-    nuevo Perro("fido", "terrier")
-  fin
+  def def_que_instancia_con_argumentos
+    new Perro("fido", "terrier")
+  end
 
-fin
-clase Perro
-  atributo nombre
-  atributo raza
-fin   
+end
+class Perro
+  attr nombre
+  attr raza
+end   

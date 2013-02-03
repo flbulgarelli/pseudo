@@ -1,0 +1,33 @@
+class Terreno
+
+  def costo_por_metro_cuadrado
+    5
+  end
+
+end
+class TerrenoDeLujo inherits Terreno
+
+  override def costo_por_metro_cuadrado
+    6
+  end
+
+end
+
+class TerrenoBerreta inherits Terreno
+
+  def costo_por_metro_cuadrado
+    2
+  end
+
+end
+
+class TerrenoDeLaHostia inherits TerrenoDeLujo
+
+  override def costo_por_metro_cuadrado
+    var costo_base = super()
+    costo_base.add(4)
+  end
+
+end
+
+

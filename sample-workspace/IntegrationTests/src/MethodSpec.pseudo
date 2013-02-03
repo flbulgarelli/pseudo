@@ -1,0 +1,119 @@
+class Methods
+
+  /* Aridad */
+  def def_sin_parametros
+  end
+
+  def def_con_1_parametro(valor)
+  end
+
+  def def_con_2_parametros(parametro1, parametro2)
+  end
+
+  def def_que_devuelve_un_parametro(parametro1)
+    parametro1
+  end
+
+  /* Retornos y self */
+  def def_que_devuelve_self_implicitamente
+    self
+  end
+
+  def def_que_devuelve_self_explicitamente
+    return self
+  end
+
+  /*defs de class */
+  classdef def_que_es_de_class
+    5
+  end
+
+  //   classdef def_de_class_con_self
+  //    self
+  //   end
+
+  /* vars Locales */
+  def def_con_vars_locales
+    var x = 5
+    var z = x
+    z
+  end
+
+  def def_que_actualiza_vars_locales
+    var x = 4
+    set x  = 6 
+    x
+  end
+
+  def def_que_incrementa_vars_locales
+    var x = 0
+    incr x
+    x
+  end
+
+  def def_que_decrementa_vars_locales
+    var x = 1
+    decr x
+    x
+  end
+
+  /* When's */
+  def def_con_when_verdadero
+    when true then
+      'ok'
+    otherwise
+      'error'
+    end
+  end
+
+  def def_con_when_falso
+    when false then
+      'ok'
+    otherwise
+      'error'
+    end
+  end
+
+  def def_con_when_multiple
+    when false then
+      'imposible'
+    when false then
+      'imposible'
+    when true then
+      'ok'
+    otherwise
+      'imposible'
+    end
+  end
+
+  def def_sin_default
+    when false then
+      self.hacer_algo
+    end
+  end
+
+  def def_con_when_con_var
+    var condicion = true
+    when condicion then
+      'ok'
+    otherwise
+      'error'
+    end
+  end
+
+  //si bien en Pseudo, todo when es una expresion, en Java, algunos compilann
+  //a una expresion y otros a una sentencia
+  def def_con_sentencia_when
+    when true then
+      nil
+    otherwise
+      nil
+    end
+    return 5
+  end
+
+  //   especificacion especificacion_def(argumento)
+  //	self método demuestra el teorema de Fermat. Es trivial, pero no lo haré porque
+  //	no entra en self bloque       
+  //   end 
+end

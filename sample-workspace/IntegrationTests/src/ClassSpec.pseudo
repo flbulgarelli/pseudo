@@ -1,0 +1,11 @@
+class EmptyClass
+end
+class Child inherits EmptyClass
+end
+class ChildWithMembers
+  attr an_attr
+
+  def a_def
+  end
+
+end
