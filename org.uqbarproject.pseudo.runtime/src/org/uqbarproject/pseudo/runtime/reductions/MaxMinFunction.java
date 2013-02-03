@@ -1,16 +1,11 @@
 package org.uqbarproject.pseudo.runtime.reductions;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-
-import org.uqbarproject.pseudo.runtime.AbstractApplicable;
 import org.uqbarproject.pseudo.runtime.Applicable;
-import org.uqbarproject.pseudo.runtime.Iterables;
 
 /**
  * @author flbulgarelli
  */
-public abstract class MaxMinFunction extends AbstractApplicable {
+public abstract class MaxMinFunction extends AbstractReduction {
 
   private final Applicable criteria;
 
@@ -19,18 +14,10 @@ public abstract class MaxMinFunction extends AbstractApplicable {
   }
 
   @Override
-  public Object apply(Object argument) throws Throwable {
-    Iterator<?> iter = Iterables.toIterable(argument).iterator();
-    if (!iter.hasNext())
-      throw new NoSuchElementException("Iterable object " + argument + " is empty");
-    Object max = iter.next();
-
-    while (iter.hasNext()) {
-      Object next = iter.next();
-      if (shouldUpdate(applyCriteria(max), (applyCriteria(next))))
-        max = next;
-    }
-    return max;
+  public Object reduce(Object lastResult, Object next) throws Throwable {
+    if (shouldUpdate(applyCriteria(lastResult), (applyCriteria(next))))
+      return next;
+    return lastResult;
   }
 
   @SuppressWarnings("unchecked")

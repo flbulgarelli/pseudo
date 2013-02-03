@@ -9,15 +9,15 @@ clase Comprensiones
   fin
   
   metodo personas_mayores(personas)
-    generar personas tal que es_mayor
+    personas tal que es_mayor
   fin
 
   metodo persona_mas_adulta(personas)
-    maximo entre personas segun edad
+    maximo segun edad entre personas
   fin
 
   metodo persona_mas_joven(personas)
-    minimo entre personas segun edad
+    minimo segun edad entre personas 
   fin
   
   metodo suma_edades(personas)
@@ -29,13 +29,15 @@ clase Comprensiones
   fin
   
   metodo edad_minima(personas)
-    variable edades = generar edad de personas
-    minimo entre edades 
+    minimo entre generar edad de personas 
   fin
   
   metodo edad_maxima(personas)
-    variable edades = generar edad de personas
-    maximo entre edades 
+    maximo entre generar edad de personas 
+  fin
+  
+  metodo todos_mayores_de_edad(personas)
+    todos es_mayor entre personas
   fin
 
 fin
@@ -53,7 +55,5 @@ clase Persona
   metodo argentina
     nacionalidad = 'argentina'  
   fin
-  
-  
 
 fin

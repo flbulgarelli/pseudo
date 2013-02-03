@@ -7,11 +7,11 @@ clase Zoologico
   fin
 
   metodo animal_mas_pesado
-    maximo entre animales segun peso
+    maximo segun peso entre animales 
   fin
 
   metodo animal_mas_liviano
-    minimo entre animales segun peso
+    minimo segun peso entre animales 
   fin
 
   metodo peso_total
@@ -23,7 +23,7 @@ clase Zoologico
   fin
 
   metodo animales_nuevos
-    generar animales tal que esNuevo
+    animales tal que esNuevo
   fin
 
   metodo nombre_animales
@@ -31,7 +31,7 @@ clase Zoologico
   fin
 
   metodo alimentar_animales
-    para cada animal en animales alimentar
+    para todos en animales alimentar
   fin
 
   metodo imprimir

@@ -77,5 +77,15 @@ public class TraversableTransformationSpec {
   public void soporta_buscar() throws Exception {
     fail();
   }
+  
+  @Test
+  public void soporta_all() throws Exception {
+    fail();
+  }
+  
+  @Test
+  public void soporta_any() throws Exception {
+    fail();
+  }
 
 }
