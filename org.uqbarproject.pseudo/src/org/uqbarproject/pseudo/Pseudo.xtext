@@ -138,11 +138,11 @@ CollectionLiteralExpression:
 ;
 
 ListLiteralExpression:
-	{ListLiteralExpression} LIST_OPEN_TOKEN (elements+=ExpressionLevel4 (SEPARATOR_TOKEN elements+=ExpressionLevel4)*)? => LIST_CLOSE_TOKEN	
+	{ListLiteralExpression} LIST_OPEN_TOKEN (elements+=ExpressionLevel4 (SEPARATOR_TOKEN elements+=ExpressionLevel4)*)?  LIST_CLOSE_TOKEN	
 ;
 
 SetLiteralExpression:
-	{SetLiteralExpression} SET_OPEN_TOKEN (elements+=ExpressionLevel4 (SEPARATOR_TOKEN elements+=ExpressionLevel4)*)? => SET_CLOSE_TOKEN	
+	{SetLiteralExpression} SET_OPEN_TOKEN (elements+=ExpressionLevel4 (SEPARATOR_TOKEN elements+=ExpressionLevel4)*)?  SET_CLOSE_TOKEN	
 ;
 
 //RangeLiteralExpression:
