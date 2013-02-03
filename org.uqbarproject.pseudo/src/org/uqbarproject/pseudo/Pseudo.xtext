@@ -37,38 +37,45 @@ Parameter:
 ;	
 
 Statement:
-	ExpressionLevel4 | Return | LocalVariable ;
+	ExpressionLevel6 | Return | LocalVariable ;
 
 Return:
-	RETURN_TOKEN value=ExpressionLevel4;
+	RETURN_TOKEN value=ExpressionLevel6;
 	
 LocalVariable:
-	LET_TOKEN (name=ID) ('=' (value=ExpressionLevel4))?;
+	LET_TOKEN (name=ID) ('=' (value=ExpressionLevel6))?;
 
 Attribute:
-	(ATTRIBUTE_TOKEN|classAttribute?=CLASS_ATTRIBUTE_TOKEN) name=ID ('=' initialValue=ExpressionLevel4)?;
+	(ATTRIBUTE_TOKEN|classAttribute?=CLASS_ATTRIBUTE_TOKEN) name=ID ('=' initialValue=ExpressionLevel6)?;
 
 //Max prioirty
-ExpressionLevel4 returns Expression:
-	ExpressionLevel3 | 
+ExpressionLevel6 returns Expression:
+	ExpressionLevel5 | 
 	AssignExpression | 
 	IncrementExpression | 
 	DecrementExpression 
 ;
 
-ExpressionLevel3 returns Expression:
+ExpressionLevel5 returns Expression:
 	ComparisonExpression 
 ;
 
-ExpressionLevel2 returns Expression:
+ExpressionLevel4 returns Expression:
 	MessageSendExpression |
 	ThrowExpression |
-	NewExpression |
 	InitExpression |
 	SetupExpression |
-	TraversableExpression | //TODO revise syntax and priority
 	WhenExpression |
-	TryCatchExpression |
+	TryCatchExpression
+;
+
+ExpressionLevel3 returns Expression:
+	FilteredExpression
+;
+
+ExpressionLevel2 returns Expression:
+	ExpressionLevel1 |
+	NewExpression |
 	CollectionLiteralExpression
 ;
 
@@ -85,8 +92,8 @@ ExpressionLevel0 returns Expression:
 	{NullExpression} NULL_TOKEN |
 	{TrueExpression} TRUE_TOKEN |
 	{FalseExpression} FALSE_TOKEN |
-	{SelfExpression} SELF_TOKEN //|
-//	OPEN_TOKEN ExpressionLevel2 => CLOSE_TOKEN
+	{SelfExpression} SELF_TOKEN |
+	OPEN_TOKEN ExpressionLevel6  CLOSE_TOKEN
 	;
 	
 IdExpression:
@@ -104,11 +111,11 @@ Number:
 	INT ('.' INT)?;
 
 MessageSendExpression returns Expression:
-	ExpressionLevel1  ({MessageSendExpression.receptor=current} MESSAGE_SEND_TOKEN message=Applicable)* 
+	ExpressionLevel3  ({MessageSendExpression.receptor=current} MESSAGE_SEND_TOKEN message=Applicable)* 
 ;
 
 ComparisonExpression returns Expression:
-	ExpressionLevel2 ({ComparisonExpression.left=current} op=ComparisonOperation right=ExpressionLevel2)? 
+	ExpressionLevel4 ({ComparisonExpression.left=current} op=ComparisonOperation right=ExpressionLevel4)? 
 ;
 
 enum ComparisonOperation:
@@ -120,17 +127,8 @@ enum ComparisonOperation:
 	NEQ='/='
 ;
 
-
-TraversableExpression:
-//TODO ojo que se necesita aplicacion parcial o lambdas
-	MaxExpression | //
-	MinExpression | //
-	AverageExpression | //
-	SumExpression | //
-	ComprehensionExpression | //
-	ForEachExpression
-	//	FindExpression |
-	//	SortExpression 
+FilteredExpression returns Expression:
+	ExpressionLevel2 ({FilteredExpression.target=current} WHERE_TOKEN condition=Applicable)?
 ;
 
 CollectionLiteralExpression:
@@ -138,11 +136,11 @@ CollectionLiteralExpression:
 ;
 
 ListLiteralExpression:
-	{ListLiteralExpression} LIST_OPEN_TOKEN (elements+=ExpressionLevel4 (SEPARATOR_TOKEN elements+=ExpressionLevel4)*)?  LIST_CLOSE_TOKEN	
+	{ListLiteralExpression} LIST_OPEN_TOKEN (elements+=ExpressionLevel6 (SEPARATOR_TOKEN elements+=ExpressionLevel6)*)?  LIST_CLOSE_TOKEN	
 ;
 
 SetLiteralExpression:
-	{SetLiteralExpression} SET_OPEN_TOKEN (elements+=ExpressionLevel4 (SEPARATOR_TOKEN elements+=ExpressionLevel4)*)?  SET_CLOSE_TOKEN	
+	{SetLiteralExpression} SET_OPEN_TOKEN (elements+=ExpressionLevel6 (SEPARATOR_TOKEN elements+=ExpressionLevel6)*)?  SET_CLOSE_TOKEN	
 ;
 
 //RangeLiteralExpression:
@@ -151,24 +149,24 @@ SetLiteralExpression:
 
 
 WhenExpression:
-	(WHEN_TOKEN (cases+=ExpressionLevel4) 
-	THEN_TOKEN actions+= ExpressionLevel4)+ 
-	(OTHERWISE_TOKEN defaultAction=ExpressionLevel4)?
+	(WHEN_TOKEN (cases+=ExpressionLevel6) 
+	THEN_TOKEN actions+= ExpressionLevel6)+ 
+	(OTHERWISE_TOKEN defaultAction=ExpressionLevel6)?
 	END_TOKEN 
 ;
 
 TryCatchExpression:
 	TRY_TOKEN 
-		action= ExpressionLevel4
+		action= ExpressionLevel6
 	CATCH_TOKEN  
-		catchAction=ExpressionLevel4	
+		catchAction=ExpressionLevel6	
 	END_TOKEN 
 ;
 
 
 
 NewExpression:
-	NEW_TOKEN target = [Type] (OPEN_TOKEN (arguments+=ExpressionLevel4 (SEPARATOR_TOKEN arguments+=ExpressionLevel4)*)? => CLOSE_TOKEN)?
+	NEW_TOKEN target = [Type] =>(OPEN_TOKEN (arguments+=ExpressionLevel6 (SEPARATOR_TOKEN arguments+=ExpressionLevel6)*)? CLOSE_TOKEN)?
 ;
 
 InitExpression:
@@ -178,13 +176,13 @@ InitExpression:
 ;
 
 SetupExpression:
-	SETUP_TOKEN target=ExpressionLevel4
+	SETUP_TOKEN target=ExpressionLevel6
 	(initializations+=Initialization)+  
 	END_TOKEN 	
 ;
 
 Initialization:
-	INIT_WITH_TOKEN attribute=ID  '='  initialValue=ExpressionLevel4
+	INIT_WITH_TOKEN attribute=ID  '='  initialValue=ExpressionLevel6
 ;
 
 Applicable returns Applicable:
@@ -193,43 +191,24 @@ Applicable returns Applicable:
 
 
 Message returns Applicable:
-	{Message} selector=ID (OPEN_TOKEN (arguments+=ExpressionLevel4 (SEPARATOR_TOKEN arguments+=ExpressionLevel4)*)? => CLOSE_TOKEN)?
+	{Message} selector=ID =>(OPEN_TOKEN (arguments+=ExpressionLevel6 (SEPARATOR_TOKEN arguments+=ExpressionLevel6)*)? CLOSE_TOKEN)?
 ;
 
 SuperSend:
-	{SuperSend} SUPER_TOKEN (OPEN_TOKEN (arguments+=ExpressionLevel4 (SEPARATOR_TOKEN arguments+=ExpressionLevel4)*)? => CLOSE_TOKEN)?
+	{SuperSend} SUPER_TOKEN =>(OPEN_TOKEN (arguments+=ExpressionLevel6 (SEPARATOR_TOKEN arguments+=ExpressionLevel6)*)? CLOSE_TOKEN)?
 ;
 
 ThrowExpression:
-	(ERROR_TOKEN | THROW_TOKEN) throwable=ExpressionLevel2
+	(ERROR_TOKEN | THROW_TOKEN) throwable=ExpressionLevel4
 ;
 
 
-
-ComprehensionExpression:
-	'generar' (mapping=Applicable 'de')? target=ExpressionLevel1 (=>'tal' 'que' condition=Applicable)?;
-
-ForEachExpression:
-	'para' 'cada' ID 'en' (target=ExpressionLevel1) (=>'tal' 'que' condition=Applicable)? action=Applicable;
-
-SumExpression:
-	'sumatoria' criteria=Applicable 'de' target=ExpressionLevel1;
-
-AverageExpression:
-	'promedio' criteria=Applicable 'de' target=ExpressionLevel1;
-
-MaxExpression:
-	'maximo entre' target=ExpressionLevel1 (=>'segun' criteria=Applicable)?;
-
-MinExpression:
-	'minimo entre' target=ExpressionLevel1 (=>'segun' criteria=Applicable)?;
-
 AssignExpression:
-	ASSIGN_TOKEN (target=[ecore::EObject]) '=' value=ExpressionLevel3;
+	ASSIGN_TOKEN (target=[ecore::EObject]) '=' value=ExpressionLevel5;
 	
 IncrementExpression:
-	INCREMENT_TOKEN target=[ecore::EObject] (ACCUM_BY_TOKEN value=ExpressionLevel3)?;
+	INCREMENT_TOKEN target=[ecore::EObject] (ACCUM_BY_TOKEN value=ExpressionLevel5)?;
 	
 DecrementExpression:
-	DECREMENT_TOKEN target=[ecore::EObject] (ACCUM_BY_TOKEN value=ExpressionLevel3)?;
+	DECREMENT_TOKEN target=[ecore::EObject] (ACCUM_BY_TOKEN value=ExpressionLevel5)?;
 	

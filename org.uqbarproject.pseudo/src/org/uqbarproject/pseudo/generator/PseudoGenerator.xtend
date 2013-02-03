@@ -273,31 +273,31 @@ class PseudoGenerator implements IGenerator {
     def dispatch compileForResult(SuperSend expression) '''
     	super.«expression.parentOfType(typeof(Method)).name.toJavaId»(«joinCompileExpressions(expression.arguments)»);
     '''
-	def dispatch compileForResult(ForEachExpression expression) '''
-	    new Traversing(
-	       «expression.action.compile»,
-	       «compileForResultOrTrueFunction(expression.condition)»
-	       ).apply(«expression.target.compileForResult»)
-	'''
-	def dispatch compileForResult(ComprehensionExpression expression) '''
-	    new TraversingTransformation(
-	       «compileForResultOrIdentityFunction(expression.mapping)»,
-	       «compileForResultOrTrueFunction(expression.condition)»,
-	       new IdentityFunction()
-	       ).apply(«expression.target.compileForResult»)
-	'''
-	def dispatch compileForResult(MaxExpression expression) {
-	 	compileReductionWithCriteria('MaxFunction', expression.criteria, expression.target)
-	}
-	def dispatch compileForResult(MinExpression expression) {
-		compileReductionWithCriteria('MinFunction', expression.criteria, expression.target)
-	}
-	def dispatch compileForResult(SumExpression expression) {
-		compileReductionWithCriteria('SumFunction', expression.criteria, expression.target)
-	}
-	def dispatch compileForResult(AverageExpression expression) {
-		compileReductionWithCriteria('AverageFunction', expression.criteria, expression.target)
-	}
+//	def dispatch compileForResult(ForEachExpression expression) '''
+//	    new Traversing(
+//	       «expression.action.compile»,
+//	       «compileForResultOrTrueFunction(expression.condition)»
+//	       ).apply(«expression.target.compileForResult»)
+//	'''
+//	def dispatch compileForResult(ComprehensionExpression expression) '''
+//	    new TraversingTransformation(
+//	       «compileForResultOrIdentityFunction(expression.mapping)»,
+//	       «compileForResultOrTrueFunction(expression.condition)»,
+//	       new IdentityFunction()
+//	       ).apply(«expression.target.compileForResult»)
+//	'''
+//	def dispatch compileForResult(MaxExpression expression) {
+//	 	compileReductionWithCriteria('MaxFunction', expression.criteria, expression.target)
+//	}
+//	def dispatch compileForResult(MinExpression expression) {
+//		compileReductionWithCriteria('MinFunction', expression.criteria, expression.target)
+//	}
+//	def dispatch compileForResult(SumExpression expression) {
+//		compileReductionWithCriteria('SumFunction', expression.criteria, expression.target)
+//	}
+//	def dispatch compileForResult(AverageExpression expression) {
+//		compileReductionWithCriteria('AverageFunction', expression.criteria, expression.target)
+//	}
 	def dispatch compileForResult(NewExpression expression) '''
 		new «expression.target.name»(«joinCompileExpressions(expression.arguments)»)
 	'''
