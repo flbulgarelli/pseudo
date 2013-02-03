@@ -28,7 +28,7 @@ Member:
 Method:
     overrideMethod?=OVERRIDE_TOKEN?	(METHOD_TOKEN | classMethod?=CLASS_METHOD_TOKEN) 
 		name=ID 
-		(OPEN_TOKEN ((parameters+=Parameter) (SEPARATOR_TOKEN parameters+=Parameter)*)?  =>CLOSE_TOKEN)?
+		=> (OPEN_TOKEN ((parameters+=Parameter) (SEPARATOR_TOKEN parameters+=Parameter)*)?  CLOSE_TOKEN)?
 	statements+=Statement*
 	END_TOKEN;
 	
