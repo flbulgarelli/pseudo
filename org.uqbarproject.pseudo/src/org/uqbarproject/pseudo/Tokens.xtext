@@ -81,10 +81,12 @@ WHERE_TOKEN: 'tal' 'que';
 SUM_TOKEN: 'suma' | 'sumatoria';
 ANY_TOKEN: 'alguno';
 ALL_TOKEN: 'todos';
-SORT_TOKEN: 'ordenar';
 MAX_TOKEN: 'max' | 'maximo';
 MIN_TOKEN: 'min' | 'minimo';
 FIND_TOKEN: 'buscar' | 'encontrar';
 AVERAGE_TOKEN: 'promedio';
-
-
+REDUCTION_SOURCE_TOKEN : 'de' | 'entre' ;
+COMPARE_BY_TOKEN: 'segun';
+FOR_ALL_IN_TOKEN: 'para' 'todos' 'en';
+SELECT_TOKEN: 'seleccionar'|'generar'|'colectar'|'mapear';
+SELECT_FROM_TOKEN: 'de';

@@ -1,6 +1,5 @@
 package org.uqbarproject.pseudo.runtime.reductions;
 
-import java.math.BigDecimal;
 import java.util.Iterator;
 
 import org.uqbarproject.pseudo.runtime.Applicable;
@@ -8,22 +7,22 @@ import org.uqbarproject.pseudo.runtime.Applicable;
 /**
  * @author flbulgarelli
  */
-public class SumFunction extends AbstractReduction {
+public class AllFunction extends AbstractReduction {
 
   private final Applicable criteria;
 
-  public SumFunction(Applicable criteria) {
+  public AllFunction(Applicable criteria) {
     this.criteria = criteria;
   }
 
   @Override
   public Object initial(Iterator<Object> iter) throws Throwable {
-    return BigDecimal.ZERO;
+    return true;
   }
 
   @Override
   public Object reduce(Object lastResult, Object next) throws Throwable {
-    return ((BigDecimal) lastResult).add((BigDecimal) criteria.apply(next));
+    return ((Boolean) lastResult) && criteria.applyForBoolean(next);
   }
 
 }

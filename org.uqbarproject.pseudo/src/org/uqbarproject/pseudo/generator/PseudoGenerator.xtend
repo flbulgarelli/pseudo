@@ -13,7 +13,6 @@ import org.eclipse.xtext.naming.IQualifiedNameProvider
 import org.uqbarproject.pseudo.pseudo.Applicable
 import org.uqbarproject.pseudo.pseudo.AssignExpression
 import org.uqbarproject.pseudo.pseudo.Attribute
-import org.uqbarproject.pseudo.pseudo.AverageExpression
 import org.uqbarproject.pseudo.pseudo.DecrementExpression
 import org.uqbarproject.pseudo.pseudo.Expression
 import org.uqbarproject.pseudo.pseudo.FalseExpression
@@ -34,22 +33,28 @@ import org.uqbarproject.pseudo.pseudo.SelfExpression
 import org.uqbarproject.pseudo.pseudo.SetLiteralExpression
 import org.uqbarproject.pseudo.pseudo.SetupExpression
 import org.uqbarproject.pseudo.pseudo.StringExpression
-import org.uqbarproject.pseudo.pseudo.SumExpression
 import org.uqbarproject.pseudo.pseudo.SuperSend
 import org.uqbarproject.pseudo.pseudo.TrueExpression
 import org.uqbarproject.pseudo.pseudo.Type
 import org.uqbarproject.pseudo.pseudo.WhenExpression
-import org.uqbarproject.pseudo.pseudo.MinExpression
-import org.uqbarproject.pseudo.pseudo.MaxExpression
-import org.uqbarproject.pseudo.pseudo.ComprehensionExpression
-import org.uqbarproject.pseudo.pseudo.ForEachExpression
 import org.uqbarproject.pseudo.pseudo.ComparisonExpression
 import org.uqbarproject.pseudo.pseudo.ComparisonOperation
+import org.uqbarproject.pseudo.pseudo.ThrowExpression
+import org.uqbarproject.pseudo.pseudo.TryCatchExpression
+import org.uqbarproject.pseudo.pseudo.ReductionExpression
+import org.uqbarproject.pseudo.pseudo.FilteredExpression
+import org.uqbarproject.pseudo.pseudo.ForAllExpression
+import org.uqbarproject.pseudo.pseudo.SelectExpression
 
 import static extension org.uqbarproject.pseudo.SelectorExtensions.*
 import static extension org.uqbarproject.pseudo.util.EObjectExtensions.*
-import org.uqbarproject.pseudo.pseudo.ThrowExpression
-import org.uqbarproject.pseudo.pseudo.TryCatchExpression
+import org.uqbarproject.pseudo.pseudo.Reduction
+import org.uqbarproject.pseudo.pseudo.Sum
+import org.uqbarproject.pseudo.pseudo.Average
+import org.uqbarproject.pseudo.pseudo.Min
+import org.uqbarproject.pseudo.pseudo.Max
+import org.uqbarproject.pseudo.pseudo.All
+import org.uqbarproject.pseudo.pseudo.Any
 
 /**
  * @author flbulgareli
@@ -273,31 +278,39 @@ class PseudoGenerator implements IGenerator {
     def dispatch compileForResult(SuperSend expression) '''
     	super.«expression.parentOfType(typeof(Method)).name.toJavaId»(«joinCompileExpressions(expression.arguments)»);
     '''
-//	def dispatch compileForResult(ForEachExpression expression) '''
-//	    new Traversing(
-//	       «expression.action.compile»,
-//	       «compileForResultOrTrueFunction(expression.condition)»
-//	       ).apply(«expression.target.compileForResult»)
-//	'''
-//	def dispatch compileForResult(ComprehensionExpression expression) '''
-//	    new TraversingTransformation(
-//	       «compileForResultOrIdentityFunction(expression.mapping)»,
-//	       «compileForResultOrTrueFunction(expression.condition)»,
-//	       new IdentityFunction()
-//	       ).apply(«expression.target.compileForResult»)
-//	'''
-//	def dispatch compileForResult(MaxExpression expression) {
-//	 	compileReductionWithCriteria('MaxFunction', expression.criteria, expression.target)
-//	}
-//	def dispatch compileForResult(MinExpression expression) {
-//		compileReductionWithCriteria('MinFunction', expression.criteria, expression.target)
-//	}
-//	def dispatch compileForResult(SumExpression expression) {
-//		compileReductionWithCriteria('SumFunction', expression.criteria, expression.target)
-//	}
-//	def dispatch compileForResult(AverageExpression expression) {
-//		compileReductionWithCriteria('AverageFunction', expression.criteria, expression.target)
-//	}
+  def dispatch compileForResult(ForAllExpression expression) '''
+		Iterables.each(«expression.target.compileForResult», «expression.action.compile»)
+  '''  
+  def dispatch compileForResult(SelectExpression expression) '''
+    Iterables.map(«expression.target.compileForResult», «expression.mapping.compile»)
+  '''    
+  def dispatch compileForResult(FilteredExpression expression) '''
+    Iterables.filter(«expression.target.compileForResult», «expression.condition.compile»)
+  '''
+  def dispatch compileForResult(ReductionExpression expression) '''
+    Iterables.reduce(«expression.target.compileForResult», new «expression.reduction.compile»)
+  '''
+  def dispatch compile(Reduction reduction) {
+  	reduction.subclassResponsibility("compile") as String
+  }
+  def dispatch compile(Sum reduction) {
+  	compileReductionWithCriteria('Sum', reduction.mapping)
+  }
+  def dispatch compile(Average reduction) {
+  	compileReductionWithCriteria('Average', reduction.mapping)
+  }
+  def dispatch compile(Min reduction) {
+  	compileReductionWithCriteria('Min', reduction.criteria)
+  }
+  def dispatch compile(Max reduction) {
+  	compileReductionWithCriteria('Max', reduction.criteria)
+  }
+  def dispatch compile(All reduction) {
+    compileReductionWithCriteria('All', reduction.criteria)
+  }
+  def dispatch compile(Any reduction) {
+    compileReductionWithCriteria('Any', reduction.criteria)
+  }
 	def dispatch compileForResult(NewExpression expression) '''
 		new «expression.target.name»(«joinCompileExpressions(expression.arguments)»)
 	'''
@@ -327,15 +340,6 @@ class PseudoGenerator implements IGenerator {
 		if(expression != null) expression.compileForResult else "java.math.BigDecimal.ONE" 
 	}
 	
-	//TODO pass arguments
-	def compileForResultOrTrueFunction(Applicable message)'''
-		«IF message != null»
-		    «message.compile»
-		«ELSE»
-			new ConstantFunction(true)
-		«ENDIF»
-	'''
-
 	//TODO pass arguments	
 	def compileForResultOrIdentityFunction(Applicable message)'''
 		«IF message != null»
@@ -353,12 +357,8 @@ class PseudoGenerator implements IGenerator {
 		if (isClassModifier) "static" else ""
 	}
 	
-	def compileReductionWithCriteria(String reductionClass, Applicable criteria, Expression target) '''
-	    new TraversingTransformation(
-	       new IdentityFunction(),
-	       new ConstantFunction(true),
-	       new «reductionClass»(«compileForResultOrIdentityFunction(criteria)»)
-	       ).apply(«target.compileForResult»)
+	def compileReductionWithCriteria(String reductionClass, Applicable criteria) '''
+	    «reductionClass»Function(«criteria.compileForResultOrIdentityFunction»)
 	'''
 	
 	def dispatch compileForReference(EObject object) {

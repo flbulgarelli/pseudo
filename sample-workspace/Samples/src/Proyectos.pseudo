@@ -14,7 +14,7 @@ clase Proyecto
   atributo tareas
  
   metodo tarea_critica
-    maximo entre tareas segun tiempo
+    maximo segun tiempo entre tareas 
   fin
 
 fin
