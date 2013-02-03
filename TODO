@@ -10,7 +10,6 @@
 * soportar texto libre
 * generacion de stubs
 * etiquetas del ide
-* luego, compuesto, etc
 * extensiones/mixins?
 * integracion con java
 * diccionarios literales
@@ -20,10 +19,8 @@
 * soportar parametros etiquetados? idem anterior
 * soportar null como absorvente? esopodria dificular mostrar un null object
 * hay una inconsistencia?: al if se le pasa una expresion, a los generadores un mensaje.
-* soportar inicializadores
 * soportar referencias en el init
 * usar envio estático de mensajes cuando sea posible
 * soportar excepciones
 * soportar paréntesis en lanzar, error, inicializar, nuevo, etc
-* soportar anidar expresiones
 * soportar secuencias de acciones en when y try catch?
