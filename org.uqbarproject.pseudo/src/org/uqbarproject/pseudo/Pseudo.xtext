@@ -149,12 +149,12 @@ ReductionExpression:
 Reduction:
 	{Sum} SUM_TOKEN (OF_TOKEN? mapping=Applicable)?  | 
 	{Average} AVERAGE_TOKEN (OF_TOKEN ? mapping=Applicable)? | 
-	{Find} FIND_TOKEN (mapping=Applicable)? WHERE_TOKEN criteria=Applicable |
 	{Min} MIN_TOKEN (mapping=Applicable)? (COMPARE_BY_TOKEN criteria=Applicable)? | 
 	{Max} MAX_TOKEN (mapping=Applicable)? (COMPARE_BY_TOKEN criteria=Applicable)? | 
 	{All} ALL_TOKEN (mapping=Applicable)? SATISFY_TOKEN (criteria=Applicable) |
 	{Any} ANY_TOKEN (mapping=Applicable)? SATISFY_TOKEN (criteria=Applicable) |
-	{First} FIRST_TOKEN (mapping=Applicable)? WHERE_TOKEN (criteria=Applicable)
+	{First} FIRST_TOKEN (mapping=Applicable)? | //| 'buscar' | 'encontrar' (WHERE_TOKEN criteria=Applicable)? //|
+	{Take} TAKE_TOKEN (amount=ExpressionLevel3) (mapping=Applicable)?
 ;
 
 FilteredExpression returns Expression:

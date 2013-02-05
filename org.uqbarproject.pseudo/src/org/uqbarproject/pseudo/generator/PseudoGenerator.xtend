@@ -55,6 +55,8 @@ import org.uqbarproject.pseudo.pseudo.Min
 import org.uqbarproject.pseudo.pseudo.Max
 import org.uqbarproject.pseudo.pseudo.All
 import org.uqbarproject.pseudo.pseudo.Any
+import org.uqbarproject.pseudo.pseudo.First
+import org.uqbarproject.pseudo.pseudo.Take
 
 /**
  * @author flbulgareli
@@ -305,6 +307,12 @@ class PseudoGenerator implements IGenerator {
   def dispatch compile(Average reduction) {
   	compileReduction('Average')
   }
+  def dispatch compile(First reduction) {
+    compileReduction('First')
+  }
+  def dispatch compile(Take reduction) {
+    compileReductionWithArgument('Take', reduction.amount)
+  }
   def dispatch compile(Min reduction) {
   	compileReductionWithCriteria('Min', reduction.criteria)
   }
@@ -366,7 +374,10 @@ class PseudoGenerator implements IGenerator {
 	def compileReductionWithCriteria(String reductionClass, Applicable criteria) '''
 	    «reductionClass»Reduction(«criteria.compileForResultOrIdentityFunction»)
 	'''
-	 def compileReduction(String reductionClass) '''
+  def compileReductionWithArgument(String reductionClass, Expression argument) '''
+      «reductionClass»Reduction(«argument.compileForResult»)
+  '''
+  def compileReduction(String reductionClass) '''
       «reductionClass»Reduction()
   '''
   

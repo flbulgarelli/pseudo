@@ -58,8 +58,15 @@ public class ReductionUnitTest {
   }
 
   @Test
-  public void find() throws Exception {
-    fail();
+  public void first() throws Throwable {
+    assertEquals("foo", Iterables.reduce(Arrays.asList("foo", "", "bar"), new FirstReduction()));
+  }
+  
+  @Test
+  public void take() throws Throwable {
+    assertEquals(Arrays.asList("foo", ""), Iterables.reduce(Arrays.asList("foo", "", "bar"), new TakeReduction(2)));
+    assertEquals(Arrays.asList("foo"), Iterables.reduce(Arrays.asList("foo", "", "bar"), new TakeReduction(1)));
+    assertEquals(Arrays.asList(), Iterables.reduce(Arrays.asList("foo", "", "bar"), new TakeReduction(0)));
   }
 
   @Test

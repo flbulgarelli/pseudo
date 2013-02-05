@@ -74,8 +74,8 @@ public class TraversableTransformationSpec {
   }
 
   @Test
-  public void soporta_buscar() throws Exception {
-    fail();
+  public void soporta_buscar() throws Throwable {
+    assertEquals(personas.get(1), new Comprensiones().unaPersonaAdulta(personas));
   }
   
   @Test
