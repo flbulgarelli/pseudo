@@ -19,26 +19,26 @@ public class ReductionUnitTest {
 
   @Test
   public void maxReductionCalculatesMax() throws Throwable {
-    assertEquals(50, Iterables.reduce(Arrays.asList(10, 50, 3), new MaxFunction(new IdentityFunction())));
+    assertEquals(50, Iterables.reduce(Arrays.asList(10, 50, 3), new MaxReduction(new IdentityFunction())));
   }
 
   @Test
   public void maxOnReductionCalculatesMaxUsingACriteria() throws Throwable {
     assertEquals(
       "abcdefgh",
-      Iterables.reduce(Arrays.asList("foo", "hello", "abcdefgh", "world"), new MaxFunction(new MessageSend("length"))));
+      Iterables.reduce(Arrays.asList("foo", "hello", "abcdefgh", "world"), new MaxReduction(new MessageSend("length"))));
   }
 
   @Test
   public void minReductionCalculatesMin() throws Throwable {
-    assertEquals(3, Iterables.reduce(Arrays.asList(10, 50, 3), new MinFunction(new IdentityFunction())));
+    assertEquals(3, Iterables.reduce(Arrays.asList(10, 50, 3), new MinReduction(new IdentityFunction())));
   }
 
   @Test
   public void minOnReductionCalculatesMinUsingACriteria() throws Throwable {
     assertEquals(
       "baz",
-      Iterables.reduce(Arrays.asList("hello", "abcdeg", "baz"), new MinFunction(new MessageSend("length"))));
+      Iterables.reduce(Arrays.asList("hello", "abcdeg", "baz"), new MinReduction(new MessageSend("length"))));
   }
 
   @Test
@@ -46,15 +46,15 @@ public class ReductionUnitTest {
     assertEquals(BigDecimal.valueOf(63), //
       Iterables.reduce(
         Arrays.asList(BigDecimal.valueOf(10), BigDecimal.valueOf(50), BigDecimal.valueOf(3)),
-        new SumFunction(new IdentityFunction())));
+        new SumReduction()));
 
   }
 
   @Test
   public void averageReductionCalculatesAverage() throws Throwable {
-    assertEquals(new BigDecimal("0.6666666667"), Iterables.reduce(
-      Arrays.asList(BigDecimal.ONE, BigDecimal.ZERO, BigDecimal.ONE),
-      new AverageFunction(new IdentityFunction())));
+    assertEquals(
+      new BigDecimal("0.6666666667"),
+      Iterables.reduce(Arrays.asList(BigDecimal.ONE, BigDecimal.ZERO, BigDecimal.ONE), new AverageReduction()));
   }
 
   @Test
@@ -64,14 +64,14 @@ public class ReductionUnitTest {
 
   @Test
   public void any() throws Throwable {
-    Reduction anyIsEmpty = new AnyFunction(new MessageSend("isEmpty"));
+    Reduction anyIsEmpty = new AnyReduction(new MessageSend("isEmpty"));
     assertTrue((Boolean) Iterables.reduce(Arrays.asList("foo", "", "bar"), anyIsEmpty));
     assertFalse((Boolean) Iterables.reduce(Arrays.asList("foo", "baz", "bar"), anyIsEmpty));
   }
 
   @Test
   public void all() throws Throwable {
-    Reduction allAreEmpty = new AllFunction(new MessageSend("isEmpty"));
+    Reduction allAreEmpty = new AllReduction(new MessageSend("isEmpty"));
     assertTrue((Boolean) Iterables.reduce(Arrays.asList("", "", ""), allAreEmpty));
     assertFalse((Boolean) Iterables.reduce(Arrays.asList("", "baz", "bar"), allAreEmpty));
   }

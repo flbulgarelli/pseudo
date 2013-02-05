@@ -31,11 +31,6 @@ public class ParaCadaSpec {
   }
 
 	@Test
-	public void soporta_iteracion_con_filtro() throws Exception {
-		fail();
-	}
-
-	@Test
 	public void la_iteracion_es_una_expresion() throws Throwable {
 		assertSame(true, observable.notificarATodos());
 	}

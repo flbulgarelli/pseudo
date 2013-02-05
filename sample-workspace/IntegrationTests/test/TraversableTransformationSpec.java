@@ -79,13 +79,13 @@ public class TraversableTransformationSpec {
   }
   
   @Test
-  public void soporta_all() throws Exception {
-    fail();
+  public void soporta_all() throws Throwable {
+    assertFalse((Boolean)new Comprensiones().todosMayoresDeEdad(personas));
   }
   
   @Test
-  public void soporta_any() throws Exception {
-    fail();
+  public void soporta_any() throws Throwable {
+    assertTrue((Boolean)new Comprensiones().algunoMayorDeEdad(personas));
   }
 
 }

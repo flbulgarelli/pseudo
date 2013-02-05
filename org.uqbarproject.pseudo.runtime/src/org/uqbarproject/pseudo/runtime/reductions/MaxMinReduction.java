@@ -5,11 +5,11 @@ import org.uqbarproject.pseudo.runtime.Applicable;
 /**
  * @author flbulgarelli
  */
-public abstract class MaxMinFunction extends AbstractReduction {
+public abstract class MaxMinReduction extends AbstractReduction {
 
   private final Applicable criteria;
 
-  public MaxMinFunction(Applicable criteria) {
+  public MaxMinReduction(Applicable criteria) {
     this.criteria = criteria;
   }
 

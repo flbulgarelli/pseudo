@@ -4,7 +4,6 @@ clase Expresiones
     variable x = 4 /*formatter FIXME*/ (x.z()).foo.bar.vaz(lista(x.k()), 4,(5 > 0),
     nuevo Literales())
     variable w =(incrementar x) >(decrementar x)
-    padre(4, 5)
     variable z = 0
     variable k = 5 > 0
   fin

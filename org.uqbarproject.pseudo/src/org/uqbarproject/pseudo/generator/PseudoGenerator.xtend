@@ -281,23 +281,29 @@ class PseudoGenerator implements IGenerator {
   def dispatch compileForResult(ForAllExpression expression) '''
 		Iterables.each(«expression.target.compileForResult», «expression.action.compile»)
   '''  
-  def dispatch compileForResult(SelectExpression expression) '''
-    Iterables.map(«expression.target.compileForResult», «expression.mapping.compile»)
-  '''    
+  def dispatch compileForResult(SelectExpression expression) {
+    compileMapping(expression.target, expression.mapping)
+  }
   def dispatch compileForResult(FilteredExpression expression) '''
     Iterables.filter(«expression.target.compileForResult», «expression.condition.compile»)
   '''
   def dispatch compileForResult(ReductionExpression expression) '''
-    Iterables.reduce(«expression.target.compileForResult», new «expression.reduction.compile»)
+    Iterables.reduce(
+    «IF expression.reduction.mapping != null»
+     «compileMapping(expression.target, expression.reduction.mapping)»
+    «ELSE»
+     «expression.target.compileForResult»
+    «ENDIF»,
+    new «expression.reduction.compile»)
   '''
   def dispatch compile(Reduction reduction) {
   	reduction.subclassResponsibility("compile") as String
   }
   def dispatch compile(Sum reduction) {
-  	compileReductionWithCriteria('Sum', reduction.mapping)
+  	compileReduction('Sum')
   }
   def dispatch compile(Average reduction) {
-  	compileReductionWithCriteria('Average', reduction.mapping)
+  	compileReduction('Average')
   }
   def dispatch compile(Min reduction) {
   	compileReductionWithCriteria('Min', reduction.criteria)
@@ -358,8 +364,12 @@ class PseudoGenerator implements IGenerator {
 	}
 	
 	def compileReductionWithCriteria(String reductionClass, Applicable criteria) '''
-	    «reductionClass»Function(«criteria.compileForResultOrIdentityFunction»)
+	    «reductionClass»Reduction(«criteria.compileForResultOrIdentityFunction»)
 	'''
+	 def compileReduction(String reductionClass) '''
+      «reductionClass»Reduction()
+  '''
+  
 	
 	def dispatch compileForReference(EObject object) {
 		object.subclassResponsibility('compileForReference')
@@ -379,6 +389,9 @@ class PseudoGenerator implements IGenerator {
   	def joinCompileParameters(Iterable<String> names) {
   		names.map [ "Object " + it ].join(", ")
   	} 
-  	
+  
+  def compileMapping(Expression target, Applicable mapping) '''
+    Iterables.map(«target.compileForResult», «mapping.compile»)
+  '''      	
     
 }

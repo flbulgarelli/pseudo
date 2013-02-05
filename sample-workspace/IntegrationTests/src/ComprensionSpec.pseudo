@@ -21,23 +21,27 @@ clase Comprensiones
   fin
   
   metodo suma_edades(personas)
-    sumatoria edad de personas
+    sumatoria de edad entre personas
   fin
-  
+
   metodo promedio_edades(personas)
-    promedio edad de personas
+    promedio de edad entre personas
   fin
-  
+
   metodo edad_minima(personas)
-    minimo entre generar edad de personas 
+    minimo edad entre personas
   fin
-  
+
   metodo edad_maxima(personas)
-    maximo entre generar edad de personas 
+    maximo edad entre personas
   fin
-  
+
   metodo todos_mayores_de_edad(personas)
-    todos es_mayor entre personas
+    todo satisface es_mayor entre personas
+  fin
+
+  metodo alguno_mayor_de_edad(personas)
+    alguno satisface es_mayor entre personas
   fin
 
 fin

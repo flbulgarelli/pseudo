@@ -8,9 +8,9 @@ import org.uqbarproject.pseudo.runtime.Applicable;
  * 
  * @author flbulgarelli
  */
-public class MinFunction extends MaxMinFunction {
+public class MinReduction extends MaxMinReduction {
 
-  public MinFunction(Applicable criteria) {
+  public MinReduction(Applicable criteria) {
     super(criteria);
   }
 

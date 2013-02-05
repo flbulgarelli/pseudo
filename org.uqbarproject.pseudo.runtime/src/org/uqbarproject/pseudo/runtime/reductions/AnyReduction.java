@@ -7,11 +7,11 @@ import org.uqbarproject.pseudo.runtime.Applicable;
 /**
  * @author flbulgarelli
  */
-public class AnyFunction extends AbstractReduction {
+public class AnyReduction extends AbstractReduction {
 
   private final Applicable criteria;
 
-  public AnyFunction(Applicable criteria) {
+  public AnyReduction(Applicable criteria) {
     this.criteria = criteria;
   }
 

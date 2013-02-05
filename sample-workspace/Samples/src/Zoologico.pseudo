@@ -15,11 +15,11 @@ clase Zoologico
   fin
 
   metodo peso_total
-    sumatoria peso de animales
+    sumatoria de peso entre animales
   fin
 
   metodo peso_promedio_animales
-    promedio peso de animales
+    promedio de peso entre animales
   fin
 
   metodo animales_nuevos

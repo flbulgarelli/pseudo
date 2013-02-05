@@ -2,7 +2,7 @@ clase TareaCompuesta
   atributo subtareas
   
   metodo tiempo
-    sumatoria tiempo de subtareas
+    sumatoria de tiempo entre subtareas
   fin
 fin
 

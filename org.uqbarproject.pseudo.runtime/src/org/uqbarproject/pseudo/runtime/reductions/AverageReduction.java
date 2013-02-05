@@ -3,23 +3,16 @@ package org.uqbarproject.pseudo.runtime.reductions;
 import java.math.BigDecimal;
 import java.util.Iterator;
 
-import org.uqbarproject.pseudo.runtime.Applicable;
 import org.uqbarproject.pseudo.runtime.BigDecimals;
 
 /**
  * @author flbulgarelli
  */
-public class AverageFunction extends AbstractReduction {
-
-  private final Applicable criteria;
-
-  public AverageFunction(Applicable criteria) {
-    this.criteria = criteria;
-  }
+public class AverageReduction extends AbstractReduction {
 
   @Override
   public Object initial(Iterator<Object> iter) throws Throwable {
-    return new AverageMutablePartialResult((BigDecimal) criteria.apply(super.initial(iter)));
+    return new AverageMutablePartialResult((BigDecimal) super.initial(iter));
   }
 
   @Override
@@ -46,7 +39,7 @@ public class AverageFunction extends AbstractReduction {
     }
 
     void update(Object element) throws Throwable {
-      sum = sum.add((BigDecimal) criteria.apply(element));
+      sum = sum.add((BigDecimal) element);
       count = count.add(BigDecimal.ONE);
     }
   }
