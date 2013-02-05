@@ -4,9 +4,9 @@ clase Excepciones
     error "ups!"
   fin
 
-//  metodo metodo_que_lanza_excepcion
-//    lanzar nuevo MiExcepcion
-//  fin
+  metodo metodo_que_lanza_excepcion
+    lanzar nuevo MiExcepcion("foo")
+  fin
   
 //  
 //  metodo metodo_que_captura_excepcion
@@ -18,6 +18,9 @@ clase Excepciones
 //    fin
 //  fin
  
+fin
+
+excepcion MiExcepcion
 fin
 
 

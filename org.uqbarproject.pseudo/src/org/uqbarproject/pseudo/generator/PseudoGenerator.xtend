@@ -59,6 +59,8 @@ import org.uqbarproject.pseudo.pseudo.Take
 import org.uqbarproject.pseudo.pseudo.MessageThrowExpression
 import org.uqbarproject.pseudo.pseudo.ExceptionThrowExpression
 import org.uqbarproject.pseudo.pseudo.ThrowExpression
+import org.uqbarproject.pseudo.pseudo.ClassType
+import org.uqbarproject.pseudo.pseudo.ExceptionType
 
 /**
  * @author flbulgareli
@@ -79,7 +81,10 @@ class PseudoGenerator implements IGenerator {
   	def dispatch compile(EObject declaration) { 
   		declaration.subclassResponsibility('compile') as String
   	}
-	def dispatch compile(Type type) '''
+  def dispatch compile(Type type) {
+    type.subclassResponsibility("compile") as String
+  }
+	def dispatch compile(ClassType type) '''
 		import org.uqbarproject.pseudo.runtime.*;
 		import org.uqbarproject.pseudo.runtime.reductions.*;
 		public class «type.name» extends «type.effectiveSuperType» {
@@ -105,6 +110,29 @@ class PseudoGenerator implements IGenerator {
 			}
 		}
   	'''
+  def dispatch compile(ExceptionType type) '''
+    import org.uqbarproject.pseudo.runtime.*;
+    import org.uqbarproject.pseudo.runtime.reductions.*;
+    public class «type.name» extends GenericException {
+
+    public «type.name»() {}
+    
+    public «type.name»(String message, Throwable cause) {
+      super(message, cause);
+    }
+    
+    public «type.name»(String message) {
+      super(message);
+    }
+      
+    public «type.name»(Throwable cause) {
+      super(cause);
+    }
+    «FOR member : type.members»
+      «member.compile»    
+    «ENDFOR»
+    }
+    '''
   	def dispatch compile(Method method) '''
 	  «IF method.overrideMethod»
 	  @Override
@@ -117,7 +145,7 @@ class PseudoGenerator implements IGenerator {
 	  		«statement.compile»		
 	  	«ENDFOR»
 	  	«IF method.statements.last instanceof ThrowExpression»
-	  	«method.statements.last.compile»;
+	  	«method.statements.last.compile»
 	  	«ELSEIF method.statements.last instanceof Expression»
 	  	return « (method.statements.last as Expression).compileForResult»;
 	  	«ELSEIF method.statements.last instanceof Return»
@@ -370,7 +398,7 @@ class PseudoGenerator implements IGenerator {
 		«ENDIF»
 	'''
 	
-	def effectiveSuperType(Type type) { 
+	def effectiveSuperType(ClassType type) { 
 		if (type.superType != null) type.superType.fullyQualifiedName else 'java.lang.Object'
 	}
 	

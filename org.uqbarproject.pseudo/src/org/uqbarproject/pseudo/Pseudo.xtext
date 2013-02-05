@@ -19,8 +19,8 @@ Model:
 	types+=Type*;
 
 Type:
-	CLASS_TOKEN name=ID (INHERITS_TOKEN superType=[Type])?
-	members+=Member*
+  ({ClassType} CLASS_TOKEN name=ID (INHERITS_TOKEN superType=[Type])? | {ExceptionType} EXCEPTION_TOKEN name=ID)
+	members+=Member*	
 	END_TOKEN;
 
 Member:

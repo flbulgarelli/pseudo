@@ -2,6 +2,7 @@ grammar org.uqbarproject.pseudo.Tokens with org.eclipse.xtext.common.Terminals
 
 END_TOKEN: 'fin';
 
+EXCEPTION_TOKEN: 'excepcion';
 CLASS_TOKEN: 'clase';
 INHERITS_TOKEN: 'hereda';
 
