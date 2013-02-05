@@ -39,6 +39,10 @@ clase Comprensiones
   metodo una_persona_adulta(personas)
     primero entre personas tal que es_mayor
   fin
+  
+  metodo dos_personas_adulta(personas)
+    primeros 2 entre personas tal que es_mayor
+  fin
 
   metodo todos_mayores_de_edad(personas)
     todo satisface es_mayor entre personas

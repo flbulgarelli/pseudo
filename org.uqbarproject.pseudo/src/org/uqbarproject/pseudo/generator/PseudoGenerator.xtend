@@ -39,7 +39,6 @@ import org.uqbarproject.pseudo.pseudo.Type
 import org.uqbarproject.pseudo.pseudo.WhenExpression
 import org.uqbarproject.pseudo.pseudo.ComparisonExpression
 import org.uqbarproject.pseudo.pseudo.ComparisonOperation
-import org.uqbarproject.pseudo.pseudo.ThrowExpression
 import org.uqbarproject.pseudo.pseudo.TryCatchExpression
 import org.uqbarproject.pseudo.pseudo.ReductionExpression
 import org.uqbarproject.pseudo.pseudo.FilteredExpression
@@ -57,6 +56,9 @@ import org.uqbarproject.pseudo.pseudo.All
 import org.uqbarproject.pseudo.pseudo.Any
 import org.uqbarproject.pseudo.pseudo.First
 import org.uqbarproject.pseudo.pseudo.Take
+import org.uqbarproject.pseudo.pseudo.MessageThrowExpression
+import org.uqbarproject.pseudo.pseudo.ExceptionThrowExpression
+import org.uqbarproject.pseudo.pseudo.ThrowExpression
 
 /**
  * @author flbulgareli
@@ -114,7 +116,9 @@ class PseudoGenerator implements IGenerator {
 	  	«FOR statement : method.statements.take(method.statements.size-1)»
 	  		«statement.compile»		
 	  	«ENDFOR»
-	  	«IF method.statements.last instanceof Expression»
+	  	«IF method.statements.last instanceof ThrowExpression»
+	  	«method.statements.last.compile»;
+	  	«ELSEIF method.statements.last instanceof Expression»
 	  	return « (method.statements.last as Expression).compileForResult»;
 	  	«ELSEIF method.statements.last instanceof Return»
 	  	«method.statements.last.compile»
@@ -271,8 +275,11 @@ class PseudoGenerator implements IGenerator {
     def dispatch compileForResult(SetLiteralExpression expression) '''
     	new java.util.HashSet(java.util.Arrays.asList(«joinCompileExpressions(expression.elements)»))
     '''
-    def dispatch compileForResult(ThrowExpression expression) '''
-    	throw «expression.throwable.compileForResult»
+    def dispatch compileForResult(MessageThrowExpression expression) '''
+    	throw new GenericException(«expression.throwable.compileForResult»)
+    '''
+    def dispatch compileForResult(ExceptionThrowExpression expression) '''
+      throw «expression.throwable.compileForResult»
     '''
     def dispatch compileForResult(MessageSendExpression expression) '''
     	«expression.getMessage.compile».apply(«expression.getReceptor.compileForResult»)
@@ -364,7 +371,7 @@ class PseudoGenerator implements IGenerator {
 	'''
 	
 	def effectiveSuperType(Type type) { 
-		if (type.superType != null) type.superType.name else 'java.lang.Object'
+		if (type.superType != null) type.superType.fullyQualifiedName else 'java.lang.Object'
 	}
 	
 	def compileClassModifier(boolean isClassModifier) {

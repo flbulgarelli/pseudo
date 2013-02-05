@@ -1,12 +1,13 @@
 clase Excepciones
 
-//  metodo metodo_que_lanza_error
-//    error "ups!"
-//  fin
-//  
+  metodo metodo_que_lanza_error
+    error "ups!"
+  fin
+
 //  metodo metodo_que_lanza_excepcion
-//    lanzar 1//nuevo RuntimeException
+//    lanzar nuevo MiExcepcion
 //  fin
+  
 //  
 //  metodo metodo_que_captura_excepcion
 //    intentar
@@ -16,5 +17,7 @@ clase Excepciones
 //      lanzar 1//excepcion
 //    fin
 //  fin
-
+ 
 fin
+
+
