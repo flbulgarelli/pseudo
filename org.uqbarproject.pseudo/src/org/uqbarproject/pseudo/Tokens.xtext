@@ -29,6 +29,7 @@ NULL_TOKEN : 'nada';
 TRUE_TOKEN: 'verdadero'|'si';
 FALSE_TOKEN: 'falso'|'no';
 SELF_TOKEN: 'este'|'esta';
+CATCHED_EXCEPTION_TOKEN: 'atrapada' | 'capturada';
 
 /* collection literals */
 LIST_OPEN_TOKEN:

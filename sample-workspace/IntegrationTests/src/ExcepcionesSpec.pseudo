@@ -8,15 +8,15 @@ clase Excepciones
     lanzar nuevo MiExcepcion("foo")
   fin
   
-//  
-//  metodo metodo_que_captura_excepcion
-//    intentar
-//      error ""
-//    capturar//(excepcion)
-//      //hacer algo..
-//      lanzar 1//excepcion
-//    fin
-//  fin
+  
+  metodo metodo_que_captura_excepcion
+    intentar
+      error ""
+    capturar
+      //hacer algo interesante
+      lanzar capturada
+    fin
+  fin
  
 fin
 

@@ -4,10 +4,7 @@ grammar org.uqbarproject.pseudo.Pseudo with org.uqbarproject.pseudo.Tokens
  * 
 lambdas? 
 mixins
-constructores alla scala
 sin paquetes
-orientado a mensajes
-composicion de computaciones x LUEGO y
  * 
  */
 generate pseudo "http://www.uqbarproject.org/pseudo/Pseudo"
@@ -19,7 +16,9 @@ Model:
 	types+=Type*;
 
 Type:
-  ({ClassType} CLASS_TOKEN name=ID (INHERITS_TOKEN superType=[Type])? | {ExceptionType} EXCEPTION_TOKEN name=ID)
+  ({ClassType} CLASS_TOKEN name=ID (INHERITS_TOKEN superType=[Type])? |
+   {ExceptionType} EXCEPTION_TOKEN name=ID |
+  )
 	members+=Member*	
 	END_TOKEN;
 
@@ -101,6 +100,7 @@ ExpressionLevel0 returns Expression:
 	{TrueExpression} TRUE_TOKEN |
 	{FalseExpression} FALSE_TOKEN |
 	{SelfExpression} SELF_TOKEN |
+	{CatchedExceptionExpression} CATCHED_EXCEPTION_TOKEN |
 	OPEN_TOKEN ExpressionLevel7  CLOSE_TOKEN
 	;
 	

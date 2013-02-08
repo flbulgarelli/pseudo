@@ -61,6 +61,7 @@ import org.uqbarproject.pseudo.pseudo.ExceptionThrowExpression
 import org.uqbarproject.pseudo.pseudo.ThrowExpression
 import org.uqbarproject.pseudo.pseudo.ClassType
 import org.uqbarproject.pseudo.pseudo.ExceptionType
+import org.uqbarproject.pseudo.pseudo.CatchedExceptionExpression
 
 /**
  * @author flbulgareli
@@ -216,12 +217,24 @@ class PseudoGenerator implements IGenerator {
 		}
 		«ENDIF»		
 	'''
+  //TODO invallid syntax
+	def dispatch compileForResult(TryCatchExpression expression) '''
+    try {
+  	   «expression.action.compile»
+    } catch (Throwable $$e$$) {
+       «expression.catchAction.compile»
+    }
+	'''
 	def dispatch compile(TryCatchExpression expression) '''
 		try {
 			«expression.action.compile»
-		} catch (Throwable e) {
+		} catch (Throwable $$e$$) {
 			«expression.catchAction.compile»
 		}
+	'''
+	//TODO validar que solo se pueda emplear en contextos adecuados
+	def dispatch compileForResult(CatchedExceptionExpression expr) '''
+	   $$e$$
 	'''
 	 
 	def dispatch compileForResult(WhenExpression expression) '''
