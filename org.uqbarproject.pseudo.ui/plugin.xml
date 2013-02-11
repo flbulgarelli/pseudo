@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<plugin>
+
+    <extension
+            point="org.eclipse.ui.editors">
+        <editor
+            class="org.uqbarproject.pseudo.ui.PseudoExecutableExtensionFactory:org.eclipse.xtext.ui.editor.XtextEditor"
+            contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
+            default="true"
+            extensions="pseudo"
+            id="org.uqbarproject.pseudo.Pseudo"
+            name="Pseudo Editor">
+        </editor>
+    </extension>
+    <extension
+        point="org.eclipse.ui.handlers">
+        <handler
+            class="org.uqbarproject.pseudo.ui.PseudoExecutableExtensionFactory:org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclarationHandler"
+            commandId="org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclaration">
+            <activeWhen>
+                <reference
+                    definitionId="org.uqbarproject.pseudo.Pseudo.Editor.opened">
+                </reference>
+            </activeWhen>
+        </handler>
+        <handler
+            class="org.uqbarproject.pseudo.ui.PseudoExecutableExtensionFactory:org.eclipse.xtext.ui.editor.handler.ValidateActionHandler"
+            commandId="org.uqbarproject.pseudo.Pseudo.validate">
+         <activeWhen>
+            <reference
+                    definitionId="org.uqbarproject.pseudo.Pseudo.Editor.opened">
+            </reference>
+         </activeWhen>
+      </handler>
+    </extension>
+    <extension point="org.eclipse.core.expressions.definitions">
+        <definition id="org.uqbarproject.pseudo.Pseudo.Editor.opened">
+            <and>
+                <reference definitionId="isActiveEditorAnInstanceOfXtextEditor"/>
+                <with variable="activeEditor">
+                    <test property="org.eclipse.xtext.ui.editor.XtextEditor.languageName" 
+                        value="org.uqbarproject.pseudo.Pseudo" 
+                        forcePluginActivation="true"/>
+                </with>        
+            </and>
+        </definition>
+    </extension>
+    <extension
+            point="org.eclipse.ui.preferencePages">
+        <page
+            class="org.uqbarproject.pseudo.ui.PseudoExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+            id="org.uqbarproject.pseudo.Pseudo"
+            name="Pseudo">
+            <keywordReference id="org.uqbarproject.pseudo.ui.keyword_Pseudo"/>
+        </page>
+        <page
+            category="org.uqbarproject.pseudo.Pseudo"
+            class="org.uqbarproject.pseudo.ui.PseudoExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
+            id="org.uqbarproject.pseudo.Pseudo.coloring"
+            name="Syntax Coloring">
+            <keywordReference id="org.uqbarproject.pseudo.ui.keyword_Pseudo"/>
+        </page>
+        <page
+            category="org.uqbarproject.pseudo.Pseudo"
+            class="org.uqbarproject.pseudo.ui.PseudoExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
+            id="org.uqbarproject.pseudo.Pseudo.templates"
+            name="Templates">
+            <keywordReference id="org.uqbarproject.pseudo.ui.keyword_Pseudo"/>
+        </page>
+    </extension>
+    <extension
+            point="org.eclipse.ui.propertyPages">
+        <page
+            class="org.uqbarproject.pseudo.ui.PseudoExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+            id="org.uqbarproject.pseudo.Pseudo"
+            name="Pseudo">
+            <keywordReference id="org.uqbarproject.pseudo.ui.keyword_Pseudo"/>
+            <enabledWhen>
+	            <adapt type="org.eclipse.core.resources.IProject"/>
+			</enabledWhen>
+	        <filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+        </page>
+    </extension>
+    <extension
+        point="org.eclipse.ui.keywords">
+        <keyword
+            id="org.uqbarproject.pseudo.ui.keyword_Pseudo"
+            label="Pseudo"/>
+    </extension>
+    <extension
+         point="org.eclipse.ui.commands">
+      <command
+            description="Trigger expensive validation"
+            id="org.uqbarproject.pseudo.Pseudo.validate"
+            name="Validate">
+      </command>
+    </extension>
+    <extension point="org.eclipse.ui.menus">
+        <menuContribution
+            locationURI="popup:#TextEditorContext?after=group.edit">
+             <command
+                 commandId="org.uqbarproject.pseudo.Pseudo.validate"
+                 style="push"
+                 tooltip="Trigger expensive validation">
+            <visibleWhen checkEnabled="false">
+                <reference
+                    definitionId="org.uqbarproject.pseudo.Pseudo.Editor.opened">
+                </reference>
+            </visibleWhen>
+         </command>  
+         </menuContribution>
+    </extension>
+    <extension point="org.eclipse.ui.menus">
+		<menuContribution locationURI="popup:#TextEditorContext?endof=group.find">
+			<command commandId="org.eclipse.xtext.ui.editor.FindReferences">
+				<visibleWhen checkEnabled="false">
+                	<reference definitionId="org.uqbarproject.pseudo.Pseudo.Editor.opened">
+                	</reference>
+            	</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.handlers">
+	    <handler
+            class="org.uqbarproject.pseudo.ui.PseudoExecutableExtensionFactory:org.eclipse.xtext.ui.editor.findrefs.FindReferencesHandler"
+            commandId="org.eclipse.xtext.ui.editor.FindReferences">
+            <activeWhen>
+                <reference
+                    definitionId="org.uqbarproject.pseudo.Pseudo.Editor.opened">
+                </reference>
+            </activeWhen>
+        </handler>
+    </extension>   
+
+<!-- adding resource factories -->
+
+	<extension
+		point="org.eclipse.emf.ecore.extension_parser">
+		<parser
+			class="org.uqbarproject.pseudo.ui.PseudoExecutableExtensionFactory:org.eclipse.xtext.resource.IResourceFactory"
+			type="pseudo">
+		</parser>
+	</extension>
+	<extension point="org.eclipse.xtext.extension_resourceServiceProvider">
+        <resourceServiceProvider
+            class="org.uqbarproject.pseudo.ui.PseudoExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+            uriExtension="pseudo">
+        </resourceServiceProvider>
+    </extension>
+
+
+    <!-- marker definitions for org.uqbarproject.pseudo.Pseudo -->
+    <extension
+            id="pseudo.check.fast"
+            name="Pseudo Problem"
+            point="org.eclipse.core.resources.markers">
+        <super type="org.eclipse.xtext.ui.check.fast"/>
+        <persistent value="true"/>
+    </extension>
+    <extension
+            id="pseudo.check.normal"
+            name="Pseudo Problem"
+            point="org.eclipse.core.resources.markers">
+        <super type="org.eclipse.xtext.ui.check.normal"/>
+        <persistent value="true"/>
+    </extension>
+    <extension
+            id="pseudo.check.expensive"
+            name="Pseudo Problem"
+            point="org.eclipse.core.resources.markers">
+        <super type="org.eclipse.xtext.ui.check.expensive"/>
+        <persistent value="true"/>
+    </extension>
+
+   <extension
+         point="org.eclipse.xtext.builder.participant">
+      <participant
+            class="org.uqbarproject.pseudo.ui.PseudoExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant">
+      </participant>
+   </extension>
+   <extension
+            point="org.eclipse.ui.preferencePages">
+        <page
+            category="org.uqbarproject.pseudo.Pseudo"
+            class="org.uqbarproject.pseudo.ui.PseudoExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+            id="org.uqbarproject.pseudo.Pseudo.compiler.preferencePage"
+            name="Compiler">
+            <keywordReference id="org.uqbarproject.pseudo.ui.keyword_Pseudo"/>
+        </page>
+    </extension>
+    <extension
+            point="org.eclipse.ui.propertyPages">
+        <page
+            category="org.uqbarproject.pseudo.Pseudo"
+            class="org.uqbarproject.pseudo.ui.PseudoExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+            id="org.uqbarproject.pseudo.Pseudo.compiler.propertyPage"
+            name="Compiler">
+            <keywordReference id="org.uqbarproject.pseudo.ui.keyword_Pseudo"/>
+            <enabledWhen>
+	            <adapt type="org.eclipse.core.resources.IProject"/>
+			</enabledWhen>
+	        <filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+        </page>
+    </extension>
+
+	<!-- Quick Outline -->
+	<extension
+		point="org.eclipse.ui.handlers">
+		<handler 
+			class="org.uqbarproject.pseudo.ui.PseudoExecutableExtensionFactory:org.eclipse.xtext.ui.editor.outline.quickoutline.ShowQuickOutlineActionHandler"
+			commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline">
+			<activeWhen>
+				<reference
+					definitionId="org.uqbarproject.pseudo.Pseudo.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension
+		point="org.eclipse.ui.commands">
+		<command
+			description="Open the quick outline."
+			id="org.eclipse.xtext.ui.editor.outline.QuickOutline"
+			name="Quick Outline">
+		</command>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution
+			locationURI="popup:#TextEditorContext?after=group.open">
+			<command commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline"
+				style="push"
+				tooltip="Open Quick Outline">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="org.uqbarproject.pseudo.Pseudo.Editor.opened"/>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+    <!-- quickfix marker resolution generator for org.uqbarproject.pseudo.Pseudo -->
+    <extension
+            point="org.eclipse.ui.ide.markerResolution">
+        <markerResolutionGenerator
+            class="org.uqbarproject.pseudo.ui.PseudoExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+            markerType="org.uqbarproject.pseudo.ui.pseudo.check.fast">
+            <attribute
+                name="FIXABLE_KEY"
+                value="true">
+            </attribute>
+        </markerResolutionGenerator>
+        <markerResolutionGenerator
+            class="org.uqbarproject.pseudo.ui.PseudoExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+            markerType="org.uqbarproject.pseudo.ui.pseudo.check.normal">
+            <attribute
+                name="FIXABLE_KEY"
+                value="true">
+            </attribute>
+        </markerResolutionGenerator>
+        <markerResolutionGenerator
+            class="org.uqbarproject.pseudo.ui.PseudoExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+            markerType="org.uqbarproject.pseudo.ui.pseudo.check.expensive">
+            <attribute
+                name="FIXABLE_KEY"
+                value="true">
+            </attribute>
+        </markerResolutionGenerator>
+    </extension>
+
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="org.eclipse.xtext.projectwiz"
+            class="org.uqbarproject.pseudo.ui.PseudoExecutableExtensionFactory:org.uqbarproject.pseudo.ui.wizard.PseudoNewProjectWizard"
+            id="org.uqbarproject.pseudo.ui.wizard.PseudoNewProjectWizard"
+            name="Pseudo Project"
+            project="true">
+      </wizard>
+   </extension>
+   	<!-- Rename Refactoring -->
+	<extension point="org.eclipse.ui.handlers">
+		<handler 
+			class="org.uqbarproject.pseudo.ui.PseudoExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.IRenameElementHandler"
+			commandId="org.eclipse.xtext.ui.refactoring.RenameElement">
+			<activeWhen>
+				<reference
+					definitionId="org.uqbarproject.pseudo.Pseudo.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+	</extension>
+    <extension point="org.eclipse.ui.menus">
+         <menuContribution
+            locationURI="popup:#TextEditorContext?after=group.edit">
+         <command commandId="org.eclipse.xtext.ui.refactoring.RenameElement"
+               style="push">
+            <visibleWhen checkEnabled="false">
+               <reference
+                     definitionId="org.uqbarproject.pseudo.Pseudo.Editor.opened">
+               </reference>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+   <extension point="org.eclipse.ui.preferencePages">
+	    <page
+	        category="org.uqbarproject.pseudo.Pseudo"
+	        class="org.uqbarproject.pseudo.ui.PseudoExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.RefactoringPreferencePage"
+	        id="org.uqbarproject.pseudo.Pseudo.refactoring"
+	        name="Refactoring">
+	        <keywordReference id="org.uqbarproject.pseudo.ui.keyword_Pseudo"/>
+	    </page>
+	</extension>
+
+  <extension point="org.eclipse.compare.contentViewers">
+    <viewer id="org.uqbarproject.pseudo.Pseudo.compare.contentViewers"
+            class="org.uqbarproject.pseudo.ui.PseudoExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
+            extensions="pseudo">
+    </viewer>
+  </extension>
+  <extension point="org.eclipse.compare.contentMergeViewers">
+    <viewer id="org.uqbarproject.pseudo.Pseudo.compare.contentMergeViewers"
+            class="org.uqbarproject.pseudo.ui.PseudoExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
+            extensions="pseudo" label="Pseudo Compare">
+     </viewer>
+  </extension>
+  <extension point="org.eclipse.ui.editors.documentProviders">
+    <provider id="org.uqbarproject.pseudo.Pseudo.editors.documentProviders"
+            class="org.uqbarproject.pseudo.ui.PseudoExecutableExtensionFactory:org.eclipse.xtext.ui.editor.model.XtextDocumentProvider"
+            extensions="pseudo">
+    </provider>
+  </extension>
+
+    <extension
+            point="org.eclipse.ui.editors">
+        <editor
+            class="org.uqbarproject.pseudo.ui.TokensExecutableExtensionFactory:org.eclipse.xtext.ui.editor.XtextEditor"
+            contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
+            default="true"
+            extensions="___tokens"
+            id="org.uqbarproject.pseudo.Tokens"
+            name="Tokens Editor">
+        </editor>
+    </extension>
+    <extension
+        point="org.eclipse.ui.handlers">
+        <handler
+            class="org.uqbarproject.pseudo.ui.TokensExecutableExtensionFactory:org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclarationHandler"
+            commandId="org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclaration">
+            <activeWhen>
+                <reference
+                    definitionId="org.uqbarproject.pseudo.Tokens.Editor.opened">
+                </reference>
+            </activeWhen>
+        </handler>
+        <handler
+            class="org.uqbarproject.pseudo.ui.TokensExecutableExtensionFactory:org.eclipse.xtext.ui.editor.handler.ValidateActionHandler"
+            commandId="org.uqbarproject.pseudo.Tokens.validate">
+         <activeWhen>
+            <reference
+                    definitionId="org.uqbarproject.pseudo.Tokens.Editor.opened">
+            </reference>
+         </activeWhen>
+      </handler>
+    </extension>
+    <extension point="org.eclipse.core.expressions.definitions">
+        <definition id="org.uqbarproject.pseudo.Tokens.Editor.opened">
+            <and>
+                <reference definitionId="isActiveEditorAnInstanceOfXtextEditor"/>
+                <with variable="activeEditor">
+                    <test property="org.eclipse.xtext.ui.editor.XtextEditor.languageName" 
+                        value="org.uqbarproject.pseudo.Tokens" 
+                        forcePluginActivation="true"/>
+                </with>        
+            </and>
+        </definition>
+    </extension>
+    <extension
+            point="org.eclipse.ui.preferencePages">
+        <page
+            class="org.uqbarproject.pseudo.ui.TokensExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+            id="org.uqbarproject.pseudo.Tokens"
+            name="Tokens">
+            <keywordReference id="org.uqbarproject.pseudo.ui.keyword_Tokens"/>
+        </page>
+        <page
+            category="org.uqbarproject.pseudo.Tokens"
+            class="org.uqbarproject.pseudo.ui.TokensExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
+            id="org.uqbarproject.pseudo.Tokens.coloring"
+            name="Syntax Coloring">
+            <keywordReference id="org.uqbarproject.pseudo.ui.keyword_Tokens"/>
+        </page>
+        <page
+            category="org.uqbarproject.pseudo.Tokens"
+            class="org.uqbarproject.pseudo.ui.TokensExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
+            id="org.uqbarproject.pseudo.Tokens.templates"
+            name="Templates">
+            <keywordReference id="org.uqbarproject.pseudo.ui.keyword_Tokens"/>
+        </page>
+    </extension>
+    <extension
+            point="org.eclipse.ui.propertyPages">
+        <page
+            class="org.uqbarproject.pseudo.ui.TokensExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+            id="org.uqbarproject.pseudo.Tokens"
+            name="Tokens">
+            <keywordReference id="org.uqbarproject.pseudo.ui.keyword_Tokens"/>
+            <enabledWhen>
+	            <adapt type="org.eclipse.core.resources.IProject"/>
+			</enabledWhen>
+	        <filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+        </page>
+    </extension>
+    <extension
+        point="org.eclipse.ui.keywords">
+        <keyword
+            id="org.uqbarproject.pseudo.ui.keyword_Tokens"
+            label="Tokens"/>
+    </extension>
+    <extension
+         point="org.eclipse.ui.commands">
+      <command
+            description="Trigger expensive validation"
+            id="org.uqbarproject.pseudo.Tokens.validate"
+            name="Validate">
+      </command>
+    </extension>
+    <extension point="org.eclipse.ui.menus">
+        <menuContribution
+            locationURI="popup:#TextEditorContext?after=group.edit">
+             <command
+                 commandId="org.uqbarproject.pseudo.Tokens.validate"
+                 style="push"
+                 tooltip="Trigger expensive validation">
+            <visibleWhen checkEnabled="false">
+                <reference
+                    definitionId="org.uqbarproject.pseudo.Tokens.Editor.opened">
+                </reference>
+            </visibleWhen>
+         </command>  
+         </menuContribution>
+    </extension>
+    <extension point="org.eclipse.ui.menus">
+		<menuContribution locationURI="popup:#TextEditorContext?endof=group.find">
+			<command commandId="org.eclipse.xtext.ui.editor.FindReferences">
+				<visibleWhen checkEnabled="false">
+                	<reference definitionId="org.uqbarproject.pseudo.Tokens.Editor.opened">
+                	</reference>
+            	</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.handlers">
+	    <handler
+            class="org.uqbarproject.pseudo.ui.TokensExecutableExtensionFactory:org.eclipse.xtext.ui.editor.findrefs.FindReferencesHandler"
+            commandId="org.eclipse.xtext.ui.editor.FindReferences">
+            <activeWhen>
+                <reference
+                    definitionId="org.uqbarproject.pseudo.Tokens.Editor.opened">
+                </reference>
+            </activeWhen>
+        </handler>
+    </extension>   
+
+</plugin>
