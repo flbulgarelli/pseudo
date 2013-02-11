@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.uqbarproject.pseudo.sdk_1.0.0.201302111038.jar" id="org.uqbarproject.pseudo.sdk" version="1.0.0.201302111038">
+      <category name="Pseudo"/>
+   </feature>
+   <category-def name="Pseudo" label="Pseudo"/>
+</site>
