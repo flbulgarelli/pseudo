@@ -6,3 +6,6 @@ sample-workspace/**/.settings/**
 **/plugin.xml_gen
 org.uqbarproject.pseudo/.antlr-generator-3.2.0.jar
 RemoteSystemsTempFiles/**
+org.uqbarproject.pseudo.site/plugins/**
+org.uqbarproject.pseudo.site/features/**
+org.uqbarproject.pseudo.site/*.jar
