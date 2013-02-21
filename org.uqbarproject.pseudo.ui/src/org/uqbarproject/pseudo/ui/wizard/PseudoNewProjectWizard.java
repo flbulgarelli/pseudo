@@ -1,5 +1,11 @@
 package org.uqbarproject.pseudo.ui.wizard;
 
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.core.ClasspathContainerInitializer;
+import org.eclipse.jdt.core.IClasspathAttribute;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 import org.eclipse.xtext.ui.IImageHelper;
@@ -45,5 +51,6 @@ public class PseudoNewProjectWizard extends XtextNewProjectWizard {
 		projectInfo.setProjectName(mainPage.getProjectName());
 		return projectInfo;
 	}
+	
 
 }
