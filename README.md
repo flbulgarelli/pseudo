@@ -1,22 +1,108 @@
-pseudo
+Pseudo
 ======
 
-Un lenguaje de objetos y funcional que imita al pseudocódigo
-
-# Ramas de desarrollo:
+Pseudo es una especificación de un pseudocódigo:
+  * orientado a objetos y con características funcionales  
+  * diseñado con fines educativos y de modelado a alto nivel
+  * en español
  
-  * Consolidar lenguaje mínimo: hacer que el lenguaje funcione, aunque no tenga todo
-  * Rama formateo: construir un formatter de eclipse.
-  * Rama aspectos visuales: hacer que el lenguaje se "vea bien" en el outline
-  * Validaciones: hacer que genere mejores mensajes de error y no compile código erroneo
-  * English version: hacer una versión paralela de Pseudo con sintaxis alternativa en inglés.  
 
-# Características
+Pseudo no constituye un lenguaje de programación completo. No especifica, entre otras cosas:
+  * Una estrategia de evaluación
+  * Un sistema de validación de tipos
+  * Un plataforma de ejecución
+  * Bibliotecas estándares
+  * Sistema de espacion de nombres (paquetes)
+ 
+
+Si embargo, para poder validar los diseños, se ofrecen herramientas de generación de código, capaces de procesar un subconjunto del lenguaje y generar código un lenguaje de programación. Actualmente sólo Java está soportado, aunque es parte de la hoja de ruta extenderlo a Scala y Groovy.
+
+# Convenciones del documento
+
+ * una expresión entre corchetes ([]) signfica que es opcional
+ * una expresion entre mayores y menores significa que allí va otra subexpresión
+
+# Especificación
+
+A diferencia de la mayoría de los pseudocódigos imperativos, Pseudo está diseñado para soportar el paridgama de objetos.
+
+## Definicion de clase
+
+Pseudo especifica un pseudocódigo OO basado en clases.
+
+```
+clase <NombreClase> [hereda <NombreSuperclase>]
+  atributo <NombreAtributo1> [: <TipoAtributo1>]
+  ...
+  atributo <NombreAtributoN> [: <TipoAtributoN>]
+  
+  metodo <NombreMetodo1> [( NombreParametro1  [: TipoParametro1], ..., NombreParametroN  [: TipoParametroN])
+     [<CuerpoDelMetodo>]
+  [fin]
+  ...
+  metodo <NombreMetodoM> [( NombreParametro1  [: TipoParametro1], ..., NombreParametroN  [: TipoParametroN])]
+     [<CuerpoDelMetodo>]
+  [fin]
+
+
+[fin]
+```
+
+Ejemplos: 
+```
+clase Persona
+   atributo nombre
+   atributo edad : Numero
+   
+   metodo mayor_de_edad : Booleano   
+```
+
+## Definición de atributos
+## Declaración de métodos
+## Definición de métodos
+## Sintaxis condicional (if/case)
+
+Pseudo no diferencia entre estructuras condicionales estilo if y case:
+
+```
+metodo fibonacci(n) 
+  cuando n = 0 entonces
+    1 
+  cuando n = 1 entonces
+    1
+  otro caso
+    fibonacci(n-1) + fibonacci(n-2)      
+  fin
+fin
+```
+
+## Literales
+### Colecciones
+
+ * listas: 
+   * ```lista()```
+   * ```lista(1, 2, 3)```
+ * conjuntos: 
+   *  ```conjunto()```
+   *  ```conjunto("hola", "hello", "hallo")```
+ 
+### Rangos
+
+ * ```1 hasta 10``` 
+ 
+## Operaciones sobre colecciones
+### Mapeo
+### Filtrado
+### Sumatoria
+### Busqueda
+
+
+
+
 
 ## Semánticas
 
- * Tipado dinámico, implícito
-   * Motivación: TODO
+
  * Paradigma: 
     * Objetos, en tanto soporta el concepto de objetos polimórficos y envío de mensajes
       * Motivación: TODO
@@ -44,40 +130,5 @@ Un lenguaje de objetos y funcional que imita al pseudocódigo
     * __A definir__ _aplicacion parcial_
       * Ojo: la sintaxis de envio de mensajes impactará sobre esta característica
 
-## Sintácticas
 
-  * __A definir__ _en español_
-  * Preferir palabras por sobre símbolos, y favorecer construcciones cercanas al lenguaje natural
-     * Motivación: sintaxis de SQL como caso de éxito
-  * Colecciones literales
-  * __A definir__. _Variables automáticas_
-  * __A definir__ sintaxis de envío de mensajaes. TODO: elegir entre
-    * Java-like (con receptor parentesis opcionales)
-    * Erlang-Like: objeto ! { selector, argumento0,argumento1..argumentoN  }    
-    * Smalltalk-like  
-    * Haskell-Like prefija o infija: 
-       * receptor selector argumento0 argumento1 ... argumentoN
-       * selector argumento0 argumento1 ... argumentoN receptor
-    * Alguna sintaxis híbrida, basada en etiquetas no posicionales, Groovy-Like:  
-        * ```receptor : selector etiqueta0 argumento 0 etiqueta1 argumento1 ... etiquetaN argumentoN```
-          * Ejemplo: ```pastel : cocinar a (150: grados) durante (30: minutos)```
-        * Se podria incluir algun atajo para los mensajes unarios:
-          * Ejemplo: ```pastel : cocinar a 150'grados durante 30'minutos```  
-          
 
-## Plataforma
-  
-  * JVM
-  * compilado
-  * distribución textual: separación entre ambiente y código (texto) (como en la mayoría de los lenguajes)
-  * __A definir__: generacion de  código Java o  bytecode
-
-## En general
-  
- * No es un lenguaje de proposito general, sino orientado al modelado a alto nivel de soluciones de software
- * No pretende ser un lenguaje que aporte productividad. 
-    * Intenta aproximarse tanto como sea posible al lenguaje natural. 
-    * Eventualmente es más verborrágico que Ruby o Groovy    * 
-    * No ofrece características de metaprogramación.    
- * TODO
- 
