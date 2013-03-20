@@ -34,19 +34,22 @@ Moraleja: ¡Pseudo admite ambiguedades! Por eso decimos que Pseudo es una especi
 
 Las herramientas claramente son menos inteligentes que un humano, por lo que lo que no es ambiguo para un humano, quizás si lo es para la máquina. Entonces, estas herramientas trabajan con un subconjunto de la especificación. Este subconjunto será llamado de ahora en más __sintaxis estricta__, en oposición al superconjunto de __sintaxis flexible__.
 
-# ¿Y para qué quiero Pseudo?
+En este documento se desarrolla la sintaxis estricta, y algunos ejemplos de sintaxis flexibles que muestra las excepciones sintáticas más comunes. Las mismas puede que sean introducidas a la sintaxis formal de Pseudo en futuras versiones.
+
+# ¿Y para qué quiero Pseudo, cuando ya tengo pseudocódigo tradicional? 
  
-A diferencia del pseudocódigo tradicional 
+Porque la mayoría de los pseudocódigos que se usan son imperativos, mientras que Pseudo está diseñado para soportar el paridgama de objetos, con algunos aditamentos funcionales. 
 
-A diferencia de la mayoría de los pseudocódigos imperativos, Pseudo está diseñado para soportar el paridgama de objetos.
+Por otro lado, el pseodcódigo tradicional imita a lenguajes como Pascal, Basic o C. Pseudo en cambio es un pseudcódigo actualizado a al desarrollo de software en la decáda del 2010, y toma ideas de lenguajes mas modernos, como Ruby, Groovy o Scala. 
+
+# ¿Y para qué formalizar algo que es por definición flexible?
+
+Porque así es más facil comunicar nuestros diseños. Si todos hablamos un mismo idioma, será mas facil que otras personas nos entiendan. 
 
 
+# Ahora sí, ¿como se escribe?
 
-En este documento también se desarrollan las excepciones sintáticas más comunes. Las mismas puede que sean introducidas a la sintaxis formal de Pseudo en futuras versiones.
-
-No obstante, sólo las especificaciones que cumplan estrictamente con la sintaxis podrán ser traducidas a código mediante herramientas automatizadas. 
-
-# Convenciones del documento
+## Convenciones del documento
 
  * una expresión entre corchetes ([]) signfica que es opcional
  * una expresion entre mayores y menores significa que allí va otra subexpresión
