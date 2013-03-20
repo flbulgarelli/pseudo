@@ -340,5 +340,49 @@ promedio de distancia_a(buenos_aires)  entre destinos_turisticos tal que tiene_d
 Pseudo no especifica ninguna sintaxis para bloques. Sin embargo, varias estructuras de control (como las transformaciones de colecciones antes desarrolladas) reciben mensajes.
 
 
+## Constructores
+
+En Pseudo se asume que los constructores ya existen, por lo que no necesitan ser codificados. 
+
+En cuando a su uso, las clases son instanciadas mediante el operador ```nuevo```, pasando argumentos posicionales (en el orden en que fueron definidos los atributos) o etiquetados
+
+### Ejemplo
+
+#### Sintaxis estricta
+Suponiendo la siguiente clase:
+```
+clase Perro
+ atributo nombre
+ atributo edad
+ metodo ladrar
+fin
+```
+
+Sintaxis posicional:
+
+```
+nuevo Perro("Fido", 4)
+```
+
+Sintaxis etiquetada:
+
+```
+nuevo Perro(nombre = "Fido", edad = 4)
+nuevo Perro(edad = 4, nombre = "Fido")
+```
+
+## Exepciones
+
+Es posible lanzar excpeciones mediante los operadores ```lanzar``` (que toma una excepción por parámetro),  y ```error``` (que toma un mensaje por parámetro).
+
+### Ejemplo
+
+```
+lanzar nueva MiExcepcion
+
+error "ups!"
+```
+
+
 
 
