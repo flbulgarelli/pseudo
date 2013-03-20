@@ -1,36 +1,55 @@
 Pseudo
 ======
 
+# ¿Qué es Pseudo?
+
 Pseudo es una especificación de un pseudocódigo:
   * orientado a objetos y con características funcionales  
   * diseñado con fines educativos y de modelado a alto nivel
   * en español
  
+# ¿Porqué Pseudo es un pseudocódigo y no un lenguaje de programación?
 
-Pseudo no constituye un lenguaje de programación completo. No especifica, entre otras cosas:
+Porque Pseudo no constituye un lenguaje de programación completo. No especifica, entre otras cosas:
   * Una estrategia de evaluación
   * Un sistema de validación de tipos
   * Un plataforma de ejecución
   * Bibliotecas estándares
   * Sistema de espacion de nombres (paquetes)
  
+Es decir, un pseudocódigo Pseudo, aún cumpliendo una sintaxis válida, no define de forma completa un programa, sino que solo describe a grandes rasgos un diseño de solución. Aún es necesario bajarlo a un lenguaje de programación para definir los detalles de implementación.
 
-Si embargo, para poder validar los diseños, se ofrecen herramientas de generación de código, capaces de procesar un subconjunto del lenguaje y generar código un lenguaje de programación. Actualmente sólo Java está soportado, aunque es parte de la hoja de ruta extenderlo a Scala y Groovy.
+Por otro lado, La sintaxis es flexible en el sentido de que virtualmente cualquier regla sintáctica puede ser quebrada si al hacerlo no se introducen ambiguedades __para un humano__. Por lo cual debe entenderse a la sintaxis de Pseudo como una guía orientativa y no como una especificación rígida. 
+ 
+Moraleja: ¡Pseudo admite ambiguedades! Por eso decimos que Pseudo es una especificación de una sintaxis y semántica __abstracta__ (mas adelante explicaremos porqué) 
+
+# ¿Qué ofrece Pseudo entonces?
+  * Una especificación abstracta de una semántica y sintaxis. 
+  * Algunas herramientas. Aquí encontrarás un plugin para Eclipse que permite:
+    * el coloreo de la sintaxis
+    * Navegación
+    * Generación de código Java (experimiental), útil para validar un diseño. Es parte de la hoja de ruta extender la generación a Scala y Groovy.
+
+# ¿Si Pseudo admite ambigüedades, como se las bancan las herramientas? 
+
+Las herramientas claramente son menos inteligentes que un humano, por lo que lo que no es ambiguo para un humano, quizás si lo es para la máquina. Entonces, estas herramientas trabajan con un subconjunto de la especificación. Este subconjunto será llamado de ahora en más __sintaxis estricta__, en oposición al superconjunto de __sintaxis flexible__.
+
+# ¿Y para qué quiero Pseudo?
+ 
+A diferencia del pseudocódigo tradicional 
+
+A diferencia de la mayoría de los pseudocódigos imperativos, Pseudo está diseñado para soportar el paridgama de objetos.
+
+
+
+En este documento también se desarrollan las excepciones sintáticas más comunes. Las mismas puede que sean introducidas a la sintaxis formal de Pseudo en futuras versiones.
+
+No obstante, sólo las especificaciones que cumplan estrictamente con la sintaxis podrán ser traducidas a código mediante herramientas automatizadas. 
 
 # Convenciones del documento
 
  * una expresión entre corchetes ([]) signfica que es opcional
  * una expresion entre mayores y menores significa que allí va otra subexpresión
-
-# Especificación
-
-A diferencia de la mayoría de los pseudocódigos imperativos, Pseudo está diseñado para soportar el paridgama de objetos.
-
-La sintaxis es además flexible en el sentido de que virtualmente cualquier regla sintáctica puede ser quebrada si al hacerlo no se introducen ambiguedades para un humano. Por lo cual debe entenderse a Pseudo como una guía orientativa y no como una especificación rígida. 
-
-En este documento también se desarrollan las excepciones sintáticas más comunes. Las mismas puede que sean introducidas a la sintaxis formal de Pseudo en futuras versiones.
-
-No obstante, sólo las especificaciones que cumplan estrictamente con la sintaxis podrán ser traducidas a código mediante herramientas automatizadas. 
 
 ## Definicion de clase
 
