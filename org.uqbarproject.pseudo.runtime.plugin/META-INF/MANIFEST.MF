@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Runtime Plugin
+Bundle-SymbolicName: org.uqbarproject.pseudo.runtime.plugin
+Bundle-Version: 1.0.0
+Bundle-ClassPath: runtime.jar
+Export-Package: org.uqbarproject.pseudo.runtime,
+ org.uqbarproject.pseudo.runtime.reductions
+Bundle-RequiredExecutionEnvironment: OSGi/Minimum-1.2

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature id="org.uqbarproject.pseudo.sdk"
+	label="Pseudo "
+	version="1.0.0.qualifier">
+	<plugin
+			id="org.uqbarproject.pseudo"
+			download-size="0"
+			install-size="0"
+			version="0.0.0"
+			unpack="false"/>
+	<plugin
+			id="org.uqbarproject.pseudo.ui"
+			download-size="0"
+			install-size="0"
+			version="0.0.0"
+			unpack="false"/>
+	<plugin
+			id="org.uqbarproject.pseudo.runtime.plugin"
+			download-size="0"
+			install-size="0"
+			version="0.0.0"
+			unpack="false"/>
+</feature>

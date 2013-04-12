@@ -1,0 +1,19 @@
+«IMPORT org::uqbarproject::pseudo::ui::wizard»
+
+«DEFINE main FOR PseudoProjectInfo»
+«EXPAND model FOR this»
+«ENDDEFINE»
+
+«DEFINE model FOR PseudoProjectInfo»
+«FILE "src/Model.pseudo"-»
+clase HolaMundo
+
+  metodo saludar
+    "hola!"
+  fin
+
+fin
+«ENDFILE»
+«ENDDEFINE»
+
+«ENDDEFINE»
