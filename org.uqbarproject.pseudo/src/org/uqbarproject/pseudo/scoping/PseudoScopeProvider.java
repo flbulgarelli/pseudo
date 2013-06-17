@@ -12,9 +12,9 @@ import org.eclipse.xtext.scoping.IScope;
 import org.eclipse.xtext.scoping.Scopes;
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider;
 import org.uqbarproject.pseudo.pseudo.Attribute;
+import org.uqbarproject.pseudo.pseudo.ClassType;
 import org.uqbarproject.pseudo.pseudo.LocalVariable;
 import org.uqbarproject.pseudo.pseudo.Method;
-import org.uqbarproject.pseudo.pseudo.Type;
 
 import com.google.common.base.Predicates;
 import com.google.common.collect.Collections2;
@@ -29,7 +29,7 @@ import com.google.common.collect.Collections2;
 public class PseudoScopeProvider extends AbstractDeclarativeScopeProvider {
 
   IScope scope_EObject(Method method, EReference eRef) {
-    Type type = (Type) method.eContainer();
+    ClassType type = (ClassType) method.eContainer();
     List<EObject> crossRefTargets = new ArrayList<EObject>();
     crossRefTargets.addAll(Collections2.filter(method.getStatements(), Predicates.instanceOf(LocalVariable.class)));
     crossRefTargets.addAll(method.getParameters());

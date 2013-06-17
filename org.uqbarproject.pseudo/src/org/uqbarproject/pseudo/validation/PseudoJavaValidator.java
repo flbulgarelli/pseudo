@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.xtext.validation.Check;
 import org.uqbarproject.pseudo.pseudo.Attribute;
+import org.uqbarproject.pseudo.pseudo.ClassType;
 import org.uqbarproject.pseudo.pseudo.CollectionLiteralExpression;
 import org.uqbarproject.pseudo.pseudo.DecrementExpression;
 import org.uqbarproject.pseudo.pseudo.Expression;
@@ -64,9 +65,9 @@ public class PseudoJavaValidator extends AbstractPseudoJavaValidator {
   }
 
   @Check
-  public void checkDuplicateMembers(Type type) {
-    new DuplicateChecker<Type, Member>() {
-      protected void checkChilds(Type parentObject) {
+  public void checkDuplicateMembers(ClassType type) {
+    new DuplicateChecker<ClassType, Member>() {
+      protected void checkChilds(ClassType parentObject) {
         for (Member child : parentObject.getMembers()) {
           updateIndexes(child, child.getName());
         }

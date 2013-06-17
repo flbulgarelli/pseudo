@@ -129,9 +129,6 @@ class PseudoGenerator implements IGenerator {
     public «type.name»(Throwable cause) {
       super(cause);
     }
-    «FOR member : type.members»
-      «member.compile»    
-    «ENDFOR»
     }
     '''
   	def dispatch compile(Method method) '''
