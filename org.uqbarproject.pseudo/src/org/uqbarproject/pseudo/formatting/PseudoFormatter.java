@@ -26,7 +26,8 @@ public class PseudoFormatter extends AbstractDeclarativeFormatter {
     c.setLinewrap(0, 1, 1).after(grammar.getML_COMMENTRule());
     
     c.setLinewrap(2).around(grammar.getMethodRule());
-    c.setLinewrap().around(grammar.getAttributeRule());
+    c.setLinewrap().around(grammar.getClassAttributeRule());
+    c.setLinewrap().around(grammar.getInstanceAttributeRule());
     
     c.setLinewrap().around(grammar.getStatementRule());
     
@@ -69,7 +70,7 @@ public class PseudoFormatter extends AbstractDeclarativeFormatter {
     
     c.setIndentation(
       grammar.getClassTypeAccess().getCLASS_TOKENParserRuleCall_0_0(), 
-      grammar.getClassTypeAccess().getEND_TOKENParserRuleCall_2());
+      grammar.getClassTypeAccess().getEND_TOKENParserRuleCall_3());
     
   }
 }

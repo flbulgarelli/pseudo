@@ -20,11 +20,15 @@ clase Observable
   fin
  
   metodo notificar_a_todos
-    para todos en observadores notificar
+    para cada observador en observadores hacer 
+      observador.notificar
+    fin
   fin 
  
   metodo notificar_a_todos_de(evento)
-    para todos en observadores notificar_de(evento)
+    para cada observador en observadores hacer  
+      observador.notificar_de(evento)
+    fin
   fin
 
 fin

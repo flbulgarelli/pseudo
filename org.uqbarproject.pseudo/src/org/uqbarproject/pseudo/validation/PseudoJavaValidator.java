@@ -1,6 +1,15 @@
 package org.uqbarproject.pseudo.validation;
 
-import static org.uqbarproject.pseudo.pseudo.PseudoPackage.Literals.*;
+import static org.uqbarproject.pseudo.pseudo.PseudoPackage.Literals.DECREMENT_EXPRESSION__TARGET;
+import static org.uqbarproject.pseudo.pseudo.PseudoPackage.Literals.DECREMENT_EXPRESSION__VALUE;
+import static org.uqbarproject.pseudo.pseudo.PseudoPackage.Literals.INCREMENT_EXPRESSION__TARGET;
+import static org.uqbarproject.pseudo.pseudo.PseudoPackage.Literals.INCREMENT_EXPRESSION__VALUE;
+import static org.uqbarproject.pseudo.pseudo.PseudoPackage.Literals.LOCAL_VARIABLE__NAME;
+import static org.uqbarproject.pseudo.pseudo.PseudoPackage.Literals.MEMBER__NAME;
+import static org.uqbarproject.pseudo.pseudo.PseudoPackage.Literals.METHOD__CLASS_METHOD;
+import static org.uqbarproject.pseudo.pseudo.PseudoPackage.Literals.METHOD__PARAMETERS;
+import static org.uqbarproject.pseudo.pseudo.PseudoPackage.Literals.SUPER_SEND__ARGUMENTS;
+import static org.uqbarproject.pseudo.pseudo.PseudoPackage.Literals.TYPE__NAME;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -25,7 +34,6 @@ import org.uqbarproject.pseudo.pseudo.Member;
 import org.uqbarproject.pseudo.pseudo.Method;
 import org.uqbarproject.pseudo.pseudo.NewExpression;
 import org.uqbarproject.pseudo.pseudo.Parameter;
-import org.uqbarproject.pseudo.pseudo.SetupExpression;
 import org.uqbarproject.pseudo.pseudo.Statement;
 import org.uqbarproject.pseudo.pseudo.StringExpression;
 import org.uqbarproject.pseudo.pseudo.SuperSend;
@@ -177,7 +185,6 @@ public class PseudoJavaValidator extends AbstractPseudoJavaValidator {
     private void checkMayBeNumeric(EObject update, Expression target, EReference feature) {
       if (target instanceof NewExpression //
         || target instanceof InitExpression //
-        || target instanceof SetupExpression //
         || target instanceof CollectionLiteralExpression //
         || target instanceof StringExpression //
         || target instanceof TrueExpression //

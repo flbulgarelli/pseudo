@@ -14,7 +14,8 @@ ExceptionType:
 ;
 
 ClassType:
-  (CLASS_TOKEN name=ID (INHERITS_TOKEN superType=[Type])?) (OPEN_TOKEN (members+=SimpleInstanceAttribute*) CLOSE_TOKEN)?
+  (CLASS_TOKEN name=ID (INHERITS_TOKEN superType=[Type])?) 
+    (OPEN_TOKEN (members+=SimpleInstanceAttribute (SEPARATOR_TOKEN members+=SimpleInstanceAttribute)*)? CLOSE_TOKEN)?
 	members+=Member*	
 	END_TOKEN;
 
