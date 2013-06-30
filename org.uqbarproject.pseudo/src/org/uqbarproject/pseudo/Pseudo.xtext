@@ -72,7 +72,6 @@ ExpressionLevel5 returns Expression:
 	ForEachExpression |
 	ThrowExpression |
 	InitExpression |
-	SetupExpression |
 	WhenExpression |
 	TryCatchExpression
 ;
@@ -186,19 +185,12 @@ TryCatchExpression:
 ;
 
 
-
 NewExpression:
 	NEW_TOKEN target = [Type] =>(OPEN_TOKEN (arguments+=ExpressionLevel7 (SEPARATOR_TOKEN arguments+=ExpressionLevel7)*)? CLOSE_TOKEN)?
 ;
 
 InitExpression:
 	INIT_TOKEN (NEW_TOKEN)? target=[Type]
-	(initializations+=Initialization)+  
-	END_TOKEN 	
-;
-
-SetupExpression:
-	SETUP_TOKEN target=ExpressionLevel7
 	(initializations+=Initialization)+  
 	END_TOKEN 	
 ;
