@@ -78,19 +78,20 @@ OR_TOKEN: 'o' ;
 AND_TOKEN: 'y' ;
 
 /* Traversable-related */
-WHERE_TOKEN: 'tal' 'que';
-SUM_TOKEN: 'suma' | 'sumatoria';
-ANY_TOKEN: 'alguno';
-ALL_TOKEN: 'todo';
-MAX_TOKEN: 'max' | 'maximo';
-MIN_TOKEN: 'min' | 'minimo';
+IN_TOKEN: 'en';
+BY_TOKEN: 'segun';
+DO_TOKEN: 'hacer';
+SATISFY_TOKEN:'satisface'|'cumple';
+
+FOR_EACH_TOKEN: 'para' 'cada';
+
+MAP_TOKEN: 'mapear';
+FILTER_TOKEN: 'filtrar';
+SUM_TOKEN: 'sumatoria';
+MAX_TOKEN: 'maximo';
+MIN_TOKEN: 'minimo';
+SORT_TOKEN: 'ordenar';
 AVERAGE_TOKEN: 'promedio';
-REDUCTION_SOURCE_TOKEN : 'entre' ;
-COMPARE_BY_TOKEN: 'segun';
-FOR_ALL_IN_TOKEN: 'para' 'todos' 'en';
-SELECT_TOKEN: 'seleccionar'|'generar'|'colectar'|'mapear';
-SELECT_FROM_TOKEN: 'de';
-FIRST_TOKEN: 'primer' | 'primero' ;
-TAKE_TOKEN: 'primeros' | 'tomar';
-SATISFY_TOKEN:'satisface';
-OF_TOKEN: 'de';
+
+ANY_TOKEN: 'algun';
+ALL_TOKEN: 'todo';

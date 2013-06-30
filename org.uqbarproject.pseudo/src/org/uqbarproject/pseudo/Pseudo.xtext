@@ -69,8 +69,7 @@ ExpressionLevel6 returns Expression:
 
 ExpressionLevel5 returns Expression:
 	MessageSendExpression |
-	ReductionExpression |
-	ForAllExpression |
+	ForEachExpression |
 	ThrowExpression |
 	InitExpression |
 	SetupExpression |
@@ -79,12 +78,13 @@ ExpressionLevel5 returns Expression:
 ;
 
 ExpressionLevel4 returns Expression:
-	ExpressionLevel3 |
-	SelectExpression 
+	ExpressionLevel3 
+//	|
+//	TraverseExpression 
 ;
 
 ExpressionLevel3 returns Expression:
-	FilteredExpression
+	ExpressionLevel2
 ;
 
 ExpressionLevel2 returns Expression:
@@ -142,31 +142,20 @@ enum ComparisonOperation:
 	NEQ='/='
 ;
 
-ForAllExpression:
-	FOR_ALL_IN_TOKEN target=ExpressionLevel5 action=Message
-;
-
-SelectExpression:
-	SELECT_TOKEN mapping=Message SELECT_FROM_TOKEN target=ExpressionLevel3 
-;
-
-ReductionExpression:
-	reduction=Reduction REDUCTION_SOURCE_TOKEN target=ExpressionLevel3
-;
-
-Reduction:
-	{Sum} SUM_TOKEN (OF_TOKEN? mapping=Message)?  | 
-	{Average} AVERAGE_TOKEN (OF_TOKEN ? mapping=Message)? | 
-	{Min} MIN_TOKEN (mapping=Message)? (COMPARE_BY_TOKEN criteria=Message)? | 
-	{Max} MAX_TOKEN (mapping=Message)? (COMPARE_BY_TOKEN criteria=Message)? | 
-	{All} ALL_TOKEN (mapping=Message)? SATISFY_TOKEN (criteria=Message) |
-	{Any} ANY_TOKEN (mapping=Message)? SATISFY_TOKEN (criteria=Message) |
-	{First} FIRST_TOKEN (mapping=Message)? | 
-	{Take} TAKE_TOKEN (amount=ExpressionLevel3) (mapping=Message)?
-;
-
-FilteredExpression returns Expression:
-	ExpressionLevel2 ({FilteredExpression.target=current} WHERE_TOKEN condition=Message)?
+ForEachExpression:
+	//effectfull action
+	{ForEach} FOR_EACH_TOKEN var=IdExpression IN_TOKEN target=ExpressionLevel5 DO_TOKEN action=ExpressionLevel7 END_TOKEN |
+	//general transform action 
+	{Map} MAP_TOKEN var=IdExpression IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=ExpressionLevel7 END_TOKEN |
+	{Filter} FILTER_TOKEN var=IdExpression IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=ExpressionLevel7 END_TOKEN |
+	{Sum} SUM_TOKEN var=IdExpression IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=ExpressionLevel7 END_TOKEN |
+	{Max} MAX_TOKEN var=IdExpression IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=ExpressionLevel7 END_TOKEN |
+	{Min} MIN_TOKEN var=IdExpression IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=ExpressionLevel7 END_TOKEN |
+	{Average} AVERAGE_TOKEN var=IdExpression IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=ExpressionLevel7 END_TOKEN |
+	{Sort} SORT_TOKEN var=IdExpression IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=ExpressionLevel7 END_TOKEN |
+	//boolean transform action
+	{All} ALL_TOKEN var=IdExpression IN_TOKEN target=ExpressionLevel5 SATISFY_TOKEN action=ExpressionLevel7 END_TOKEN |
+	{Any} ANY_TOKEN var=IdExpression IN_TOKEN target=ExpressionLevel5 SATISFY_TOKEN action=ExpressionLevel7 END_TOKEN 
 ;
 
 CollectionLiteralExpression:
