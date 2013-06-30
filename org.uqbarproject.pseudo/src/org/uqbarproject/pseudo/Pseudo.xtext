@@ -14,16 +14,30 @@ ExceptionType:
 ;
 
 ClassType:
-  (CLASS_TOKEN name=ID (INHERITS_TOKEN superType=[Type])?)
+  (CLASS_TOKEN name=ID (INHERITS_TOKEN superType=[Type])?) (OPEN_TOKEN (members+=SimpleAttribute*) CLOSE_TOKEN)?
 	members+=Member*	
 	END_TOKEN;
 
 Member:
-	Attribute | Method;
+	InstanceAttribute | ClassAttribute | Method;
 
+InstanceAttribute:
+	ATTRIBUTE_TOKEN SimpleAttribute;
+
+ClassAttribute:
+	CLASS_ATTRIBUTE_TOKEN SimpleAttribute
+;
+
+	
+SimpleAttribute:
+	name=ID ( ':' type=[Type] )? ('=' initialValue=ExpressionLevel7)?
+;
+
+
+
+	
 Method:
-    overrideMethod?=OVERRIDE_TOKEN?	(METHOD_TOKEN | classMethod?=CLASS_METHOD_TOKEN) 
-		name=ID 
+    overrideMethod?=OVERRIDE_TOKEN?	(METHOD_TOKEN | classMethod?=CLASS_METHOD_TOKEN) name=ID 
 		=> (OPEN_TOKEN ((parameters+=Parameter) (SEPARATOR_TOKEN parameters+=Parameter)*)?  CLOSE_TOKEN)?
 		( ':' type=[Type] )?
 	statements+=Statement*
@@ -42,8 +56,6 @@ Return:
 LocalVariable:
 	LET_TOKEN (name=ID) ( ':' type=[Type] )? ('=' (value=ExpressionLevel7))?;
 
-Attribute:
-	(ATTRIBUTE_TOKEN|classAttribute?=CLASS_ATTRIBUTE_TOKEN) name=ID ( ':' type=[Type] )? ('=' initialValue=ExpressionLevel7)?;
 
 //Max prioirty
 ExpressionLevel7 returns Expression:
