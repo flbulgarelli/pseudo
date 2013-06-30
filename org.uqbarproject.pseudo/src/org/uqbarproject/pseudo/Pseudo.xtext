@@ -14,23 +14,22 @@ ExceptionType:
 ;
 
 ClassType:
-  (CLASS_TOKEN name=ID (INHERITS_TOKEN superType=[Type])?) (OPEN_TOKEN (members+=SimpleAttribute*) CLOSE_TOKEN)?
+  (CLASS_TOKEN name=ID (INHERITS_TOKEN superType=[Type])?) (OPEN_TOKEN (members+=SimpleInstanceAttribute*) CLOSE_TOKEN)?
 	members+=Member*	
 	END_TOKEN;
 
 Member:
 	InstanceAttribute | ClassAttribute | Method;
 
-InstanceAttribute:
-	ATTRIBUTE_TOKEN SimpleAttribute;
+InstanceAttribute returns Attribute:
+	{InstanceAttribute} ATTRIBUTE_TOKEN name=ID ( ':' type=[Type] )? ('=' initialValue=ExpressionLevel7)?;
 
-ClassAttribute:
-	CLASS_ATTRIBUTE_TOKEN SimpleAttribute
+ClassAttribute returns Attribute:
+	{ClassAttribute} CLASS_ATTRIBUTE_TOKEN name=ID ( ':' type=[Type] )? ('=' initialValue=ExpressionLevel7)?
 ;
-
 	
-SimpleAttribute:
-	name=ID ( ':' type=[Type] )? ('=' initialValue=ExpressionLevel7)?
+SimpleInstanceAttribute returns Attribute:
+  {SimpleInstanceAttribute}	name=ID ( ':' type=[Type] )? ('=' initialValue=ExpressionLevel7)?
 ;
 
 	
