@@ -33,8 +33,6 @@ SimpleAttribute:
 	name=ID ( ':' type=[Type] )? ('=' initialValue=ExpressionLevel7)?
 ;
 
-
-
 	
 Method:
     overrideMethod?=OVERRIDE_TOKEN?	(METHOD_TOKEN | classMethod?=CLASS_METHOD_TOKEN) name=ID 
@@ -128,7 +126,7 @@ Number:
 	INT ('.' INT)?;
 
 MessageSendExpression returns Expression:
-	ExpressionLevel4  ({MessageSendExpression.receptor=current} MESSAGE_SEND_TOKEN message=Applicable)* 
+	ExpressionLevel4  ({MessageSendExpression.receptor=current} MESSAGE_SEND_TOKEN message=Message)* 
 ;
 
 ComparisonExpression returns Expression:
@@ -145,11 +143,11 @@ enum ComparisonOperation:
 ;
 
 ForAllExpression:
-	FOR_ALL_IN_TOKEN target=ExpressionLevel5 action=Applicable
+	FOR_ALL_IN_TOKEN target=ExpressionLevel5 action=Message
 ;
 
 SelectExpression:
-	SELECT_TOKEN mapping=Applicable SELECT_FROM_TOKEN target=ExpressionLevel3 
+	SELECT_TOKEN mapping=Message SELECT_FROM_TOKEN target=ExpressionLevel3 
 ;
 
 ReductionExpression:
@@ -157,18 +155,18 @@ ReductionExpression:
 ;
 
 Reduction:
-	{Sum} SUM_TOKEN (OF_TOKEN? mapping=Applicable)?  | 
-	{Average} AVERAGE_TOKEN (OF_TOKEN ? mapping=Applicable)? | 
-	{Min} MIN_TOKEN (mapping=Applicable)? (COMPARE_BY_TOKEN criteria=Applicable)? | 
-	{Max} MAX_TOKEN (mapping=Applicable)? (COMPARE_BY_TOKEN criteria=Applicable)? | 
-	{All} ALL_TOKEN (mapping=Applicable)? SATISFY_TOKEN (criteria=Applicable) |
-	{Any} ANY_TOKEN (mapping=Applicable)? SATISFY_TOKEN (criteria=Applicable) |
-	{First} FIRST_TOKEN (mapping=Applicable)? | 
-	{Take} TAKE_TOKEN (amount=ExpressionLevel3) (mapping=Applicable)?
+	{Sum} SUM_TOKEN (OF_TOKEN? mapping=Message)?  | 
+	{Average} AVERAGE_TOKEN (OF_TOKEN ? mapping=Message)? | 
+	{Min} MIN_TOKEN (mapping=Message)? (COMPARE_BY_TOKEN criteria=Message)? | 
+	{Max} MAX_TOKEN (mapping=Message)? (COMPARE_BY_TOKEN criteria=Message)? | 
+	{All} ALL_TOKEN (mapping=Message)? SATISFY_TOKEN (criteria=Message) |
+	{Any} ANY_TOKEN (mapping=Message)? SATISFY_TOKEN (criteria=Message) |
+	{First} FIRST_TOKEN (mapping=Message)? | 
+	{Take} TAKE_TOKEN (amount=ExpressionLevel3) (mapping=Message)?
 ;
 
 FilteredExpression returns Expression:
-	ExpressionLevel2 ({FilteredExpression.target=current} WHERE_TOKEN condition=Applicable)?
+	ExpressionLevel2 ({FilteredExpression.target=current} WHERE_TOKEN condition=Message)?
 ;
 
 CollectionLiteralExpression:
@@ -220,12 +218,7 @@ Initialization:
 	INIT_WITH_TOKEN attribute=ID  '='  initialValue=ExpressionLevel7
 ;
 
-Applicable returns Applicable:
-	Message ({Applicable.left=current} (andThen?=AND_THEN_TOKEN | compose?=COMPOSE_TOKEN | or?=OR_TOKEN | and?=AND_TOKEN) right=Message)*
-;
-
-
-Message returns Applicable:
+Message:
 	{Message} selector=ID =>(OPEN_TOKEN (arguments+=ExpressionLevel7 (SEPARATOR_TOKEN arguments+=ExpressionLevel7)*)? CLOSE_TOKEN)?
 ;
 
