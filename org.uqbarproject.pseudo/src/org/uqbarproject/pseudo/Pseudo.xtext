@@ -143,18 +143,18 @@ enum ComparisonOperation:
 
 ForEachExpression:
 	//effectfull action
-	{ForEach} FOR_EACH_TOKEN var=IdExpression IN_TOKEN target=ExpressionLevel5 DO_TOKEN action=ExpressionLevel7 END_TOKEN |
+	{ForEach} FOR_EACH_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 DO_TOKEN action=ExpressionLevel7 END_TOKEN |
 	//general transform action 
-	{Map} MAP_TOKEN var=IdExpression IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=ExpressionLevel7 END_TOKEN |
-	{Filter} FILTER_TOKEN var=IdExpression IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=ExpressionLevel7 END_TOKEN |
-	{Sum} SUM_TOKEN var=IdExpression IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=ExpressionLevel7 END_TOKEN |
-	{Max} MAX_TOKEN var=IdExpression IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=ExpressionLevel7 END_TOKEN |
-	{Min} MIN_TOKEN var=IdExpression IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=ExpressionLevel7 END_TOKEN |
-	{Average} AVERAGE_TOKEN var=IdExpression IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=ExpressionLevel7 END_TOKEN |
-	{Sort} SORT_TOKEN var=IdExpression IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=ExpressionLevel7 END_TOKEN |
+	{Map} MAP_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=ExpressionLevel7 END_TOKEN |
+	{Filter} FILTER_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=ExpressionLevel7 END_TOKEN |
+	{Sum} SUM_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=ExpressionLevel7 END_TOKEN |
+	{Max} MAX_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=ExpressionLevel7 END_TOKEN |
+	{Min} MIN_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=ExpressionLevel7 END_TOKEN |
+	{Average} AVERAGE_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=ExpressionLevel7 END_TOKEN |
+	{Sort} SORT_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=ExpressionLevel7 END_TOKEN |
 	//boolean transform action
-	{All} ALL_TOKEN var=IdExpression IN_TOKEN target=ExpressionLevel5 SATISFY_TOKEN action=ExpressionLevel7 END_TOKEN |
-	{Any} ANY_TOKEN var=IdExpression IN_TOKEN target=ExpressionLevel5 SATISFY_TOKEN action=ExpressionLevel7 END_TOKEN 
+	{All} ALL_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 SATISFY_TOKEN action=ExpressionLevel7 END_TOKEN |
+	{Any} ANY_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 SATISFY_TOKEN action=ExpressionLevel7 END_TOKEN 
 ;
 
 CollectionLiteralExpression:
