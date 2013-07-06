@@ -31,14 +31,14 @@ Member:
 	InstanceAttribute | ClassAttribute | Method;
 
 InstanceAttribute returns Attribute:
-	{InstanceAttribute} ATTRIBUTE_TOKEN name=ID ( ':' type=[Type] )? ('=' initialValue=ExpressionLevel7)?;
+	{InstanceAttribute} ATTRIBUTE_TOKEN name=ID ( ':' type=[Type] )? ('=' initialValue=GeneralExpression)?;
 
 ClassAttribute returns Attribute:
-	{ClassAttribute} CLASS_ATTRIBUTE_TOKEN name=ID ( ':' type=[Type] )? ('=' initialValue=ExpressionLevel7)?
+	{ClassAttribute} CLASS_ATTRIBUTE_TOKEN name=ID ( ':' type=[Type] )? ('=' initialValue=GeneralExpression)?
 ;
 	
 SimpleInstanceAttribute returns Attribute:
-  {SimpleInstanceAttribute}	name=ID ( ':' type=[Type] )? ('=' initialValue=ExpressionLevel7)?
+  {SimpleInstanceAttribute}	name=ID ( ':' type=[Type] )? ('=' initialValue=GeneralExpression)?
 ;
 
 MessageSignature:
@@ -60,25 +60,32 @@ Parameter:
 ;	
 
 Statement:
-	ExpressionLevel7 | Return | LocalVariable ;
+	GeneralExpression | Return ;
 
 Return:
-	RETURN_TOKEN value=ExpressionLevel7;
+	RETURN_TOKEN value=RestrictedExpression;
 	
 LocalVariable:
-	LET_TOKEN (name=ID) ( ':' type=[Type] )? ('=' (value=ExpressionLevel7))?;
+	LET_TOKEN (name=ID) ( ':' type=[Type] )? ('=' (value=GeneralExpression))?;
 
-
-//Max prioirty
-ExpressionLevel7 returns Expression:
-	ExpressionLevel6 | 
+/**
+ * Expressions that are either basic, assignment or local variable declarations.
+ * They are very general, and thus can appear only in some specific parts of the AST where statements are valid. 
+ */
+GeneralExpression returns Expression:
+	RestrictedExpression |
 	AssignExpression | 
-	IncrementExpression | 
-	DecrementExpression 
+	LocalVariable 
 ;
 
-ExpressionLevel6 returns Expression:
-	ComparisonExpression 
+/** 
+ * Restricted expression may appear mostly everywhere where an expression is admitted, 
+ * including return statements
+ */
+RestrictedExpression returns Expression:
+	ComparisonExpression | 
+	IncrementExpression | 
+	DecrementExpression   
 ;
 
 ExpressionLevel5 returns Expression:
@@ -121,7 +128,7 @@ ExpressionLevel0 returns Expression:
 	{FalseExpression} FALSE_TOKEN |
 	{SelfExpression} SELF_TOKEN |
 	{CatchedExceptionExpression} CATCHED_EXCEPTION_TOKEN |
-	OPEN_TOKEN ExpressionLevel7  CLOSE_TOKEN
+	OPEN_TOKEN GeneralExpression  CLOSE_TOKEN
 	;
 	
 IdExpression:
@@ -157,18 +164,18 @@ enum ComparisonOperation:
 
 ForEachExpression:
 	//effectfull action
-	{ForEach} FOR_EACH_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 DO_TOKEN action=ExpressionLevel7 END_TOKEN |
+	{ForEach} FOR_EACH_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 DO_TOKEN action=GeneralExpression END_TOKEN |
 	//general transform action 
-	{Map} MAP_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=ExpressionLevel7 END_TOKEN |
-	{Filter} FILTER_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=ExpressionLevel7 END_TOKEN |
-	{Sum} SUM_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=ExpressionLevel7 END_TOKEN |
-	{Max} MAX_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=ExpressionLevel7 END_TOKEN |
-	{Min} MIN_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=ExpressionLevel7 END_TOKEN |
-	{Average} AVERAGE_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=ExpressionLevel7 END_TOKEN |
-	{Sort} SORT_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=ExpressionLevel7 END_TOKEN |
+	{Map} MAP_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=GeneralExpression END_TOKEN |
+	{Filter} FILTER_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=GeneralExpression END_TOKEN |
+	{Sum} SUM_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=GeneralExpression END_TOKEN |
+	{Max} MAX_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=GeneralExpression END_TOKEN |
+	{Min} MIN_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=GeneralExpression END_TOKEN |
+	{Average} AVERAGE_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=GeneralExpression END_TOKEN |
+	{Sort} SORT_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=GeneralExpression END_TOKEN |
 	//boolean transform action
-	{All} ALL_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 SATISFY_TOKEN action=ExpressionLevel7 END_TOKEN |
-	{Any} ANY_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 SATISFY_TOKEN action=ExpressionLevel7 END_TOKEN 
+	{All} ALL_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 SATISFY_TOKEN action=GeneralExpression END_TOKEN |
+	{Any} ANY_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 SATISFY_TOKEN action=GeneralExpression END_TOKEN 
 ;
 
 CollectionLiteralExpression:
@@ -176,31 +183,31 @@ CollectionLiteralExpression:
 ;
 
 ListLiteralExpression:
-	{ListLiteralExpression} LIST_OPEN_TOKEN (elements+=ExpressionLevel7 (SEPARATOR_TOKEN elements+=ExpressionLevel7)*)?  LIST_CLOSE_TOKEN	
+	{ListLiteralExpression} LIST_OPEN_TOKEN (elements+=GeneralExpression (SEPARATOR_TOKEN elements+=GeneralExpression)*)?  LIST_CLOSE_TOKEN	
 ;
 
 SetLiteralExpression:
-	{SetLiteralExpression} SET_OPEN_TOKEN (elements+=ExpressionLevel7 (SEPARATOR_TOKEN elements+=ExpressionLevel7)*)?  SET_CLOSE_TOKEN	
+	{SetLiteralExpression} SET_OPEN_TOKEN (elements+=GeneralExpression (SEPARATOR_TOKEN elements+=GeneralExpression)*)?  SET_CLOSE_TOKEN	
 ;
 
 WhenExpression:
-	(WHEN_TOKEN (cases+=ExpressionLevel7) 
-	THEN_TOKEN actions+= ExpressionLevel7)+ 
-	(OTHERWISE_TOKEN defaultAction=ExpressionLevel7)?
+	(WHEN_TOKEN (cases+=GeneralExpression) 
+	THEN_TOKEN actions+= GeneralExpression)+ 
+	(OTHERWISE_TOKEN defaultAction=GeneralExpression)?
 	END_TOKEN 
 ;
 
 TryCatchExpression:
 	TRY_TOKEN 
-		action= ExpressionLevel7
+		action= GeneralExpression
 	CATCH_TOKEN  
-		catchAction=ExpressionLevel7	
+		catchAction=GeneralExpression	
 	END_TOKEN 
 ;
 
 
 NewExpression:
-	NEW_TOKEN target = [Type] =>(OPEN_TOKEN (arguments+=ExpressionLevel7 (SEPARATOR_TOKEN arguments+=ExpressionLevel7)*)? CLOSE_TOKEN)?
+	NEW_TOKEN target = [Type] =>(OPEN_TOKEN (arguments+=GeneralExpression (SEPARATOR_TOKEN arguments+=GeneralExpression)*)? CLOSE_TOKEN)?
 ;
 
 InitExpression:
@@ -210,15 +217,15 @@ InitExpression:
 ;
 
 Initialization:
-	INIT_WITH_TOKEN attribute=ID  '='  initialValue=ExpressionLevel7
+	INIT_WITH_TOKEN attribute=ID  '='  initialValue=GeneralExpression
 ;
 
 Message:
-	{Message} selector=ID =>(OPEN_TOKEN (arguments+=ExpressionLevel7 (SEPARATOR_TOKEN arguments+=ExpressionLevel7)*)? CLOSE_TOKEN)?
+	{Message} selector=ID =>(OPEN_TOKEN (arguments+=GeneralExpression (SEPARATOR_TOKEN arguments+=GeneralExpression)*)? CLOSE_TOKEN)?
 ;
 
 SuperSend:
-	{SuperSend} SUPER_TOKEN =>(OPEN_TOKEN (arguments+=ExpressionLevel7 (SEPARATOR_TOKEN arguments+=ExpressionLevel7)*)? CLOSE_TOKEN)?
+	{SuperSend} SUPER_TOKEN =>(OPEN_TOKEN (arguments+=GeneralExpression (SEPARATOR_TOKEN arguments+=GeneralExpression)*)? CLOSE_TOKEN)?
 ;
 
 ThrowExpression:
@@ -227,11 +234,11 @@ ThrowExpression:
 ;
 
 AssignExpression:
-	ASSIGN_TOKEN (target=[ecore::EObject]) '=' value=ExpressionLevel6;
+	ASSIGN_TOKEN (target=[ecore::EObject]) '=' value=RestrictedExpression;
 	
 IncrementExpression:
-	INCREMENT_TOKEN target=[ecore::EObject] (ACCUM_BY_TOKEN value=ExpressionLevel6)?;
+	INCREMENT_TOKEN target=[ecore::EObject] (ACCUM_BY_TOKEN value=RestrictedExpression)?;
 	
 DecrementExpression:
-	DECREMENT_TOKEN target=[ecore::EObject] (ACCUM_BY_TOKEN value=ExpressionLevel6)?;
+	DECREMENT_TOKEN target=[ecore::EObject] (ACCUM_BY_TOKEN value=RestrictedExpression)?;
 	

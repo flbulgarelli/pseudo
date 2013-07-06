@@ -55,10 +55,10 @@ public class PseudoFormatter extends AbstractDeclarativeFormatter {
     c.setNoSpace().before(grammar.getSET_CLOSE_TOKENRule());
     
     
-    c.setIndentationIncrement().before(grammar.getWhenExpressionAccess().getActionsExpressionLevel7ParserRuleCall_0_3_0());
-    c.setIndentationDecrement().after(grammar.getWhenExpressionAccess().getActionsExpressionLevel7ParserRuleCall_0_3_0());
-    c.setIndentationIncrement().before(grammar.getWhenExpressionAccess().getDefaultActionExpressionLevel7ParserRuleCall_1_1_0());
-    c.setIndentationDecrement().after(grammar.getWhenExpressionAccess().getDefaultActionExpressionLevel7ParserRuleCall_1_1_0());
+    c.setIndentationIncrement().before(grammar.getWhenExpressionAccess().getActionsGeneralExpressionParserRuleCall_0_3_0());
+    c.setIndentationDecrement().after(grammar.getWhenExpressionAccess().getActionsGeneralExpressionParserRuleCall_0_3_0());
+    c.setIndentationIncrement().before(grammar.getWhenExpressionAccess().getActionsGeneralExpressionParserRuleCall_0_3_0());
+    c.setIndentationDecrement().after(grammar.getWhenExpressionAccess().getActionsGeneralExpressionParserRuleCall_0_3_0());
     
     c.setIndentation(
       grammar.getInitExpressionAccess().getINIT_TOKENParserRuleCall_0(), 
