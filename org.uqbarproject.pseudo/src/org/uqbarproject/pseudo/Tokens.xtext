@@ -7,8 +7,11 @@ END_TOKEN: 'fin';
 
 EXCEPTION_TOKEN: 'excepcion';
 CLASS_TOKEN: 'clase';
+CONTRACT_TOKEN: 'interfaz' | 'contrato';
 INHERITS_TOKEN: 'hereda';
+IMPLEMENTS_TOKEN: 'implementa';
 
+MESSAGE_SIGNATURE_TOKEN : 'mensaje';
 METHOD_TOKEN: 'mi' | 'metodo';
 ATTRIBUTE_TOKEN: 'vi' | 'atributo';
 

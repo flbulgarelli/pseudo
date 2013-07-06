@@ -13,7 +13,6 @@ import org.eclipse.xtext.scoping.Scopes;
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider;
 import org.uqbarproject.pseudo.pseudo.Attribute;
 import org.uqbarproject.pseudo.pseudo.ClassType;
-import org.uqbarproject.pseudo.pseudo.ForEach;
 import org.uqbarproject.pseudo.pseudo.ForEachExpression;
 import org.uqbarproject.pseudo.pseudo.LocalVariable;
 import org.uqbarproject.pseudo.pseudo.Method;

@@ -69,8 +69,8 @@ public class PseudoFormatter extends AbstractDeclarativeFormatter {
     c.setIndentationDecrement().before(grammar.getMethodAccess().getEND_TOKENParserRuleCall_6());
     
     c.setIndentation(
-      grammar.getClassTypeAccess().getCLASS_TOKENParserRuleCall_0_0(), 
-      grammar.getClassTypeAccess().getEND_TOKENParserRuleCall_3());
+      grammar.getClassTypeAccess().getCLASS_TOKENParserRuleCall_0(), 
+      grammar.getClassTypeAccess().getEND_TOKENParserRuleCall_6());
     
   }
 }
