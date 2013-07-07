@@ -83,7 +83,7 @@ GeneralExpression returns Expression:
  * including return statements
  */
 RestrictedExpression returns Expression:
-	/*descending*/ComparisonExpression | 
+	/*descending*/OperatorExpression | 
 	IncrementExpression | 
 	DecrementExpression   
 ;
@@ -119,7 +119,7 @@ RestrictedExpressionLevel0 returns Expression:
 	{SelfExpression} SELF_TOKEN |
 	{CatchedExceptionExpression} CATCHED_EXCEPTION_TOKEN |
 	OPEN_TOKEN RestrictedExpression  CLOSE_TOKEN
-	;
+;
 	
 IdExpression:
 	value=[ecore::EObject]
@@ -139,11 +139,19 @@ MessageSendExpression returns Expression:
 	RestrictedExpressionLevel2  ({MessageSendExpression.receptor=current} MESSAGE_SEND_TOKEN message=Message)* 
 ;
 
-ComparisonExpression returns Expression:
-	RestrictedExpressionLevel3 ({ComparisonExpression.left=current} op=ComparisonOperation right=RestrictedExpressionLevel3)? 
+OperatorExpression returns Expression:
+	AritmeticExpression ({ComparisonExpression.left=current} op=ComparisonOperator right=AritmeticExpression)? 
 ;
 
-enum ComparisonOperation:
+AritmeticExpression returns Expression:
+	ProductExpression ({SumExpression.left=current} op=('+'|('-')) right=ProductExpression)*
+;
+
+ProductExpression returns Expression:
+	RestrictedExpressionLevel3 ({ProductExpression.left=current} op=('*'|('/')) right=RestrictedExpressionLevel3)*
+;
+
+enum ComparisonOperator:
 	GT='>' |
 	LT='<' |
 	GTE= '>=' |
