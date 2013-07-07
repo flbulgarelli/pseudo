@@ -83,43 +83,33 @@ GeneralExpression returns Expression:
  * including return statements
  */
 RestrictedExpression returns Expression:
-	ComparisonExpression | 
+	/*descending*/ComparisonExpression | 
 	IncrementExpression | 
 	DecrementExpression   
 ;
 
-ExpressionLevel5 returns Expression:
-	MessageSendExpression |
-	ForEachExpression |
+RestrictedExpressionLevel3 returns Expression:
+	/*descending*/ MessageSendExpression |
 	ThrowExpression |
+	ForEachExpression |
 	InitExpression |
 	WhenExpression |
 	TryCatchExpression
 ;
 
-ExpressionLevel4 returns Expression:
-	ExpressionLevel3 
-//	|
-//	TraverseExpression 
-;
-
-ExpressionLevel3 returns Expression:
-	ExpressionLevel2
-;
-
-ExpressionLevel2 returns Expression:
-	ExpressionLevel1 |
+RestrictedExpressionLevel2 returns Expression:
+	/*descending*/ RestrctedExpressionLevel1 |
 	NewExpression |
 	CollectionLiteralExpression
 ;
 
-ExpressionLevel1 returns Expression:
-	ExpressionLevel0 |
+RestrctedExpressionLevel1 returns Expression:
+	/*descending*/ RestrictedExpressionLevel0 |
 	SuperSend 
 ;
 
 //Min prioirty
-ExpressionLevel0 returns Expression:
+RestrictedExpressionLevel0 returns Expression:
 	IdExpression |
 	StringExpression |
 	NumberExpression |
@@ -128,7 +118,7 @@ ExpressionLevel0 returns Expression:
 	{FalseExpression} FALSE_TOKEN |
 	{SelfExpression} SELF_TOKEN |
 	{CatchedExceptionExpression} CATCHED_EXCEPTION_TOKEN |
-	OPEN_TOKEN GeneralExpression  CLOSE_TOKEN
+	OPEN_TOKEN RestrictedExpression  CLOSE_TOKEN
 	;
 	
 IdExpression:
@@ -146,11 +136,11 @@ Number:
 	INT ('.' INT)?;
 
 MessageSendExpression returns Expression:
-	ExpressionLevel4  ({MessageSendExpression.receptor=current} MESSAGE_SEND_TOKEN message=Message)* 
+	RestrictedExpressionLevel2  ({MessageSendExpression.receptor=current} MESSAGE_SEND_TOKEN message=Message)* 
 ;
 
 ComparisonExpression returns Expression:
-	ExpressionLevel5 ({ComparisonExpression.left=current} op=ComparisonOperation right=ExpressionLevel5)? 
+	RestrictedExpressionLevel3 ({ComparisonExpression.left=current} op=ComparisonOperation right=RestrictedExpressionLevel3)? 
 ;
 
 enum ComparisonOperation:
@@ -164,18 +154,18 @@ enum ComparisonOperation:
 
 ForEachExpression:
 	//effectfull action
-	{ForEach} FOR_EACH_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 DO_TOKEN action=GeneralExpression END_TOKEN |
+	{ForEach} FOR_EACH_TOKEN name=ID IN_TOKEN target=RestrictedExpressionLevel3 DO_TOKEN action=RestrictedExpression END_TOKEN |
 	//general transform action 
-	{Map} MAP_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=GeneralExpression END_TOKEN |
-	{Filter} FILTER_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=GeneralExpression END_TOKEN |
-	{Sum} SUM_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=GeneralExpression END_TOKEN |
-	{Max} MAX_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=GeneralExpression END_TOKEN |
-	{Min} MIN_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=GeneralExpression END_TOKEN |
-	{Average} AVERAGE_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=GeneralExpression END_TOKEN |
-	{Sort} SORT_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 BY_TOKEN action=GeneralExpression END_TOKEN |
+	{Map} MAP_TOKEN name=ID IN_TOKEN target=RestrictedExpressionLevel3 BY_TOKEN action=RestrictedExpression END_TOKEN |
+	{Filter} FILTER_TOKEN name=ID IN_TOKEN target=RestrictedExpressionLevel3 BY_TOKEN action=RestrictedExpression END_TOKEN |
+	{Sum} SUM_TOKEN name=ID IN_TOKEN target=RestrictedExpressionLevel3 BY_TOKEN action=RestrictedExpression END_TOKEN |
+	{Max} MAX_TOKEN name=ID IN_TOKEN target=RestrictedExpressionLevel3 BY_TOKEN action=RestrictedExpression END_TOKEN |
+	{Min} MIN_TOKEN name=ID IN_TOKEN target=RestrictedExpressionLevel3 BY_TOKEN action=RestrictedExpression END_TOKEN |
+	{Average} AVERAGE_TOKEN name=ID IN_TOKEN target=RestrictedExpressionLevel3 BY_TOKEN action=RestrictedExpression END_TOKEN |
+	{Sort} SORT_TOKEN name=ID IN_TOKEN target=RestrictedExpressionLevel3 BY_TOKEN action=RestrictedExpression END_TOKEN |
 	//boolean transform action
-	{All} ALL_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 SATISFY_TOKEN action=GeneralExpression END_TOKEN |
-	{Any} ANY_TOKEN name=ID IN_TOKEN target=ExpressionLevel5 SATISFY_TOKEN action=GeneralExpression END_TOKEN 
+	{All} ALL_TOKEN name=ID IN_TOKEN target=RestrictedExpressionLevel3 SATISFY_TOKEN action=RestrictedExpression END_TOKEN |
+	{Any} ANY_TOKEN name=ID IN_TOKEN target=RestrictedExpressionLevel3 SATISFY_TOKEN action=RestrictedExpression END_TOKEN 
 ;
 
 CollectionLiteralExpression:
@@ -183,31 +173,31 @@ CollectionLiteralExpression:
 ;
 
 ListLiteralExpression:
-	{ListLiteralExpression} LIST_OPEN_TOKEN (elements+=GeneralExpression (SEPARATOR_TOKEN elements+=GeneralExpression)*)?  LIST_CLOSE_TOKEN	
+	{ListLiteralExpression} LIST_OPEN_TOKEN (elements+=RestrictedExpression (SEPARATOR_TOKEN elements+=RestrictedExpression)*)?  LIST_CLOSE_TOKEN	
 ;
 
 SetLiteralExpression:
-	{SetLiteralExpression} SET_OPEN_TOKEN (elements+=GeneralExpression (SEPARATOR_TOKEN elements+=GeneralExpression)*)?  SET_CLOSE_TOKEN	
+	{SetLiteralExpression} SET_OPEN_TOKEN (elements+=RestrictedExpression (SEPARATOR_TOKEN elements+=RestrictedExpression)*)?  SET_CLOSE_TOKEN	
 ;
 
 WhenExpression:
-	(WHEN_TOKEN (cases+=GeneralExpression) 
-	THEN_TOKEN actions+= GeneralExpression)+ 
-	(OTHERWISE_TOKEN defaultAction=GeneralExpression)?
+	(WHEN_TOKEN (cases+=RestrictedExpression) 
+	THEN_TOKEN actions+= RestrictedExpression)+ 
+	(OTHERWISE_TOKEN defaultAction=RestrictedExpression)?
 	END_TOKEN 
 ;
 
 TryCatchExpression:
 	TRY_TOKEN 
-		action= GeneralExpression
+		action= RestrictedExpression
 	CATCH_TOKEN  
-		catchAction=GeneralExpression	
+		catchAction=RestrictedExpression	
 	END_TOKEN 
 ;
 
 
 NewExpression:
-	NEW_TOKEN target = [Type] =>(OPEN_TOKEN (arguments+=GeneralExpression (SEPARATOR_TOKEN arguments+=GeneralExpression)*)? CLOSE_TOKEN)?
+	NEW_TOKEN target = [Type] =>(OPEN_TOKEN (arguments+=RestrictedExpression (SEPARATOR_TOKEN arguments+=RestrictedExpression)*)? CLOSE_TOKEN)?
 ;
 
 InitExpression:
@@ -221,16 +211,16 @@ Initialization:
 ;
 
 Message:
-	{Message} selector=ID =>(OPEN_TOKEN (arguments+=GeneralExpression (SEPARATOR_TOKEN arguments+=GeneralExpression)*)? CLOSE_TOKEN)?
+	{Message} selector=ID =>(OPEN_TOKEN (arguments+=RestrictedExpression (SEPARATOR_TOKEN arguments+=RestrictedExpression)*)? CLOSE_TOKEN)?
 ;
 
 SuperSend:
-	{SuperSend} SUPER_TOKEN =>(OPEN_TOKEN (arguments+=GeneralExpression (SEPARATOR_TOKEN arguments+=GeneralExpression)*)? CLOSE_TOKEN)?
+	{SuperSend} SUPER_TOKEN =>(OPEN_TOKEN (arguments+=RestrictedExpression (SEPARATOR_TOKEN arguments+=RestrictedExpression)*)? CLOSE_TOKEN)?
 ;
 
 ThrowExpression:
-  {MessageThrowExpression} ERROR_TOKEN throwable=ExpressionLevel5 |
-  {ExceptionThrowExpression} THROW_TOKEN  throwable=ExpressionLevel5 
+  {MessageThrowExpression} ERROR_TOKEN throwable=RestrictedExpressionLevel3 |
+  {ExceptionThrowExpression} THROW_TOKEN  throwable=RestrictedExpressionLevel3 
 ;
 
 AssignExpression:
