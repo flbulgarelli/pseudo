@@ -1,18 +1,12 @@
-clase CuentaBancaria
-  atributo monto = 10
-
+clase CuentaBancaria(monto)
   metodo depositar(cantidad)
     incrementar monto en cantidad
-  fin
 
   metodo extraer(cantidad)
     decrementar monto en cantidad
-  fin
-
+ 
   metodo imprimir
   //    'Cuenta(' // ++ monto ++ ')' 
-  fin
 
-fin
  
 

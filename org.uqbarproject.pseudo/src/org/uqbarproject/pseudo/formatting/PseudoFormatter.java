@@ -24,23 +24,19 @@ public class PseudoFormatter extends AbstractDeclarativeFormatter {
     c.setLinewrap(0, 1, 2).before(grammar.getSL_COMMENTRule());
     c.setLinewrap(0, 1, 2).before(grammar.getML_COMMENTRule());
     c.setLinewrap(0, 1, 1).after(grammar.getML_COMMENTRule());
-    
+  
     c.setLinewrap(2).around(grammar.getMethodRule());
-    c.setLinewrap().around(grammar.getClassAttributeRule());
-    c.setLinewrap().around(grammar.getInstanceAttributeRule());
+//    c.setLinewrap().around(grammar.getClassAttributeRule());
+//    c.setLinewrap().around(grammar.getInstanceAttributeRule());
     
     c.setLinewrap().around(grammar.getStatementRule());
-    
-    c.setLinewrap().before(grammar.getWHEN_TOKENRule());
+
+    c.setLinewrap().before(grammar.getWhenExpressionRule());
     c.setLinewrap().after(grammar.getTHEN_TOKENRule());
     c.setLinewrap().around(grammar.getOTHERWISE_TOKENRule());
     
     c.setLinewrap().around(grammar.getNewExpressionRule());
     
-    
-    c.setLinewrap().before(grammar.getInitExpressionAccess().getINIT_TOKENParserRuleCall_0());
-    c.setLinewrap().before(grammar.getINIT_WITH_TOKENRule());
-
     c.setSpace("  ");
     
     c.setLinewrap().around(grammar.getEND_TOKENRule());
@@ -55,22 +51,18 @@ public class PseudoFormatter extends AbstractDeclarativeFormatter {
     c.setNoSpace().before(grammar.getSET_CLOSE_TOKENRule());
     
     
-    c.setIndentationIncrement().before(grammar.getWhenExpressionAccess().getActionsGeneralExpressionParserRuleCall_0_3_0());
-    c.setIndentationDecrement().after(grammar.getWhenExpressionAccess().getActionsGeneralExpressionParserRuleCall_0_3_0());
-    c.setIndentationIncrement().before(grammar.getWhenExpressionAccess().getActionsGeneralExpressionParserRuleCall_0_3_0());
-    c.setIndentationDecrement().after(grammar.getWhenExpressionAccess().getActionsGeneralExpressionParserRuleCall_0_3_0());
-    
-    c.setIndentation(
-      grammar.getInitExpressionAccess().getINIT_TOKENParserRuleCall_0(), 
-      grammar.getInitExpressionAccess().getEND_TOKENParserRuleCall_4());
-
-    c.setIndentationIncrement().after(grammar.getMETHOD_TOKENRule());
-    c.setIndentationIncrement().after(grammar.getCLASS_METHOD_TOKENRule());
-    c.setIndentationDecrement().before(grammar.getMethodAccess().getEND_TOKENParserRuleCall_6());
-    
-    c.setIndentation(
-      grammar.getClassTypeAccess().getCLASS_TOKENParserRuleCall_0(), 
-      grammar.getClassTypeAccess().getEND_TOKENParserRuleCall_6());
+//    c.setIndentationIncrement().before(grammar.getWhenExpressionAccess().getActionsGeneralExpressionParserRuleCall_0_3_0());
+//    c.setIndentationDecrement().after(grammar.getWhenExpressionAccess().getActionsGeneralExpressionParserRuleCall_0_3_0());
+//    c.setIndentationIncrement().before(grammar.getWhenExpressionAccess().getActionsGeneralExpressionParserRuleCall_0_3_0());
+//    c.setIndentationDecrement().after(grammar.getWhenExpressionAccess().getActionsGeneralExpressionParserRuleCall_0_3_0());
+//    
+//    c.setIndentationIncrement().after(grammar.getMETHOD_TOKENRule());
+//    c.setIndentationIncrement().after(grammar.getCLASS_METHOD_TOKENRule());
+//    c.setIndentationDecrement().before(grammar.getMethodAccess().getEND_TOKENParserRuleCall_6());
+//    
+//    c.setIndentation(
+//      grammar.getClassTypeAccess().getCLASS_TOKENParserRuleCall_0(), 
+//      grammar.getClassTypeAccess().getEND_TOKENParserRuleCall_6());
     
   }
 }

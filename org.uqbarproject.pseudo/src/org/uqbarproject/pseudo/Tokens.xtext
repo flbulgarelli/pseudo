@@ -32,10 +32,9 @@ MESSAGE_SEND_TOKEN:
 /* basic literals */
 
 NULL_TOKEN : 'nada'|'null'|'nil';
-TRUE_TOKEN: 'verdadero'|'si'|'true';
-FALSE_TOKEN: 'falso'|'no'|'false';
-SELF_TOKEN: 'this'|'self';
-CATCHED_EXCEPTION_TOKEN: 'atrapada' | 'capturada';
+TRUE_TOKEN: 'verdadero' |'true';
+FALSE_TOKEN: 'falso' |'false';
+SELF_TOKEN: ('self' | 'this' | 'yo' | 'este' | 'esta');
 
 /* collection literals */
 LIST_OPEN_TOKEN:
@@ -51,50 +50,27 @@ SET_CLOSE_TOKEN:
 	'}'
 ;
 
+IF_TOKEN: 'si';
+
 /* When Tokens */
 WHEN_TOKEN: 'cuando';
 THEN_TOKEN: 'entonces';
 OTHERWISE_TOKEN: 'caso contrario' | 'otro caso';
 
-RETURN_TOKEN: 'devolver';
+RETURN_TOKEN: 'devolver' | 'retornar';
 THROW_TOKEN: 'lanzar';
 ERROR_TOKEN: 'error';
 TRY_TOKEN: 'intentar';
-CATCH_TOKEN: 'capturar';
+CATCH_TOKEN: 'capturar' | 'atrapar';
 
 /* Assignment tokens */
 
 LET_TOKEN: 'variable';
-ASSIGN_TOKEN: 'actualizar';
+ASSIGN_TOKEN: 'actualizar' | 'asignar';
 INCREMENT_TOKEN: 'incrementar';
 DECREMENT_TOKEN: 'decrementar';
 ACCUM_BY_TOKEN: 'en';
 
 /* Instantiation tokens */
-NEW_TOKEN: 'new';
-INIT_TOKEN: 'inicializar';
-SETUP_TOKEN: 'configurar';
-INIT_WITH_TOKEN: 'con' ; 
+NEW_TOKEN: 'nuevo';
 
-
-OR_TOKEN: 'o' ;
-AND_TOKEN: 'y' ;
-
-/* Traversable-related */
-IN_TOKEN: 'en';
-BY_TOKEN: 'segun';
-DO_TOKEN: 'hacer';
-SATISFY_TOKEN:'satisface'|'cumple';
-
-FOR_EACH_TOKEN: 'para' 'cada';
-
-MAP_TOKEN: 'mapear';
-FILTER_TOKEN: 'filtrar';
-SUM_TOKEN: 'sumatoria';
-MAX_TOKEN: 'maximo';
-MIN_TOKEN: 'minimo';
-SORT_TOKEN: 'ordenar';
-AVERAGE_TOKEN: 'promedio';
-
-ANY_TOKEN: 'algun';
-ALL_TOKEN: 'todo';

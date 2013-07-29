@@ -1,242 +1,178 @@
 grammar org.uqbarproject.pseudo.Pseudo with org.uqbarproject.pseudo.Tokens
 
 generate pseudo "http://www.uqbarproject.org/pseudo/Pseudo"
-
 import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 
 Model:
 	types+=Type*;
 
-Type: ExceptionType | ClassType | ContractType 	;
+Type:
+	ClassType | ContractType | ExceptionType;
 
 ExceptionType:
-	EXCEPTION_TOKEN name=ID
-;
+	'excepcion' name=ID;
+
+ContractType:
+	('interfaz' | 'contrato') name=(ID | OPERATOR)
+	('hereda' contracts+=ID (',' contracts+=ID)*)?
+	members+=Signature*;
+
+Signature:
+	'metodo' name=(ID | OPERATOR)
+	('(' ((parameters+=Parameter) (',' parameters+=Parameter)*)? ')')?
+	(':' type=ID)?;
 
 ClassType:
-  CLASS_TOKEN name=ID 
-  	(INHERITS_TOKEN superType=[Type])?
-  	(IMPLEMENTS_TOKEN (contracts+=[ContractType] (SEPARATOR_TOKEN contracts+=[ContractType])*)?)?
-    (OPEN_TOKEN (members+=SimpleInstanceAttribute (SEPARATOR_TOKEN members+=SimpleInstanceAttribute)*)? CLOSE_TOKEN)?
-	members+=Member*	
-	END_TOKEN;
-	
-ContractType:
-  CONTRACT_TOKEN name=ID 
-    (INHERITS_TOKEN (contracts+=[ContractType] (SEPARATOR_TOKEN contracts+=[ContractType])*)?)?
-	members+=MessageSignature*	
-	END_TOKEN;	
+	'clase' ('abstracta')? name=ID
+	('(' (members+=Attribute (',' members+=Attribute)*)? ')')?
+	(('hereda' superType=ID)
+	('(' (constructionArguments+=Expression0 (',' constructionArguments+=Expression0)*)? ')')?)?
+	('implementa' contracts+=ID (',' contracts+=ID)*)?
+	('incluye' mixins+=ID (',' mixins+=ID)*)?
+	members+=Method*;
 
-Member:
-	InstanceAttribute | ClassAttribute | Method;
+Attribute:
+	name=ID
+	(':' type=ID)?;
 
-InstanceAttribute returns Attribute:
-	{InstanceAttribute} ATTRIBUTE_TOKEN name=ID ( ':' type=[Type] )? ('=' initialValue=GeneralExpression)?;
-
-ClassAttribute returns Attribute:
-	{ClassAttribute} CLASS_ATTRIBUTE_TOKEN name=ID ( ':' type=[Type] )? ('=' initialValue=GeneralExpression)?
-;
-	
-SimpleInstanceAttribute returns Attribute:
-  {SimpleInstanceAttribute}	name=ID ( ':' type=[Type] )? ('=' initialValue=GeneralExpression)?
-;
-
-MessageSignature:
-	MESSAGE_SIGNATURE_TOKEN 
-		name=ID 
-		=> (OPEN_TOKEN ((parameters+=Parameter) (SEPARATOR_TOKEN parameters+=Parameter)*)?  CLOSE_TOKEN)? 
-		( ':' type=[Type] )?
-;
-	
 Method:
-    overrideMethod?=OVERRIDE_TOKEN?	(METHOD_TOKEN | classMethod?=CLASS_METHOD_TOKEN) name=ID 
-		=> (OPEN_TOKEN ((parameters+=Parameter) (SEPARATOR_TOKEN parameters+=Parameter)*)?  CLOSE_TOKEN)?
-		( ':' type=[Type] )?
-	statements+=Statement*
-	END_TOKEN;
-	
+	('redefinir')? 'metodo' ('de' 'clase' | 'abstracto')? name=ID
+	(=> '(' ((parameters+=Parameter) (',' parameters+=Parameter)*)? ')')?
+	(':' type=ID)?
+	statements+=Statement*;
+
 Parameter:
-	name = ID ( ':' type=[Type] )?
-;	
+	name=ID (':' type=ID)?;
 
 Statement:
-	GeneralExpression | Return ;
+	LocalVar |
+	Assignment |
+	Return |
+	Increment |
+	Decrement |
+	Expression;
+
+LocalVar:
+	'variable' name=ID
+	(':' type=ID)?
+	('=' (value=Expression))?;
 
 Return:
-	RETURN_TOKEN value=RestrictedExpression;
-	
-LocalVariable:
-	LET_TOKEN (name=ID) ( ':' type=[Type] )? ('=' (value=GeneralExpression))?;
+	'retornar' value=Expression;
 
-/**
- * Expressions that are either basic, assignment or local variable declarations.
- * They are very general, and thus can appear only in some specific parts of the AST where statements are valid. 
- */
-GeneralExpression returns Expression:
-	RestrictedExpression |
-	AssignExpression | 
-	LocalVariable 
-;
+Assignment:
+	'asignar' (target=ID)
+	'=' value=Expression;
 
-/** 
- * Restricted expression may appear mostly everywhere where an expression is admitted, 
- * including return statements
- */
-RestrictedExpression returns Expression:
-	/*descending*/OperatorExpression | 
-	IncrementExpression | 
-	DecrementExpression   
-;
+Increment:
+	'incrementar' target=ID ('en' value=Expression)?;
 
-RestrictedExpressionLevel3 returns Expression:
-	/*descending*/ MessageSendExpression |
+Decrement:
+	'decrementar' target=ID ('en' value=Expression)?;
+
+Expression returns Expression:
+	(Expression0 => ({MessageSendExpression.receptor=current} message=Message)*);
+
+Expression0 returns Expression:
 	ThrowExpression |
-	ForEachExpression |
-	InitExpression |
-	WhenExpression |
-	TryCatchExpression
-;
-
-RestrictedExpressionLevel2 returns Expression:
-	/*descending*/ RestrctedExpressionLevel1 |
-	NewExpression |
-	CollectionLiteralExpression
-;
-
-RestrctedExpressionLevel1 returns Expression:
-	/*descending*/ RestrictedExpressionLevel0 |
-	SuperSend 
-;
-
-//Min prioirty
-RestrictedExpressionLevel0 returns Expression:
 	IdExpression |
-	StringExpression |
 	NumberExpression |
-	{NullExpression} NULL_TOKEN |
+	StringExpression |
+	NewExpression |
+	ListExpression |
+	LambdaExpression |
+	TryExpression |
+	WhenExpression |
+	NullExpression |
+	BooleanExpression |
+	IfExpression |
+	SelfExpression |
+	'(' Expression ')';
+
+Message:
+	OperatorMessage | IdMessage;
+
+OperatorMessage:
+	selector=OPERATOR arguments+=Expression0;
+
+IdMessage:
+	'.' selector=ID
+	=> ('(' (arguments+=Expression0 (',' arguments+=Expression0)*)? ')')?;
+
+SelfExpression:
+	{SelfExpression} SELF_TOKEN;
+
+NullExpression:
+	{NullExpression} NULL_TOKEN;
+
+BooleanExpression:
 	{TrueExpression} TRUE_TOKEN |
-	{FalseExpression} FALSE_TOKEN |
-	{SelfExpression} SELF_TOKEN |
-	{CatchedExceptionExpression} CATCHED_EXCEPTION_TOKEN |
-	OPEN_TOKEN RestrictedExpression  CLOSE_TOKEN
-;
-	
-IdExpression:
-	value=[ecore::EObject]
-;	
+	{FalseExpression} FALSE_TOKEN;
+
+ListExpression:
+	{ListExpression} '[' (elements+=Expression (',' elements+=Expression)*)? ']';
+
 StringExpression:
-	value=STRING
-;
-	
+	value=STRING;
+
 NumberExpression:
-	value=Number
-;	
+	value=Number;
+
+IdExpression:
+	name=ID;
 
 Number:
 	INT ('.' INT)?;
 
-MessageSendExpression returns Expression:
-	RestrictedExpressionLevel2  ({MessageSendExpression.receptor=current} MESSAGE_SEND_TOKEN message=Message)* 
-;
+TryExpression:
+	'intentar' tryStatements+=Statement+
+	CATCH_TOKEN '('(exception = ID (':' type=ID)?)')'
+	catchStatements+=Statement*
+	END_TOKEN;
 
-OperatorExpression returns Expression:
-	AritmeticExpression ({ComparisonExpression.left=current} op=ComparisonOperator right=AritmeticExpression)? 
-;
-
-AritmeticExpression returns Expression:
-	ProductExpression ({SumExpression.left=current} op=('+'|('-')) right=ProductExpression)*
-;
-
-ProductExpression returns Expression:
-	RestrictedExpressionLevel3 ({ProductExpression.left=current} op=('*'|('/')) right=RestrictedExpressionLevel3)*
-;
-
-enum ComparisonOperator:
-	GT='>' |
-	LT='<' |
-	GTE= '>=' |
-	LTE= '<=' |
-	EQ='=' |
-	NEQ='/='
-;
-
-ForEachExpression:
-	//effectfull action
-	{ForEach} FOR_EACH_TOKEN name=ID IN_TOKEN target=RestrictedExpressionLevel3 DO_TOKEN action=RestrictedExpression END_TOKEN |
-	//general transform action 
-	{Map} MAP_TOKEN name=ID IN_TOKEN target=RestrictedExpressionLevel3 BY_TOKEN action=RestrictedExpression END_TOKEN |
-	{Filter} FILTER_TOKEN name=ID IN_TOKEN target=RestrictedExpressionLevel3 BY_TOKEN action=RestrictedExpression END_TOKEN |
-	{Sum} SUM_TOKEN name=ID IN_TOKEN target=RestrictedExpressionLevel3 BY_TOKEN action=RestrictedExpression END_TOKEN |
-	{Max} MAX_TOKEN name=ID IN_TOKEN target=RestrictedExpressionLevel3 BY_TOKEN action=RestrictedExpression END_TOKEN |
-	{Min} MIN_TOKEN name=ID IN_TOKEN target=RestrictedExpressionLevel3 BY_TOKEN action=RestrictedExpression END_TOKEN |
-	{Average} AVERAGE_TOKEN name=ID IN_TOKEN target=RestrictedExpressionLevel3 BY_TOKEN action=RestrictedExpression END_TOKEN |
-	{Sort} SORT_TOKEN name=ID IN_TOKEN target=RestrictedExpressionLevel3 BY_TOKEN action=RestrictedExpression END_TOKEN |
-	//boolean transform action
-	{All} ALL_TOKEN name=ID IN_TOKEN target=RestrictedExpressionLevel3 SATISFY_TOKEN action=RestrictedExpression END_TOKEN |
-	{Any} ANY_TOKEN name=ID IN_TOKEN target=RestrictedExpressionLevel3 SATISFY_TOKEN action=RestrictedExpression END_TOKEN 
-;
-
-CollectionLiteralExpression:
-	ListLiteralExpression | SetLiteralExpression  
-;
-
-ListLiteralExpression:
-	{ListLiteralExpression} LIST_OPEN_TOKEN (elements+=RestrictedExpression (SEPARATOR_TOKEN elements+=RestrictedExpression)*)?  LIST_CLOSE_TOKEN	
-;
-
-SetLiteralExpression:
-	{SetLiteralExpression} SET_OPEN_TOKEN (elements+=RestrictedExpression (SEPARATOR_TOKEN elements+=RestrictedExpression)*)?  SET_CLOSE_TOKEN	
-;
+IfExpression:
+	IF_TOKEN condition=Expression
+	'entonces' trueActions+=Statement+
+	('si' 'no' falseActions+=Statement+)?
+	END_TOKEN;
 
 WhenExpression:
-	(WHEN_TOKEN (cases+=RestrictedExpression) 
-	THEN_TOKEN actions+= RestrictedExpression)+ 
-	(OTHERWISE_TOKEN defaultAction=RestrictedExpression)?
-	END_TOKEN 
-;
+	'matchear' target=Expression
+	cases+=Case+
+	END_TOKEN;
 
-TryCatchExpression:
-	TRY_TOKEN 
-		action= RestrictedExpression
-	CATCH_TOKEN  
-		catchAction=RestrictedExpression	
-	END_TOKEN 
-;
-
-
-NewExpression:
-	NEW_TOKEN target = [Type] =>(OPEN_TOKEN (arguments+=RestrictedExpression (SEPARATOR_TOKEN arguments+=RestrictedExpression)*)? CLOSE_TOKEN)?
-;
-
-InitExpression:
-	INIT_TOKEN (NEW_TOKEN)? target=[Type]
-	(initializations+=Initialization)+  
-	END_TOKEN 	
-;
-
-Initialization:
-	INIT_WITH_TOKEN attribute=ID  '='  initialValue=GeneralExpression
-;
-
-Message:
-	{Message} selector=ID =>(OPEN_TOKEN (arguments+=RestrictedExpression (SEPARATOR_TOKEN arguments+=RestrictedExpression)*)? CLOSE_TOKEN)?
-;
-
-SuperSend:
-	{SuperSend} SUPER_TOKEN =>(OPEN_TOKEN (arguments+=RestrictedExpression (SEPARATOR_TOKEN arguments+=RestrictedExpression)*)? CLOSE_TOKEN)?
-;
+Case:
+	'caso' condition=Expression
+	'entonces' actions+=Statement+;
 
 ThrowExpression:
-  {MessageThrowExpression} ERROR_TOKEN throwable=RestrictedExpressionLevel3 |
-  {ExceptionThrowExpression} THROW_TOKEN  throwable=RestrictedExpressionLevel3 
-;
+	THROW_TOKEN throwable=Expression;
 
-AssignExpression:
-	ASSIGN_TOKEN (target=[ecore::EObject]) '=' value=RestrictedExpression;
-	
-IncrementExpression:
-	INCREMENT_TOKEN target=[ecore::EObject] (ACCUM_BY_TOKEN value=RestrictedExpression)?;
-	
-DecrementExpression:
-	DECREMENT_TOKEN target=[ecore::EObject] (ACCUM_BY_TOKEN value=RestrictedExpression)?;
-	
+NewExpression:
+	NEW_TOKEN target=ID
+	(=> '(' (arguments+=Expression (',' arguments+=Expression)*)? ')')?;
+
+LambdaExpression:
+	{LambdaExpression}
+	'lambda'
+	(=> '(' ((parameters+=Parameter) (',' parameters+=Parameter)*)? ')')?
+	statements+=Statement*
+	END_TOKEN;
+
+terminal OPERATOR:
+	('~' | '$' | '+' | '-' | '\\' | '?' | '@' | '%' | '>' | '<' | '^' | '&' | '|' | '!' | '*' | '=')+;
+
+	//		{InstanceAttribute} ATTRIBUTE_TOKEN name=ID ( ':' type=[Type] )? ('=' initialValue=GeneralExpression)?;
+//
+//ClassAttribute returns Attribute:
+//	{ClassAttribute} CLASS_ATTRIBUTE_TOKEN name=ID ( ':' type=[Type] )? ('=' initialValue=GeneralExpression)?
+//;
+//RestrctedExpressionLevel1 returns Expression:
+//	/*descending*/ RestrictedExpressionLevel0 |
+//	SuperSend 
+//;
+//
+//SuperSend:
+//	{SuperSend} SUPER_TOKEN =>(OPEN_TOKEN (arguments+=RestrictedExpression (SEPARATOR_TOKEN arguments+=RestrictedExpression)*)? CLOSE_TOKEN)?
+//;
+//
