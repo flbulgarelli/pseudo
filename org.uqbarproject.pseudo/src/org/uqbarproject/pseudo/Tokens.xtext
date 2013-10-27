@@ -1,11 +1,17 @@
-grammar org.uqbarproject.pseudo.Tokens with org.eclipse.xtext.common.Terminals
+grammar org.uqbarproject.pseudo.Tokens 
+with org.eclipse.xtext.common.Terminals hidden(WS, ML_COMMENT, SL_COMMENT)
+
+terminal SL_COMMENT 	: ('...'  | '//' ) !('\n'|'\r')* ('\r'? '\n')?;
 
 END_TOKEN: 'fin';
 
 EXCEPTION_TOKEN: 'excepcion';
 CLASS_TOKEN: 'clase';
+CONTRACT_TOKEN: 'interfaz' | 'contrato';
 INHERITS_TOKEN: 'hereda';
+IMPLEMENTS_TOKEN: 'implementa';
 
+MESSAGE_SIGNATURE_TOKEN : 'mensaje';
 METHOD_TOKEN: 'mi' | 'metodo';
 ATTRIBUTE_TOKEN: 'vi' | 'atributo';
 
@@ -13,7 +19,7 @@ CLASS_METHOD_TOKEN: 'vc' | 'metodo' 'de' 'clase'  ;
 CLASS_ATTRIBUTE_TOKEN: 'mc' | 'atributo' 'de' 'clase';
 
 OVERRIDE_TOKEN: 'redefinir';
-SUPER_TOKEN: 'padre' | 'super' | 'redefinido' ;
+SUPER_TOKEN: 'padre' | 'super' ;
 /* Generic elemetns lists */
 SEPARATOR_TOKEN: ',';
 OPEN_TOKEN: '(';
@@ -25,73 +31,46 @@ MESSAGE_SEND_TOKEN:
 
 /* basic literals */
 
-NULL_TOKEN : 'nada';
-TRUE_TOKEN: 'verdadero'|'si';
-FALSE_TOKEN: 'falso'|'no';
-SELF_TOKEN: 'este'|'esta';
-CATCHED_EXCEPTION_TOKEN: 'atrapada' | 'capturada';
+NULL_TOKEN : 'nada'|'null'|'nil';
+TRUE_TOKEN: 'verdadero' |'true';
+FALSE_TOKEN: 'falso' |'false';
+SELF_TOKEN: ('self' | 'this' | 'yo' | 'este' | 'esta');
 
 /* collection literals */
 LIST_OPEN_TOKEN:
-	'lista' '('
+	'['
 ;
 LIST_CLOSE_TOKEN:
-	')'
+	']'
 ;
 SET_OPEN_TOKEN:
-	'conjunto' '('
+	'{'
 ;
 SET_CLOSE_TOKEN:
-	')'
+	'}'
 ;
+
+IF_TOKEN: 'si';
 
 /* When Tokens */
 WHEN_TOKEN: 'cuando';
 THEN_TOKEN: 'entonces';
 OTHERWISE_TOKEN: 'caso contrario' | 'otro caso';
 
-RETURN_TOKEN: 'devolver';
+RETURN_TOKEN: 'devolver' | 'retornar';
 THROW_TOKEN: 'lanzar';
 ERROR_TOKEN: 'error';
 TRY_TOKEN: 'intentar';
-CATCH_TOKEN: 'capturar';
+CATCH_TOKEN: 'capturar' | 'atrapar';
 
 /* Assignment tokens */
 
 LET_TOKEN: 'variable';
-ASSIGN_TOKEN: 'actualizar';
+ASSIGN_TOKEN: 'actualizar' | 'asignar';
 INCREMENT_TOKEN: 'incrementar';
 DECREMENT_TOKEN: 'decrementar';
 ACCUM_BY_TOKEN: 'en';
 
 /* Instantiation tokens */
 NEW_TOKEN: 'nuevo';
-INIT_TOKEN: 'inicializar';
-SETUP_TOKEN: 'configurar';
-INIT_WITH_TOKEN: 'con' ; 
 
-
-/* Message composition */
-AND_THEN_TOKEN: 'luego';
-COMPOSE_TOKEN: 'compuesto' ;
-
-OR_TOKEN: 'o' ;
-AND_TOKEN: 'y' ;
-
-/* Traversable-related */
-WHERE_TOKEN: 'tal' 'que';
-SUM_TOKEN: 'suma' | 'sumatoria';
-ANY_TOKEN: 'alguno';
-ALL_TOKEN: 'todo';
-MAX_TOKEN: 'max' | 'maximo';
-MIN_TOKEN: 'min' | 'minimo';
-AVERAGE_TOKEN: 'promedio';
-REDUCTION_SOURCE_TOKEN : 'entre' ;
-COMPARE_BY_TOKEN: 'segun';
-FOR_ALL_IN_TOKEN: 'para' 'todos' 'en';
-SELECT_TOKEN: 'seleccionar'|'generar'|'colectar'|'mapear';
-SELECT_FROM_TOKEN: 'de';
-FIRST_TOKEN: 'primer' | 'primero' ;
-TAKE_TOKEN: 'primeros' | 'tomar';
-SATISFY_TOKEN:'satisface';
-OF_TOKEN: 'de';

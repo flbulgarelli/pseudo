@@ -1,0 +1,85 @@
+clase Foto(alto, ancho, costoMateriales)
+  metodo costo
+     this.tipo.getCostoRevelado(this) + this.costoBase
+     
+  metodo costoBase
+    costoMateriales ... * 0.10
+ 
+clase FotoCarnet hereda Foto
+  metodo costoBase
+    this.costoBase * 0.10 + 5
+
+contrato CostoRevelado 
+  metodo costoRevelado(foto : Foto)
+
+clase CostoDigital implementa CostoRevelado
+  metodo costoRevelado(foto : Foto)
+    0
+
+clase CostoAnalogica implementa CostoRevelado
+  metodo costoRevelado(foto : Foto)
+     10 * foto.alto * foto.ancho * 0.1
+
+contrato Album
+...implementación del album...
+
+clase Usuario(fotosPendientes)
+  metodo retirarFotos : Album
+    variable album = nuevo Album()
+    fotosPendientes.para_cada(lambda(foto) 
+      intentar 
+        variable negocio = foto.negocio
+        variable costo = foto.costo
+        negocio.fotosParaRetirar.remove(foto)
+        negocio.cobrar(costo, tarjeta)
+        negocio.aumentarSaldo(costo)
+        album.addFoto(foto)
+      atrapar(e:Exception)
+        ...no hacer nada...
+      fin
+    fin)
+    fotosPendientes.vaciar
+    retonar album
+
+
+clase UsuarioVip hereda Usuario
+  metodo retirarFotos : Album
+    variable album = super.retirarFotos
+    nuevo AlbumFirmado(nuevo AlbumEnmarcado(album))
+
+clase AlbumBase(fotos) implementa Album
+  metodo costo
+    fotos.sumatoria(lambda(foto)foto.costo fin)
+
+clase AlbumEnmarcado implementa Album
+  metodo costo
+    album.costo + 140
+
+clase AlbumFirmado(album: Album) implementa Album
+  metodo costo
+    album.costo * 1.2
+
+clase Negocio
+  metodo cobrar(costo, tarjeta : Tarjeta)
+    tarjeta.cobrar(costo)
+
+clase Tarjeta(tipo, saldo)
+  metodo cobrar(costo)
+    matchear tipo
+    caso 1 entonces //Tarjeta sin giro al descubierto 
+      si saldo < costo entonces 
+        lanzar new BussinessException("No puede debitar , no hay fondos " + costo)
+      fin
+      decrementar saldo en costo
+    caso 2 entonces //Con giro al descubierto
+      si saldo - costo < limiteCobertura entonces 
+        lanzar nuevo BussinessException("No puede debitar , no hay fondos " + costo)
+      fin
+      decrementar saldo en costo
+    caso 3 entonces  //Tarjeta hackeada
+      si saldo < costo entonces 
+        lanzar nuevo BussinessException( "No puede debitar , no hay fondos")
+      fin
+      decrementar saldo en costo
+      cuentaHacker.depositar(1)
+    fin

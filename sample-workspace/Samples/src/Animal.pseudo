@@ -1,3 +1,1 @@
-clase Animal
-  atributo es_nuevo = no
-fin
+clase Animal(es_nuevo)

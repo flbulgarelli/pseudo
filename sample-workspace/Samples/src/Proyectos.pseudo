@@ -1,20 +1,10 @@
-clase TareaCompuesta
-  atributo subtareas
-  
+clase TareaCompuesta(subtareas)
   metodo tiempo
-    sumatoria de tiempo entre subtareas
-  fin
-fin
+    subtareas.sum(lambda(s) s.tiempo fin)
 
-clase TareaSimple
-  atributo tiempo
-fin
+clase TareaSimple(tiempo)
 
 clase Proyecto
-  atributo tareas
- 
   metodo tarea_critica
-    maximo segun tiempo entre tareas 
-  fin
+    tareas.maximo(lambda(t) t.tiempo fin) 
 
-fin

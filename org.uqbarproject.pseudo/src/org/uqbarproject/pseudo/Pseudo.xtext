@@ -1,246 +1,178 @@
 grammar org.uqbarproject.pseudo.Pseudo with org.uqbarproject.pseudo.Tokens
 
-/*
- * 
-lambdas? 
-mixins
-sin paquetes
- * 
- */
 generate pseudo "http://www.uqbarproject.org/pseudo/Pseudo"
-
 import "http://www.eclipse.org/emf/2002/Ecore" as ecore
-//import "http://www.eclipse.org/xtext/common/JavaVMTypes" as jvmType
 
 Model:
 	types+=Type*;
 
 Type:
-  ({ClassType} CLASS_TOKEN name=ID (INHERITS_TOKEN superType=[Type])? |
-   {ExceptionType} EXCEPTION_TOKEN name=ID
-  )
-	members+=Member*	
-	END_TOKEN;
+	ClassType | ContractType | ExceptionType;
 
-Member:
-	Attribute | Method;
+ExceptionType:
+	'excepcion' name=ID;
 
-Method:
-    overrideMethod?=OVERRIDE_TOKEN?	(METHOD_TOKEN | classMethod?=CLASS_METHOD_TOKEN) 
-		name=ID 
-		=> (OPEN_TOKEN ((parameters+=Parameter) (SEPARATOR_TOKEN parameters+=Parameter)*)?  CLOSE_TOKEN)?
-		( ':' type=[Type] )?
-	statements+=Statement*
-	END_TOKEN;
-	
-Parameter:
-	name = ID ( ':' type=[Type] )?
-;	
+ContractType:
+	('interfaz' | 'contrato') name=(ID | OPERATOR)
+	('hereda' contracts+=ID (',' contracts+=ID)*)?
+	members+=Signature*;
 
-Statement:
-	ExpressionLevel7 | Return | LocalVariable ;
+Signature:
+	'metodo' name=(ID | OPERATOR)
+	('(' ((parameters+=Parameter) (',' parameters+=Parameter)*)? ')')?
+	(':' type=ID)?;
 
-Return:
-	RETURN_TOKEN value=ExpressionLevel7;
-	
-LocalVariable:
-	LET_TOKEN (name=ID) ( ':' type=[Type] )? ('=' (value=ExpressionLevel7))?;
+ClassType:
+	'clase' ('abstracta')? name=ID
+	('(' (members+=Attribute (',' members+=Attribute)*)? ')')?
+	(('hereda' superType=ID)
+	('(' (constructionArguments+=Expression0 (',' constructionArguments+=Expression0)*)? ')')?)?
+	('implementa' contracts+=ID (',' contracts+=ID)*)?
+	('incluye' mixins+=ID (',' mixins+=ID)*)?
+	members+=Method*;
 
 Attribute:
-	(ATTRIBUTE_TOKEN|classAttribute?=CLASS_ATTRIBUTE_TOKEN) name=ID ( ':' type=[Type] )? ('=' initialValue=ExpressionLevel7)?;
+	name=ID
+	(':' type=ID)?;
 
-//Max prioirty
-ExpressionLevel7 returns Expression:
-	ExpressionLevel6 | 
-	AssignExpression | 
-	IncrementExpression | 
-	DecrementExpression 
-;
+Method:
+	('redefinir')? 'metodo' ('de' 'clase' | 'abstracto')? name=ID
+	(=> '(' ((parameters+=Parameter) (',' parameters+=Parameter)*)? ')')?
+	(':' type=ID)?
+	statements+=Statement*;
 
-ExpressionLevel6 returns Expression:
-	ComparisonExpression 
-;
+Parameter:
+	name=ID (':' type=ID)?;
 
-ExpressionLevel5 returns Expression:
-	MessageSendExpression |
-	ReductionExpression |
-	ForAllExpression |
+Statement:
+	LocalVar |
+	Assignment |
+	Return |
+	Increment |
+	Decrement |
+	Expression;
+
+LocalVar:
+	'variable' name=ID
+	(':' type=ID)?
+	('=' (value=Expression))?;
+
+Return:
+	'retornar' value=Expression;
+
+Assignment:
+	'asignar' (target=ID)
+	'=' value=Expression;
+
+Increment:
+	'incrementar' target=ID ('en' value=Expression)?;
+
+Decrement:
+	'decrementar' target=ID ('en' value=Expression)?;
+
+Expression returns Expression:
+	(Expression0 => ({MessageSendExpression.receptor=current} message=Message)*);
+
+Expression0 returns Expression:
 	ThrowExpression |
-	InitExpression |
-	SetupExpression |
-	WhenExpression |
-	TryCatchExpression
-;
-
-ExpressionLevel4 returns Expression:
-	ExpressionLevel3 |
-	SelectExpression 
-;
-
-ExpressionLevel3 returns Expression:
-	FilteredExpression
-;
-
-ExpressionLevel2 returns Expression:
-	ExpressionLevel1 |
-	NewExpression |
-	CollectionLiteralExpression
-;
-
-ExpressionLevel1 returns Expression:
-	ExpressionLevel0 |
-	SuperSend 
-;
-
-//Min prioirty
-ExpressionLevel0 returns Expression:
 	IdExpression |
-	StringExpression |
 	NumberExpression |
-	{NullExpression} NULL_TOKEN |
+	StringExpression |
+	NewExpression |
+	ListExpression |
+	LambdaExpression |
+	TryExpression |
+	WhenExpression |
+	NullExpression |
+	BooleanExpression |
+	IfExpression |
+	SelfExpression |
+	'(' Expression ')';
+
+Message:
+	OperatorMessage | IdMessage;
+
+OperatorMessage:
+	selector=OPERATOR arguments+=Expression0;
+
+IdMessage:
+	'.' selector=ID
+	=> ('(' (arguments+=Expression0 (',' arguments+=Expression0)*)? ')')?;
+
+SelfExpression:
+	{SelfExpression} SELF_TOKEN;
+
+NullExpression:
+	{NullExpression} NULL_TOKEN;
+
+BooleanExpression:
 	{TrueExpression} TRUE_TOKEN |
-	{FalseExpression} FALSE_TOKEN |
-	{SelfExpression} SELF_TOKEN |
-	{CatchedExceptionExpression} CATCHED_EXCEPTION_TOKEN |
-	OPEN_TOKEN ExpressionLevel7  CLOSE_TOKEN
-	;
-	
-IdExpression:
-	value=[ecore::EObject]
-;	
+	{FalseExpression} FALSE_TOKEN;
+
+ListExpression:
+	{ListExpression} '[' (elements+=Expression (',' elements+=Expression)*)? ']';
+
 StringExpression:
-	value=STRING
-;
-	
+	value=STRING;
+
 NumberExpression:
-	value=Number
-;	
+	value=Number;
+
+IdExpression:
+	name=ID;
 
 Number:
 	INT ('.' INT)?;
 
-MessageSendExpression returns Expression:
-	ExpressionLevel4  ({MessageSendExpression.receptor=current} MESSAGE_SEND_TOKEN message=Applicable)* 
-;
+TryExpression:
+	'intentar' tryStatements+=Statement+
+	CATCH_TOKEN '('(exception = ID (':' type=ID)?)')'
+	catchStatements+=Statement*
+	END_TOKEN;
 
-ComparisonExpression returns Expression:
-	ExpressionLevel5 ({ComparisonExpression.left=current} op=ComparisonOperation right=ExpressionLevel5)? 
-;
-
-enum ComparisonOperation:
-	GT='>' |
-	LT='<' |
-	GTE= '>=' |
-	LTE= '<=' |
-	EQ='=' |
-	NEQ='/='
-;
-
-ForAllExpression:
-	FOR_ALL_IN_TOKEN target=ExpressionLevel5 action=Applicable
-;
-
-SelectExpression:
-	SELECT_TOKEN mapping=Applicable SELECT_FROM_TOKEN target=ExpressionLevel3 
-;
-
-ReductionExpression:
-	reduction=Reduction REDUCTION_SOURCE_TOKEN target=ExpressionLevel3
-;
-
-Reduction:
-	{Sum} SUM_TOKEN (OF_TOKEN? mapping=Applicable)?  | 
-	{Average} AVERAGE_TOKEN (OF_TOKEN ? mapping=Applicable)? | 
-	{Min} MIN_TOKEN (mapping=Applicable)? (COMPARE_BY_TOKEN criteria=Applicable)? | 
-	{Max} MAX_TOKEN (mapping=Applicable)? (COMPARE_BY_TOKEN criteria=Applicable)? | 
-	{All} ALL_TOKEN (mapping=Applicable)? SATISFY_TOKEN (criteria=Applicable) |
-	{Any} ANY_TOKEN (mapping=Applicable)? SATISFY_TOKEN (criteria=Applicable) |
-	{First} FIRST_TOKEN (mapping=Applicable)? | //| 'buscar' | 'encontrar' (WHERE_TOKEN criteria=Applicable)? //|
-	{Take} TAKE_TOKEN (amount=ExpressionLevel3) (mapping=Applicable)?
-;
-
-FilteredExpression returns Expression:
-	ExpressionLevel2 ({FilteredExpression.target=current} WHERE_TOKEN condition=Applicable)?
-;
-
-CollectionLiteralExpression:
-	ListLiteralExpression | SetLiteralExpression //| RangeLiteralExpression 
-;
-
-ListLiteralExpression:
-	{ListLiteralExpression} LIST_OPEN_TOKEN (elements+=ExpressionLevel7 (SEPARATOR_TOKEN elements+=ExpressionLevel7)*)?  LIST_CLOSE_TOKEN	
-;
-
-SetLiteralExpression:
-	{SetLiteralExpression} SET_OPEN_TOKEN (elements+=ExpressionLevel7 (SEPARATOR_TOKEN elements+=ExpressionLevel7)*)?  SET_CLOSE_TOKEN	
-;
-
-//RangeLiteralExpression:
-//	'rango desde' start =  EmbeddableExpression 'hasta' end = EmbeddableExpression 
-//;
-
+IfExpression:
+	IF_TOKEN condition=Expression
+	'entonces' trueActions+=Statement+
+	('si' 'no' falseActions+=Statement+)?
+	END_TOKEN;
 
 WhenExpression:
-	(WHEN_TOKEN (cases+=ExpressionLevel7) 
-	THEN_TOKEN actions+= ExpressionLevel7)+ 
-	(OTHERWISE_TOKEN defaultAction=ExpressionLevel7)?
-	END_TOKEN 
-;
+	'matchear' target=Expression
+	cases+=Case+
+	END_TOKEN;
 
-TryCatchExpression:
-	TRY_TOKEN 
-		action= ExpressionLevel7
-	CATCH_TOKEN  
-		catchAction=ExpressionLevel7	
-	END_TOKEN 
-;
-
-
-
-NewExpression:
-	NEW_TOKEN target = [Type] =>(OPEN_TOKEN (arguments+=ExpressionLevel7 (SEPARATOR_TOKEN arguments+=ExpressionLevel7)*)? CLOSE_TOKEN)?
-;
-
-InitExpression:
-	INIT_TOKEN (NEW_TOKEN)? target=[Type]
-	(initializations+=Initialization)+  
-	END_TOKEN 	
-;
-
-SetupExpression:
-	SETUP_TOKEN target=ExpressionLevel7
-	(initializations+=Initialization)+  
-	END_TOKEN 	
-;
-
-Initialization:
-	INIT_WITH_TOKEN attribute=ID  '='  initialValue=ExpressionLevel7
-;
-
-Applicable returns Applicable:
-	Message ({Applicable.left=current} (andThen?=AND_THEN_TOKEN | compose?=COMPOSE_TOKEN | or?=OR_TOKEN | and?=AND_TOKEN) right=Message)*
-;
-
-
-Message returns Applicable:
-	{Message} selector=ID =>(OPEN_TOKEN (arguments+=ExpressionLevel7 (SEPARATOR_TOKEN arguments+=ExpressionLevel7)*)? CLOSE_TOKEN)?
-;
-
-SuperSend:
-	{SuperSend} SUPER_TOKEN =>(OPEN_TOKEN (arguments+=ExpressionLevel7 (SEPARATOR_TOKEN arguments+=ExpressionLevel7)*)? CLOSE_TOKEN)?
-;
+Case:
+	'caso' condition=Expression
+	'entonces' actions+=Statement+;
 
 ThrowExpression:
-  {MessageThrowExpression} ERROR_TOKEN throwable=ExpressionLevel5 |
-  {ExceptionThrowExpression} THROW_TOKEN  throwable=ExpressionLevel5 
-;
+	THROW_TOKEN throwable=Expression;
 
-AssignExpression:
-	ASSIGN_TOKEN (target=[ecore::EObject]) '=' value=ExpressionLevel6;
-	
-IncrementExpression:
-	INCREMENT_TOKEN target=[ecore::EObject] (ACCUM_BY_TOKEN value=ExpressionLevel6)?;
-	
-DecrementExpression:
-	DECREMENT_TOKEN target=[ecore::EObject] (ACCUM_BY_TOKEN value=ExpressionLevel6)?;
-	
+NewExpression:
+	NEW_TOKEN target=ID
+	(=> '(' (arguments+=Expression (',' arguments+=Expression)*)? ')')?;
+
+LambdaExpression:
+	{LambdaExpression}
+	'lambda'
+	(=> '(' ((parameters+=Parameter) (',' parameters+=Parameter)*)? ')')?
+	statements+=Statement*
+	END_TOKEN;
+
+terminal OPERATOR:
+	('~' | '$' | '+' | '-' | '\\' | '?' | '@' | '%' | '>' | '<' | '^' | '&' | '|' | '!' | '*' | '=')+;
+
+	//		{InstanceAttribute} ATTRIBUTE_TOKEN name=ID ( ':' type=[Type] )? ('=' initialValue=GeneralExpression)?;
+//
+//ClassAttribute returns Attribute:
+//	{ClassAttribute} CLASS_ATTRIBUTE_TOKEN name=ID ( ':' type=[Type] )? ('=' initialValue=GeneralExpression)?
+//;
+//RestrctedExpressionLevel1 returns Expression:
+//	/*descending*/ RestrictedExpressionLevel0 |
+//	SuperSend 
+//;
+//
+//SuperSend:
+//	{SuperSend} SUPER_TOKEN =>(OPEN_TOKEN (arguments+=RestrictedExpression (SEPARATOR_TOKEN arguments+=RestrictedExpression)*)? CLOSE_TOKEN)?
+//;
+//
